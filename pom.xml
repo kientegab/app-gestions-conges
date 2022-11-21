@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.mfptps</groupId>
-    <artifactId>app-sggcm</artifactId>
+    <artifactId>app-gestions-conges</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>app-nomination</name>
-    <description>Plateforme de proposition de nomination</description>
+    <name>app-gestions-conges</name>
+    <description>Plateforme de demandes de conges</description>
     <properties> 
         <java.version>1.8</java.version>
         <hibernate.version>5.4.32.Final</hibernate.version>
