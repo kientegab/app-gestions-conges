@@ -45,6 +45,10 @@ public class Avis extends CommonEntity {
     @Column(name = "avis_dg", length = 254)
     private String avisDG;
 
+    @ManyToOne
+    @JoinColumn(name = "demande_id")
+    private Demande demande;
+
     public Long getId() {
         return id;
     }
@@ -85,6 +89,14 @@ public class Avis extends CommonEntity {
         this.avisDG = avisDG;
     }
 
+    public Demande getDemande() {
+        return demande;
+    }
+
+    public void setDemande(Demande demande) {
+        this.demande = demande;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -106,6 +118,7 @@ public class Avis extends CommonEntity {
                 ", avisSG='" + avisSG + '\'' +
                 ", avisSH='" + avisSH + '\'' +
                 ", avisDG='" + avisDG + '\'' +
+                ", demande=" + demande +
                 '}';
     }
 }
