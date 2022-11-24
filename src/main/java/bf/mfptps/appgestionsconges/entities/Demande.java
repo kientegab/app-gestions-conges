@@ -6,6 +6,7 @@ import org.hibernate.annotations.Cache;
 import javax.persistence.*;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import java.util.Date;
 import java.util.Objects;
 
 @Entity
@@ -44,10 +45,13 @@ public class Demande extends CommonEntity {
     private String situationSND;
 
     @Column(name = "duree_absence", length = 254)
-    private String dureeAbsence;
+    private Long dureeAbsence;
 
-    @Column(name = "periode_absence", length = 254)
-    private String periodeAbsence;
+    @Column(name = "periode_debut", length = 254)
+    private Date periodeDebut;
+
+    @Column(name = "periode_fin", length = 254)
+    private Date periodeFin;
 
     @ManyToOne
     @JoinColumn(name = "motif_absence_id")
@@ -109,20 +113,28 @@ public class Demande extends CommonEntity {
         this.situationSND = situationSND;
     }
 
-    public String getDureeAbsence() {
+    public Long getDureeAbsence() {
         return dureeAbsence;
     }
 
-    public void setDureeAbsence(String dureeAbsence) {
+    public void setDureeAbsence(Long dureeAbsence) {
         this.dureeAbsence = dureeAbsence;
     }
 
-    public String getPeriodeAbsence() {
-        return periodeAbsence;
+    public Date getPeriodeDebut() {
+        return periodeDebut;
     }
 
-    public void setPeriodeAbsence(String periodeAbsence) {
-        this.periodeAbsence = periodeAbsence;
+    public void setPeriodeDebut(Date periodeDebut) {
+        this.periodeDebut = periodeDebut;
+    }
+
+    public Date getPeriodeFin() {
+        return periodeFin;
+    }
+
+    public void setPeriodeFin(Date periodeFin) {
+        this.periodeFin = periodeFin;
     }
 
     public MotifAbsence getMotifAbsence() {
@@ -171,8 +183,9 @@ public class Demande extends CommonEntity {
                 ", lieuJouissanceEtrang='" + lieuJouissanceEtrang + '\'' +
                 ", refLastDecision='" + refLastDecision + '\'' +
                 ", situationSND='" + situationSND + '\'' +
-                ", dureeAbsence='" + dureeAbsence + '\'' +
-                ", periodeAbsence='" + periodeAbsence + '\'' +
+                ", dureeAbsence=" + dureeAbsence +
+                ", periodeDebut=" + periodeDebut +
+                ", periodeFin=" + periodeFin +
                 ", motifAbsence=" + motifAbsence +
                 ", typeDemande=" + typeDemande +
                 ", utilisateur=" + utilisateur +
