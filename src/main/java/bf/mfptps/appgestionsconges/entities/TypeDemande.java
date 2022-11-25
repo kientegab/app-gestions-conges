@@ -7,7 +7,6 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -43,9 +42,13 @@ import java.util.Set;
 
         @Column(name = "description")
         private String description;
+        
 
         @OneToMany(mappedBy = "typeDemande")
         private Set<TypeVisa> typeVisas = new HashSet<TypeVisa>();
+        
+        @Column(name ="solde_annuel")
+        private String soldeAnnuel;
 
 
         public Long getId() {
@@ -91,8 +94,18 @@ import java.util.Set;
     public void addTypeVisa(TypeVisa typeVisa) {
         this.typeVisas.add(typeVisa);
     }
+    
+    
 
-    @Override
+    public String getSoldeAnnuel() {
+		return soldeAnnuel;
+	}
+
+	public void setSoldeAnnuel(String soldeAnnuel) {
+		this.soldeAnnuel = soldeAnnuel;
+	}
+
+	@Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -113,6 +126,7 @@ import java.util.Set;
                 ", modePaie=" + modePaie +
                 ", description='" + description + '\'' +
                 ", typeVisas=" + typeVisas +
+                ", soldeAnnuel=" + soldeAnnuel +
                 '}';
     }
 }

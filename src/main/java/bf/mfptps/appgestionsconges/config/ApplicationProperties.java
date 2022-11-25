@@ -12,6 +12,8 @@ public class ApplicationProperties {
     private Mail mail;
 
     private final Cache cache = new Cache();
+    
+    private String appUploadsStorage = "/mnt/uploads";
 
     public String getName() {
         return name;
@@ -41,7 +43,15 @@ public class ApplicationProperties {
         return cache;
     }
 
-    public static class Security {
+    public String getAppUploadsStorage() {
+		return appUploadsStorage;
+	}
+
+	public void setAppUploadsStorage(String appUploadsStorage) {
+		this.appUploadsStorage = appUploadsStorage;
+	}
+
+	public static class Security {
 
         private Authentication authentication;
 

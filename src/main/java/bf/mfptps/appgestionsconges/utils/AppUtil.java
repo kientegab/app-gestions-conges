@@ -5,11 +5,24 @@
  */
 package bf.mfptps.appgestionsconges.utils;
 
+import bf.mfptps.appgestionsconges.entities.Demande;
+import bf.mfptps.appgestionsconges.entities.Document;
 import bf.mfptps.appgestionsconges.web.exceptions.CustomException;
 import bf.mfptps.appgestionsconges.web.vm.ManagedAgentVM;
+
+import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.DecimalFormat;
+import java.util.Set;
+
 import javax.validation.constraints.Size;
+
+import org.springframework.web.multipart.MultipartFile;
+
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -73,4 +86,21 @@ public class AppUtil {
 
         return Double.valueOf(df.format(valeur).replace(",", "."));
     }
+    
+    public static String saveUploadFileToServer(String uplaodStorage, String userStorage,
+			MultipartFile file) throws Exception {
+		
+			 try {
+				byte[] bytes = file.getBytes();
+				String fileName = System.currentTimeMillis()+ "_" + file.getOriginalFilename();
+				 Path path = Paths.get(uplaodStorage+ File.separatorChar+ userStorage+ File.separatorChar + fileName);
+				 Files.write(path, bytes);
+				return path.toString();
+			} catch (IOException e) {
+				log.error("Failed to write file on server", e);
+				throw new Exception("Failed to write file on server " + e.getMessage());
+			}
+			
+	}
+
 }
