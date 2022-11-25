@@ -1,11 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties @HEBIE
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package bf.mfptps.appgestionsconges.service.dto;
 
-import bf.mfptps.appgestionsconges.entities.TypeVisa;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -14,83 +9,92 @@ import java.util.Set;
  *
  * @author HEBIE
  */
-public class TypeDemandeDTO {
+    public class TypeDemandeDTO  {
 
-    private Long id;
+        private Long id;
+        private String libelle;
+        private Boolean modePaie;
+        private String description;
+        private Set<TypeVisaDTO> typeVisas = new HashSet<>();
+        private String soldeAnnuel;
 
-    private String libelle;
 
-    private Boolean modePaie;
+        public Long getId() {
+            return id;
+        }
 
-    private String description;
+        public void setId(Long id) {
+            this.id = id;
+        }
 
-    private Set<TypeVisa> typeVisas = new HashSet<TypeVisa>();
+        public String getLibelle() {
+            return libelle;
+        }
 
-    public Long getId() {
-        return id;
-    }
+        public void setLibelle(String libelle) {
+            this.libelle = libelle;
+        }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+        public Boolean getModePaie() {
+            return modePaie;
+        }
 
-    public String getLibelle() {
-        return libelle;
-    }
+        public void setModePaie(Boolean modePaie) {
+            this.modePaie = modePaie;
+        }
 
-    public void setLibelle(String libelle) {
-        this.libelle = libelle;
-    }
+        public String getDescription() {
+            return description;
+        }
 
-    public Boolean getModePaie() {
-        return modePaie;
-    }
+        public void setDescription(String description) {
+            this.description = description;
+        }
 
-    public void setModePaie(Boolean modePaie) {
-        this.modePaie = modePaie;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Set<TypeVisa> getTypeVisas() {
+    public Set<TypeVisaDTO> getTypeVisas() {
         return typeVisas;
     }
 
-    public void setTypeVisas(Set<TypeVisa> typeVisas) {
+    public void setTypeVisas(Set<TypeVisaDTO> typeVisas) {
         this.typeVisas = typeVisas;
+    }
+
+    public void addTypeVisa(TypeVisaDTO typeVisa) {
+        this.typeVisas.add(typeVisa);
+    }
+    
+    
+
+    public String getSoldeAnnuel() {
+		return soldeAnnuel;
+	}
+
+	public void setSoldeAnnuel(String soldeAnnuel) {
+		this.soldeAnnuel = soldeAnnuel;
+	}
+
+	@Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TypeDemandeDTO that = (TypeDemandeDTO) o;
+        return id.equals(that.id);
     }
 
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 37 * hash + Objects.hashCode(this.id);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final TypeDemandeDTO other = (TypeDemandeDTO) obj;
-        return Objects.equals(this.id, other.id);
+        return Objects.hash(id);
     }
 
     @Override
     public String toString() {
-        return "TypeDemandeDTO{" + "id=" + id + ", libelle=" + libelle + ", modePaie=" + modePaie + ", description=" + description + ", typeVisas=" + typeVisas + '}';
+      return "TypeDemande{" +
+                "id=" + id +
+                ", libelle='" + libelle + '\'' +
+                ", modePaie=" + modePaie +
+                ", description='" + description + '\'' +
+                ", typeVisas=" + typeVisas +
+                ", soldeAnnuel=" + soldeAnnuel +
+                '}';
     }
-
 }

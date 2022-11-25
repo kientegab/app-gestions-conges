@@ -1,24 +1,25 @@
 package bf.mfptps.appgestionsconges.service;
 
+import bf.mfptps.appgestionsconges.entities.Document;
 import bf.mfptps.appgestionsconges.service.dto.DocumentDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Optional;
 
-/**
- *
- * @author TEGUERA
- */
 public interface DocumentService {
 
-    DocumentDTO create(DocumentDTO documentDTO);
+	DocumentDTO create(String numeroDemande, MultipartFile fichier);
 
-    DocumentDTO update(DocumentDTO documentDTO);
+	DocumentDTO update(String numeroDemande, MultipartFile fichier);
 
-    Optional<DocumentDTO> findOne(Long id);
+    Optional<Document> findByReference(String ref);
+
+    Optional<Document> findById(Long id);
 
     Page<DocumentDTO> findAll(Pageable pageable);
 
-    void deleteOne(Long id);
+    void delete(Long reference);
+
 }
