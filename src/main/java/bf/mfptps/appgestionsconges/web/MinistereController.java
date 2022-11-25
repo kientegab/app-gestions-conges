@@ -50,7 +50,7 @@ public class MinistereController {
      * @throws URISyntaxException
      */
     @PostMapping(path = "/ministeres")
-    @PreAuthorize("hasAnyAuthority(\"" + AppUtil.ADMIN + "\")")
+    //@PreAuthorize("hasAnyAuthority(\"" + AppUtil.ADMIN + "\")")
     public ResponseEntity<Ministere> create(@Valid @RequestBody MinistereDTO ministere) throws URISyntaxException {
         log.debug("Création du Ministere : {}", ministere);
         Ministere min = ministereService.create(ministere);

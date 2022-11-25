@@ -30,7 +30,6 @@ public class MotifAbsence extends CommonEntity {
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
-    @Size(min = 5, max = 254)
     @Column(name = "libelle", length = 254)
     private String libelle;
 

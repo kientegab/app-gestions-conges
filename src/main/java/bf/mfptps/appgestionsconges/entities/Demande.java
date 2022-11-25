@@ -4,10 +4,16 @@ import org.hibernate.annotations.*;
 import org.hibernate.annotations.Cache;
 
 import javax.persistence.*;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "demande")
@@ -29,7 +35,7 @@ public class Demande extends CommonEntity {
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
-    @Column(name = "numero_demande", length = 254)
+    @Column(name = "numero_demande", length = 254, unique = true, nullable = false)
     private String numeroDemande;
 
     @Column(name = "lieu_jouissance_bf", length = 254)
@@ -64,6 +70,9 @@ public class Demande extends CommonEntity {
     @ManyToOne
     @JoinColumn(name = "utilisateur_id")
     private Utilisateur utilisateur ;
+    @OneToMany(mappedBy = "demande", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties(value = { "demande" }, allowSetters = true)
+    private Set<Document> documents = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -161,7 +170,15 @@ public class Demande extends CommonEntity {
         this.utilisateur = utilisateur;
     }
 
-    @Override
+    public Set<Document> getDocuments() {
+		return documents;
+	}
+
+	public void setDocuments(Set<Document> documents) {
+		this.documents = documents;
+	}
+
+	@Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -189,6 +206,7 @@ public class Demande extends CommonEntity {
                 ", motifAbsence=" + motifAbsence +
                 ", typeDemande=" + typeDemande +
                 ", utilisateur=" + utilisateur +
+                ", documents=" + documents +
                 '}';
     }
 }

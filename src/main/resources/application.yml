@@ -3,7 +3,7 @@ server:
   servlet:
     context-path: /conges
 application:
-  name: sicca
+  name: sicaa
   security:
     authentication:
       jwt:

@@ -13,6 +13,10 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+/**
+ *
+ * @author TEGUERA <teguera.zakaria@gmail.com>
+ */
 @Entity
 @Table(name = "visa")
 @SQLDelete(sql = "UPDATE visa SET deleted = true WHERE id=?")
