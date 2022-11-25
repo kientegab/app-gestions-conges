@@ -9,6 +9,10 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
+/**
+ *
+ * @author TEGUERA
+ */
 @Entity
 @Table(name = "type_visa")
 @SQLDelete(sql = "UPDATE type_visa SET deleted = true WHERE id=?")
