@@ -3,7 +3,6 @@ package bf.mfptps.appgestionsconges.service.dto;
 import bf.mfptps.appgestionsconges.entities.CommonEntity;
 import bf.mfptps.appgestionsconges.entities.TypeVisa;
 
-import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
