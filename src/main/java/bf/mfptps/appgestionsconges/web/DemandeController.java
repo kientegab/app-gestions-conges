@@ -7,6 +7,10 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,6 +26,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -33,6 +38,7 @@ import bf.mfptps.appgestionsconges.utils.HeaderUtil;
 import bf.mfptps.appgestionsconges.utils.PaginationUtil;
 import bf.mfptps.appgestionsconges.utils.ResponseUtil;
 import bf.mfptps.appgestionsconges.web.exceptions.BadRequestAlertException;
+import bf.mfptps.appgestionsconges.web.exceptions.CustomException;
 
 /**
  *
@@ -64,8 +70,15 @@ public class DemandeController {
      */
     @PostMapping(path = "/demandes")
   //  @PreAuthorize("hasAnyAuthority(\"" + AppUtil.ADMIN + "\")")
-    public ResponseEntity<DemandeDTO> create(@Valid @RequestParam("demande") DemandeDTO demande, @RequestParam("files") MultipartFile[] fichiersJoint) throws URISyntaxException {
-        log.debug("Création de la Demande : {}", demande);
+    public ResponseEntity<DemandeDTO> create(@Valid @RequestParam(value="demande") String demandeJson, @RequestParam(value ="files", required = false) MultipartFile[] fichiersJoint) throws URISyntaxException {
+        log.debug("Création de la Demande : {}", demandeJson);
+        ObjectMapper mapper = new ObjectMapper();
+        DemandeDTO demande;
+		try {
+			demande = mapper.readValue(demandeJson, DemandeDTO.class);
+		} catch (Exception e) {
+			throw new CustomException("Echec lors du formatage des donnees du formulaire");
+		} 
         DemandeDTO dem = demandeService.create(demande, fichiersJoint);
         return ResponseEntity.created(new URI("/api/demandes/" + dem.getId()))
                 .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, dem.getId().toString()))

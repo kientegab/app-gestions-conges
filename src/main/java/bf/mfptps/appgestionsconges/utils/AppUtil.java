@@ -94,6 +94,10 @@ public class AppUtil {
 				byte[] bytes = file.getBytes();
 				String fileName = System.currentTimeMillis()+ "_" + file.getOriginalFilename();
 				 Path path = Paths.get(uplaodStorage+ File.separatorChar+ userStorage+ File.separatorChar + fileName);
+				 File dir = new File(path.toString());
+				 if(!dir.exists()) {
+					 dir.getParentFile().mkdirs();
+				 }
 				 Files.write(path, bytes);
 				return path.toString();
 			} catch (IOException e) {

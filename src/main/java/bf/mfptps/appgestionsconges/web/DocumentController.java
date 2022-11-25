@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -53,8 +54,8 @@ public class DocumentController {
         this.documentService = documentService;
     }
 
-    @PostMapping(path = "/documents{numeroDemande}" )
-    public ResponseEntity<DocumentDTO> create(@PathVariable("numeroDemande") String  numeroDemande, @RequestParam("file") MultipartFile file) throws URISyntaxException {
+    @PostMapping(path = "/documents{numeroDemande}")
+    public ResponseEntity<DocumentDTO> create(@PathVariable("numeroDemande") String  numeroDemande, @RequestPart("file") MultipartFile file) throws URISyntaxException {
         log.debug("Création du Document pour la demande : {}", numeroDemande);
         DocumentDTO document = documentService.create(numeroDemande, file);
         return ResponseEntity.created(new URI("/api/documents/" + document.getId()))

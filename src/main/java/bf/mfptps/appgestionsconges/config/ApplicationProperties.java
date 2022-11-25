@@ -13,7 +13,7 @@ public class ApplicationProperties {
 
     private final Cache cache = new Cache();
     
-    private String appUploadsStorage = "/mnt/uploads";
+    private String appUploadsStorage = "/opt/uploads/";
 
     public String getName() {
         return name;
