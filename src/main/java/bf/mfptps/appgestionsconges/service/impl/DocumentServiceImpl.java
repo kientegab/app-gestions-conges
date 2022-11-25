@@ -105,8 +105,8 @@ public class DocumentServiceImpl implements DocumentService {
 
 	@Override
 	@Transactional()
-	public Optional<DocumentDTO> findByReference(String ref) {
-		return documentRepository.findByReference(ref).map(documentMapper::toDto);
+	public Optional<Document> findByReference(String ref) {
+		return documentRepository.findByReference(ref);
 	}
 
 	@Override
@@ -117,8 +117,8 @@ public class DocumentServiceImpl implements DocumentService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public Optional<DocumentDTO> findById(Long id) {
-		return documentRepository.findById(id).map(documentMapper::toDto);
+	public Optional<Document> findById(Long id) {
+		return documentRepository.findById(id);
 	}
 
 	@Override

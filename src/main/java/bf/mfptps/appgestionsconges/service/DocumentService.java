@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
+import bf.mfptps.appgestionsconges.entities.Document;
 import bf.mfptps.appgestionsconges.service.dto.DocumentDTO;
 
 public interface DocumentService {
@@ -14,9 +15,9 @@ public interface DocumentService {
 
 	DocumentDTO update(String numeroDemande, MultipartFile fichier);
 
-    Optional<DocumentDTO> findByReference(String ref);
+    Optional<Document> findByReference(String ref);
 
-    Optional<DocumentDTO> findById(Long id);
+    Optional<Document> findById(Long id);
 
     Page<DocumentDTO> findAll(Pageable pageable);
 

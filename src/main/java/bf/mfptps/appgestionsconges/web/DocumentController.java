@@ -1,27 +1,36 @@
 package bf.mfptps.appgestionsconges.web;
 
-import bf.mfptps.appgestionsconges.entities.Document;
-import bf.mfptps.appgestionsconges.service.DocumentService;
-import bf.mfptps.appgestionsconges.service.dto.DocumentDTO;
-import bf.mfptps.appgestionsconges.utils.AppUtil;
-import bf.mfptps.appgestionsconges.utils.HeaderUtil;
-import bf.mfptps.appgestionsconges.utils.PaginationUtil;
-import bf.mfptps.appgestionsconges.utils.ResponseUtil;
-import bf.mfptps.appgestionsconges.web.exceptions.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
-import javax.validation.Valid;
-import org.slf4j.*;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.*;
-import org.springframework.http.*;
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import bf.mfptps.appgestionsconges.entities.Document;
+import bf.mfptps.appgestionsconges.service.DocumentService;
+import bf.mfptps.appgestionsconges.service.dto.DocumentDTO;
+import bf.mfptps.appgestionsconges.utils.HeaderUtil;
+import bf.mfptps.appgestionsconges.utils.PaginationUtil;
+import bf.mfptps.appgestionsconges.utils.ResponseUtil;
+import bf.mfptps.appgestionsconges.web.exceptions.BadRequestAlertException;
 
 /**
  *
@@ -44,16 +53,8 @@ public class DocumentController {
         this.documentService = documentService;
     }
 
-    /**
-     * Access granted to ADMIN ...
-     *
-     * @param document
-     * @return
-     * @throws URISyntaxException
-     */
-    @PostMapping(path = "/documents")
-    @PreAuthorize("hasAnyAuthority(\"" + AppUtil.ADMIN + "\")")
-    public ResponseEntity<DocumentDTO> create(@RequestPart("numeroDemande") String  numeroDemande, @RequestPart("file") MultipartFile file) throws URISyntaxException {
+    @PostMapping(path = "/documents{numeroDemande}" )
+    public ResponseEntity<DocumentDTO> create(@PathVariable("numeroDemande") String  numeroDemande, @RequestParam("file") MultipartFile file) throws URISyntaxException {
         log.debug("Création du Document pour la demande : {}", numeroDemande);
         DocumentDTO document = documentService.create(numeroDemande, file);
         return ResponseEntity.created(new URI("/api/documents/" + document.getId()))
@@ -61,16 +62,9 @@ public class DocumentController {
                 .body(document);
     }
 
-    /**
-     * Access granted to ADMIN ...
-     *
-     * @param document
-     * @return
-     * @throws URISyntaxException
-     */
-    @PutMapping(path = "/documents")
-    @PreAuthorize("hasAnyAuthority(\"" + AppUtil.ADMIN + "\")")
-    public ResponseEntity<DocumentDTO> updateDocument(@Valid @RequestPart("reference") String reference, @RequestPart("file") MultipartFile file) throws URISyntaxException {
+
+    @PutMapping(path = "/documents{reference}")
+    public ResponseEntity<DocumentDTO> updateDocument(@PathVariable(name = "reference") String reference, @RequestParam("file") MultipartFile file) throws URISyntaxException {
         log.debug("Mis à jour du Document : {}", reference);
         if (!StringUtils.hasText(reference)) {
             throw new BadRequestAlertException("Reference invalide", ENTITY_NAME, "idnull");
@@ -84,7 +78,7 @@ public class DocumentController {
     @GetMapping(path = "/documents/{reference}")
     public ResponseEntity<Document> getDocument(@PathVariable(name = "reference") String reference) {
         log.debug("Consultation du Document : {}", reference);
-        Optional<DocumentDTO> document = documentService.get(reference);
+        Optional<Document> document = documentService.findByReference(reference);
         return ResponseUtil.wrapOrNotFound(document);
     }
 
