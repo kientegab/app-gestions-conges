@@ -23,6 +23,8 @@ public class AppUtil {
 
     @Size(min = ManagedAgentVM.PASSWORD_MIN_LENGTH, max = ManagedAgentVM.PASSWORD_MAX_LENGTH)
     public static final String DEFAULT_PASSWORD = "12345678";
+    public static String TYPE_EXCEL = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+    public static String TYPE_CSV = "application/csv";
 
     /**
      * TYPE OF STRUCTURE
@@ -46,7 +48,7 @@ public class AppUtil {
     public static final String BASIC_STRUCTURE_EMAIL = "contact.test@fp.gov.bf";
     public static final String BASIC_STRUCTURE_RESPONSABLE = "contact.test@fp.gov.bf";
 
-    public static final String BASIC_TYPE_STRUCTURE_LIBELLE = "REGIONALE";
+    public static final String BASIC_TYPE_STRUCTURE_LIBELLE = "CENTRALE";
 
     /**
      * ALL ROLE/PRIVILEGES OF USERS

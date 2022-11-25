@@ -5,8 +5,7 @@
  */
 package bf.mfptps.appgestionsconges.repositories;
 
-import bf.mfptps.appgestionsconges.entities.Corps;
-import java.util.Optional;
+import bf.mfptps.appgestionsconges.entities.ModalitePaie;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
@@ -14,7 +13,6 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
  *
  * @author HEBIE
  */
-public interface CorpsRepository extends JpaRepository<Corps, Long>, JpaSpecificationExecutor<Corps> {
+public interface ModalitePaieRepository extends JpaRepository<ModalitePaie, Long>, JpaSpecificationExecutor<ModalitePaie> {
 
-    Optional<Corps> findByCodeCorps(String codeCorps);
 }
