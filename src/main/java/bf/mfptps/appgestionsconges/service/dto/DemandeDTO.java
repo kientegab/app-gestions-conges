@@ -14,11 +14,11 @@ public class DemandeDTO  {
     private Date periodeDebut;
 
     private Date periodeFin;
-   /* private MotifAbsenceDTO motifAbsence;
+    private MotifAbsenceDTO motifAbsence;
 
     private TypeDemandeDTO typeDemande ;
 
-    private UtilisateurDTO utilisateur ;*/
+    private UtilisateurDTO utilisateur ;
 
     public Long getId() {
         return id;
@@ -92,27 +92,28 @@ public class DemandeDTO  {
         this.periodeFin = periodeFin;
     }
 
-//    public MotifAbsence getMotifAbsence() {
-//        return motifAbsence;
-//    }
-//
-//    public void setMotifAbsence(MotifAbsence motifAbsence) {
-//        this.motifAbsence = motifAbsence;
-//    }
-//
-//    public TypeDemande getTypeDemande() {
-//        return typeDemande;
-//    }
-//
-//    public void setTypeDemande(TypeDemande typeDemande) {
-//        this.typeDemande = typeDemande;
-//    }
-//
-//    public Utilisateur getUtilisateur() {
-//        return utilisateur;
-//    }
-//
-//    public void setUtilisateur(Utilisateur utilisateur) {
-//        this.utilisateur = utilisateur;
-//    }
+	public MotifAbsenceDTO getMotifAbsence() {
+		return motifAbsence;
+	}
+
+	public void setMotifAbsence(MotifAbsenceDTO motifAbsence) {
+		this.motifAbsence = motifAbsence;
+	}
+
+	public TypeDemandeDTO getTypeDemande() {
+		return typeDemande;
+	}
+
+	public void setTypeDemande(TypeDemandeDTO typeDemande) {
+		this.typeDemande = typeDemande;
+	}
+
+	public UtilisateurDTO getUtilisateur() {
+		return utilisateur;
+	}
+
+	public void setUtilisateur(UtilisateurDTO utilisateur) {
+		this.utilisateur = utilisateur;
+	}
+
 }
