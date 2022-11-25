@@ -86,6 +86,8 @@ fetch first 100 rows only
     //================================= DEBUT TRAITEMENT FILE AGENT ==================================
     private void traitementAgentExcel(List<Agent> agents) {
         List<Agent> newAgents = new ArrayList<Agent>();
+        List<Agent> agentsToUpdate = new ArrayList<Agent>();
+
         for (Agent agent : agents) {
             Agent agentFromdb = agentRepository.findOneByMatricule(agent.getMatricule()).orElse(null);
             if (agentFromdb == null) {//faire une insertion car nouvelle ligne c
@@ -115,13 +117,17 @@ fetch first 100 rows only
                 agentFromdb.setAffectation(agent.getAffectation());
                 agentFromdb.setCorps(agent.getCorps());
 
-                agentRepository.save(agentFromdb);
+                agentsToUpdate.add(agentFromdb);
             }
         }
 
         if (!newAgents.isEmpty()) {
             System.out.println("_______________________ ici");
             agentRepository.saveAll(newAgents);
+        }
+
+        if (!agentsToUpdate.isEmpty()) {
+            agentRepository.saveAll(agentsToUpdate);
         }
     }
 
@@ -172,6 +178,8 @@ fetch first 100 rows only
     //======================================= DEBUT TRAITEMENT FILE CORPS =====================================
     private void traitementCorpsExcel(List<Corps> corps) {
         List<Corps> newCorps = new ArrayList<Corps>();
+        List<Corps> corpsToUpdate = new ArrayList<Corps>();
+
         for (Corps c : corps) {
             Corps corpsFromdb = corpsRepository.findByCodeCorps(c.getCodeCorps()).orElse(null);
             if (corpsFromdb == null) {//faire une insertion car nouvelle ligne c
@@ -181,13 +189,18 @@ fetch first 100 rows only
                 System.out.println("...................... MISE A JOUR ID = " + corpsFromdb.getId() + " CODE = " + c.getCodeCorps());
                 corpsFromdb.setLibelleCorps(c.getLibelleCorps());
 
-                corpsRepository.save(corpsFromdb);
+                corpsToUpdate.add(corpsFromdb);
+
             }
         }
 
         if (!newCorps.isEmpty()) {
             corpsRepository.saveAll(newCorps);
         }
+        if (!corpsToUpdate.isEmpty()) {
+            corpsRepository.saveAll(corpsToUpdate);
+        }
+
     }
 
     private List<Corps> lectureDuFichierCorps(InputStream is) throws IOException {
