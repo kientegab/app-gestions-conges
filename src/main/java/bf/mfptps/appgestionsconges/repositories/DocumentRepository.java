@@ -10,6 +10,4 @@ import bf.mfptps.appgestionsconges.entities.Document;
 
 public interface DocumentRepository extends JpaRepository<Document, Long>, JpaSpecificationExecutor<Document> {
 	Optional<Document> findByReference(String reference);
-
-    Optional<DocumentDTO> findOne(Long id);
 }

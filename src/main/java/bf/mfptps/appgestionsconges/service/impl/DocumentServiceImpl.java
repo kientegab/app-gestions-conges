@@ -120,9 +120,4 @@ public class DocumentServiceImpl implements DocumentService {
 		// TODO Auto-generated method stub
 
 	}
-
-	@Override
-	public Optional<DocumentDTO> findOne(Long id) {
-		return documentRepository.findOne(id);
-	}
 }

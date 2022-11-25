@@ -22,5 +22,4 @@ public interface DocumentService {
 
     void delete(Long reference);
 
-    Optional<DocumentDTO> findOne(Long id);
 }
