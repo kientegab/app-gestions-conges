@@ -9,11 +9,15 @@ import bf.mfptps.appgestionsconges.repositories.AgentStructureRepository;
 import bf.mfptps.appgestionsconges.repositories.ProfileRepository;
 import bf.mfptps.appgestionsconges.repositories.StructureRepository;
 import bf.mfptps.appgestionsconges.security.SecurityUtils;
+import bf.mfptps.appgestionsconges.service.dto.ActivateCompteRequest;
+import bf.mfptps.appgestionsconges.service.dto.ActivateCompteResponse;
 import bf.mfptps.appgestionsconges.service.dto.AgentDTO;
 import bf.mfptps.appgestionsconges.service.dto.AgentStructureDTO;
+import bf.mfptps.appgestionsconges.service.dto.CreateCompteRequest;
 import bf.mfptps.appgestionsconges.utils.AppUtil;
 import bf.mfptps.appgestionsconges.utils.RandomUtil;
 import bf.mfptps.appgestionsconges.web.exceptions.CustomException;
+import bf.mfptps.appgestionsconges.web.exceptions.EntityNotFoundException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
@@ -405,4 +409,62 @@ public class AgentService {
 
         return response;
     }
+
+    public ActivateCompteResponse activateCompte(ActivateCompteRequest request) {
+        /*  ActivateCompteResponse result = new ActivateCompteResponse();
+        Agent agent = agentRepository.activateCompte(
+                request.getMatricule(),
+                request.getDateNaissance(),
+                request.getDateRecrutement())
+                .orElseThrow(() -> new EntityNotFoundException("Aucun candidat trouve avec le numero matricule '%s'", request.getMatricule()));
+        if (agent.isActif()) {
+            log.error("Agent is already active");
+            throw new CustomException("L'agent est déja actif ");
+        } else {*/
+
+        return agentRepository.activateCompte(
+                request.getMatricule(),
+                request.getDateNaissance(),
+                request.getDateRecrutement())
+                .map(agent -> {
+                    return ActivateCompteResponse.builder()
+                            .activate(true)
+                            .build();
+                })
+                .orElse(new ActivateCompteResponse(false));
+    }
+
+    private Agent getAgent(String matricule) {
+        Agent agent = agentRepository.findOneByMatricule(matricule)
+                .orElseThrow(() -> new EntityNotFoundException("Aucun candidat trouve avec le numero matricule '%s'", matricule));
+        if (agent.isActif()) {
+            log.error("Agent is already active");
+            throw new CustomException("L'agent est déja actif ");
+        }
+        return agent;
+    }
+
+    @Transactional
+    public Agent create(CreateCompteRequest request) {
+
+        Agent agent = getAgent(request.getMatricule().toLowerCase());
+        agent.activate();
+        agent.setEmail(request.getEmail());
+        String encryptedPassword = passwordEncoder.encode(request.getPassword());
+        agent.setPassword(encryptedPassword);
+        agent.setResetKey(RandomUtil.generateResetKey());
+        agent.setResetDate(Instant.now());
+
+        Set<Profile> profiles = new HashSet<>();
+        profiles.add(profileRepository.findByName("USER").get());
+        agent.setProfiles(profiles);
+        agentRepository.save(agent);
+
+        this.clearAgentCaches(agent);
+
+        log.debug(
+                "Created Information for Agent: {}", agent);
+        return agent;
+    }
+
 }

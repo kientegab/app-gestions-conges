@@ -368,6 +368,10 @@ public class Agent extends CommonEntity {
         this.corps = corps;
     }
 
+    public void activate() {
+        this.actif = true;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
