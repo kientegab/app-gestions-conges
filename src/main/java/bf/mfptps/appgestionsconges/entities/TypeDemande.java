@@ -45,10 +45,13 @@ import java.util.Set;
         
 
         @OneToMany(mappedBy = "typeDemande")
-        private Set<TypeVisa> typeVisas = new HashSet<TypeVisa>();
+        private Set<TypeVisa> typeVisas;
         
         @Column(name ="solde_annuel")
-        private String soldeAnnuel;
+        private Long soldeAnnuel;
+
+        @Column(name ="code")
+        private String code;
 
 
         public Long getId() {
@@ -97,15 +100,23 @@ import java.util.Set;
     
     
 
-    public String getSoldeAnnuel() {
+    public Long getSoldeAnnuel() {
 		return soldeAnnuel;
 	}
 
-	public void setSoldeAnnuel(String soldeAnnuel) {
+	public void setSoldeAnnuel(Long soldeAnnuel) {
 		this.soldeAnnuel = soldeAnnuel;
 	}
 
-	@Override
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -127,6 +138,7 @@ import java.util.Set;
                 ", description='" + description + '\'' +
                 ", typeVisas=" + typeVisas +
                 ", soldeAnnuel=" + soldeAnnuel +
+                ", code='" + code + '\'' +
                 '}';
     }
 }

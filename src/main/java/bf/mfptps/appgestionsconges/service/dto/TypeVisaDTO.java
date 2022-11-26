@@ -2,13 +2,14 @@ package bf.mfptps.appgestionsconges.service.dto;
 
 import bf.mfptps.appgestionsconges.entities.CommonEntity;
 import bf.mfptps.appgestionsconges.entities.TypeDemande;
+import bf.mfptps.appgestionsconges.entities.TypeVisaKey;
 import bf.mfptps.appgestionsconges.entities.Visa;
 
+import javax.persistence.EmbeddedId;
 import java.util.Objects;
 
 public class TypeVisaDTO extends CommonEntity {
-
-    private Long id;
+    TypeVisaKey id;
 
     private Visa visa;
 
@@ -19,18 +20,18 @@ public class TypeVisaDTO extends CommonEntity {
     public TypeVisaDTO() {
     }
 
-    public TypeVisaDTO(Long id, Visa visa, TypeDemande typeDemande, Long numeroOrdre) {
+    public TypeVisaDTO(TypeVisaKey id, Visa visa, TypeDemande typeDemande, Long numeroOrdre) {
         this.id = id;
         this.visa = visa;
         this.typeDemande = typeDemande;
         this.numeroOrdre = numeroOrdre;
     }
 
-    public Long getId() {
+    public TypeVisaKey getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(TypeVisaKey id) {
         this.id = id;
     }
 

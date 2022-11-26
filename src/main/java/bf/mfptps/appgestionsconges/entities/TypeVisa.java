@@ -27,31 +27,38 @@ import java.util.Objects;
 )
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class TypeVisa extends CommonEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
-    @SequenceGenerator(name = "sequenceGenerator")
-    @Column(name = "type_visa_id")
-    private Long id;
+    @EmbeddedId
+    TypeVisaKey id;
 
     @ManyToOne
+    @MapsId("visaId")
     @JoinColumn(name = "visa_id")
-    private Visa visa;
+    Visa visa;
 
 
     @ManyToOne
+    @MapsId("typeDemandeId")
     @JoinColumn(name = "type_demande_id")
-    private TypeDemande typeDemande;
+    TypeDemande typeDemande;
 
     @NotNull
-    @Column(name = "numero_ordre", unique = true, nullable = false)
     private Long numeroOrdre;
 
-    public Long getId() {
+    public TypeVisa() {
+    }
+
+    public TypeVisa(TypeVisaKey id, Visa visa, TypeDemande typeDemande, Long numeroOrdre) {
+        this.id = id;
+        this.visa = visa;
+        this.typeDemande = typeDemande;
+        this.numeroOrdre = numeroOrdre;
+    }
+
+    public TypeVisaKey getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(TypeVisaKey id) {
         this.id = id;
     }
 
@@ -78,7 +85,6 @@ public class TypeVisa extends CommonEntity {
     public void setNumeroOrdre(Long numeroOrdre) {
         this.numeroOrdre = numeroOrdre;
     }
-
 
     @Override
     public boolean equals(Object o) {
