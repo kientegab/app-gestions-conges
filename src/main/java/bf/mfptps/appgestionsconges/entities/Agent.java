@@ -48,7 +48,7 @@ public class Agent extends CommonEntity {
 
     @Email
     @Size(min = 5, max = 254)
-    @Column(length = 254, unique = true)
+    @Column(length = 254, unique = true, nullable = true)
     private String email;
 
     @JsonIgnore

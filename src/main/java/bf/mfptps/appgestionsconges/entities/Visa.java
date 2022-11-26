@@ -47,7 +47,7 @@ public class Visa extends CommonEntity {
     private String libelle;
 
     @OneToMany(mappedBy = "visa")
-    private Set<TypeVisa> typeVisas = new HashSet<TypeVisa>();
+    private Set<TypeVisa> typeVisas;
 
     public Long getId() {
         return id;
