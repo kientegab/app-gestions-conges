@@ -16,7 +16,9 @@ import java.util.Set;
         private Boolean modePaie;
         private String description;
         private Set<TypeVisaDTO> typeVisas = new HashSet<>();
-        private String soldeAnnuel;
+        private Long soldeAnnuel;
+
+        private String code;
 
 
         public Long getId() {
@@ -65,15 +67,23 @@ import java.util.Set;
     
     
 
-    public String getSoldeAnnuel() {
+    public Long getSoldeAnnuel() {
 		return soldeAnnuel;
 	}
 
-	public void setSoldeAnnuel(String soldeAnnuel) {
+	public void setSoldeAnnuel(Long soldeAnnuel) {
 		this.soldeAnnuel = soldeAnnuel;
 	}
 
-	@Override
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -88,13 +98,14 @@ import java.util.Set;
 
     @Override
     public String toString() {
-      return "TypeDemande{" +
+        return "TypeDemandeDTO{" +
                 "id=" + id +
                 ", libelle='" + libelle + '\'' +
                 ", modePaie=" + modePaie +
                 ", description='" + description + '\'' +
                 ", typeVisas=" + typeVisas +
                 ", soldeAnnuel=" + soldeAnnuel +
+                ", code='" + code + '\'' +
                 '}';
     }
 }
