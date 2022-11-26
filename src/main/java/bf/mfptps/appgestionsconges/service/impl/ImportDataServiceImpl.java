@@ -17,10 +17,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -36,9 +39,12 @@ public class ImportDataServiceImpl implements ImportDataService {
 
     private final CorpsRepository corpsRepository;
 
-    public ImportDataServiceImpl(AgentRepository agentRepository, CorpsRepository corpsRepository) {
+    private final PasswordEncoder passwordEncoder;
+
+    public ImportDataServiceImpl(AgentRepository agentRepository, CorpsRepository corpsRepository, PasswordEncoder passwordEncoder) {
         this.agentRepository = agentRepository;
         this.corpsRepository = corpsRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     /* select a.no_matricule, a.lt_matricule, a.nm, a.pn, a.nm_jf, a.sexe,a.dt_naissance, a.lieu_naissance, a.no_cnib, b.DT_POSIT_ADM,a.TEL_MOBILE,a.EMAIL, b.CD_QUAL_AGENT, b.DT_QUAL_AGENT,
@@ -54,6 +60,7 @@ and a.no_cnib Is not null
 fetch first 100 rows only
 ; */
     @Override
+    @Transactional(rollbackFor = CustomException.class)
     public void importerAgents(MultipartFile file) {
         try {
             if (AppUtil.TYPE_EXCEL.equals(file.getContentType())) {
@@ -92,8 +99,9 @@ fetch first 100 rows only
             Agent agentFromdb = agentRepository.findOneByMatricule(agent.getMatricule()).orElse(null);
             if (agentFromdb == null) {//faire une insertion car nouvelle ligne c
                 System.out.println("...................... A AJOUTER MATRICULE = " + agent.getMatricule());
-                agent.setPassword(AppUtil.DEFAULT_PASSWORD);
+                agent.setPassword(passwordEncoder.encode(AppUtil.DEFAULT_PASSWORD));
                 agent.setActif(false);
+
                 newAgents.add(agent);
             } else {//faire une mise a jour d'une ligne en db
                 System.out.println("...................... MISE A JOUR ID = " + agentFromdb.getId() + " MATRICULE = " + agent.getMatricule());
@@ -122,10 +130,8 @@ fetch first 100 rows only
         }
 
         if (!newAgents.isEmpty()) {
-            System.out.println("_______________________ ici");
             agentRepository.saveAll(newAgents);
         }
-
         if (!agentsToUpdate.isEmpty()) {
             agentRepository.saveAll(agentsToUpdate);
         }
@@ -148,13 +154,13 @@ fetch first 100 rows only
                 agent.setNom(row.getCell(2).getStringCellValue());
                 agent.setPrenom(row.getCell(3).getStringCellValue());
                 agent.setNomJeuneFille(row.getCell(4).getStringCellValue());
-                agent.setSexe(row.getCell(5).getStringCellValue() == "M" ? Sexe.MASCULIN : Sexe.FEMININ);
+                agent.setSexe(Objects.equals(row.getCell(5).getStringCellValue(), "" + 'M') ? Sexe.MASCULIN : Sexe.FEMININ);
                 //agent.setDateNaissance(row.getCell(6).getDateCellValue());
                 agent.setLieuNaissance(row.getCell(7).getStringCellValue());
                 agent.setNoCNIB(row.getCell(8).getStringCellValue());
                 //agent.setDateRecrutement(row.getCell(9).getDateCellValue());
                 agent.setTelephone(row.getCell(10).getStringCellValue());
-                agent.setEmail(row.getCell(11).getStringCellValue());
+                agent.setEmail(Objects.equals(row.getCell(11).getStringCellValue(), "") ? null : row.getCell(11).getStringCellValue());
                 agent.setQualite(row.getCell(12).getStringCellValue());
                 //agent.setDateQualite(row.getCell(13).getDateCellValue());
                 agent.setCategorie(row.getCell(14).getStringCellValue());
