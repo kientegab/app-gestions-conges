@@ -55,7 +55,7 @@ public class DocumentController {
     }
 
     @PostMapping(path = "/documents{numeroDemande}")
-    public ResponseEntity<DocumentDTO> create(@PathVariable("numeroDemande") String  numeroDemande, @RequestPart("file") MultipartFile file) throws URISyntaxException {
+    public ResponseEntity<DocumentDTO> create(@PathVariable("numeroDemande") String  numeroDemande, @RequestParam("file") MultipartFile file) throws URISyntaxException {
         log.debug("Création du Document pour la demande : {}", numeroDemande);
         DocumentDTO document = documentService.create(numeroDemande, file);
         return ResponseEntity.created(new URI("/api/documents/" + document.getId()))
