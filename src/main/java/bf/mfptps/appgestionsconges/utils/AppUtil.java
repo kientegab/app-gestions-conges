@@ -5,11 +5,6 @@
  */
 package bf.mfptps.appgestionsconges.utils;
 
-import bf.mfptps.appgestionsconges.entities.Demande;
-import bf.mfptps.appgestionsconges.entities.Document;
-import bf.mfptps.appgestionsconges.web.exceptions.CustomException;
-import bf.mfptps.appgestionsconges.web.vm.ManagedAgentVM;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,12 +12,13 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.DecimalFormat;
-import java.util.Set;
 
 import javax.validation.constraints.Size;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import bf.mfptps.appgestionsconges.web.exceptions.CustomException;
+import bf.mfptps.appgestionsconges.web.vm.ManagedAgentVM;
 import lombok.extern.slf4j.Slf4j;
 
 /**
