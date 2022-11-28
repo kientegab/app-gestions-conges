@@ -2,6 +2,8 @@ package bf.mfptps.appgestionsconges.service.dto;
 
 import java.util.Date;
 
+import bf.mfptps.appgestionsconges.enums.EStatusDemande;
+
 public class DemandeDTO  {
     private Long id;
     private String numeroDemande;
@@ -19,6 +21,9 @@ public class DemandeDTO  {
     private TypeDemandeDTO typeDemande ;
 
     private UtilisateurDTO utilisateur ;
+    
+    private EStatusDemande statusDemande;
+    
 
     public Long getId() {
         return id;
@@ -116,4 +121,11 @@ public class DemandeDTO  {
 		this.utilisateur = utilisateur;
 	}
 
+	public EStatusDemande getStatusDemande() {
+		return statusDemande;
+	}
+
+	public void setStatusDemande(EStatusDemande statusDemande) {
+		this.statusDemande = statusDemande;
+	}
 }

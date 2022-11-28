@@ -3,6 +3,8 @@ package bf.mfptps.appgestionsconges.entities;
 import org.hibernate.annotations.*;
 import org.hibernate.annotations.Cache;
 
+import bf.mfptps.appgestionsconges.enums.EStatusDemande;
+
 import javax.persistence.*;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -66,6 +68,8 @@ public class Demande extends CommonEntity {
     @ManyToOne
     @JoinColumn(name = "type_demande_id")
     private TypeDemande typeDemande ;
+    
+    
 
     @ManyToOne
     @JoinColumn(name = "utilisateur_id")
@@ -73,6 +77,9 @@ public class Demande extends CommonEntity {
     @OneToMany(mappedBy = "demande", cascade = CascadeType.ALL)
     @JsonIgnoreProperties(value = { "demande" }, allowSetters = true)
     private Set<Document> documents = new HashSet<>();
+    
+    @Column(name = "status")
+    private EStatusDemande statusDemande;
 
     public Long getId() {
         return id;
@@ -178,6 +185,14 @@ public class Demande extends CommonEntity {
 		this.documents = documents;
 	}
 
+	public EStatusDemande getStatusDemande() {
+		return statusDemande;
+	}
+
+	public void setStatusDemande(EStatusDemande statusDemande) {
+		this.statusDemande = statusDemande;
+	}
+
 	@Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -207,6 +222,7 @@ public class Demande extends CommonEntity {
                 ", typeDemande=" + typeDemande +
                 ", utilisateur=" + utilisateur +
                 ", documents=" + documents +
+                ", statusDemande=" + statusDemande +
                 '}';
     }
 }

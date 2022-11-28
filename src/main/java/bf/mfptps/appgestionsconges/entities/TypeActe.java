@@ -3,15 +3,15 @@ package bf.mfptps.appgestionsconges.entities;
 import org.hibernate.annotations.*;
 import org.hibernate.annotations.Cache;
 
-import bf.mfptps.appgestionsconges.enums.EStatusActe;
+import bf.mfptps.appgestionsconges.enums.EPorteActe;
 
 import javax.persistence.*;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "acte")
-@SQLDelete(sql = "UPDATE acte SET deleted = true WHERE id=?")
+@Table(name = "type_acte")
+@SQLDelete(sql = "UPDATE type_acte SET deleted = true WHERE id=?")
 @Where(clause = "deleted = false")
 @FilterDef(
         name = "deletedFilter",
@@ -23,7 +23,7 @@ import javax.persistence.Table;
 )
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 
-public class Acte extends CommonEntity{
+public class TypeActe extends CommonEntity{
 
 
 	@Id
@@ -31,19 +31,18 @@ public class Acte extends CommonEntity{
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
     
-    @Column(name = "reference", nullable = false, unique = true)
+    @Column(name = "code", nullable = false, unique = true)
     private String reference;
     
-    @Column(name = "status")
-    @Enumerated(EnumType.STRING)
-    private EStatusActe status;
+    @Column(name = "libelle")
+    private String libelle;
     
-    @Column(name = "ampliation")
-    private String ampliation;
+    @Column(name = "template_uri")
+    private String templateUri;
     
     @ManyToOne
-    @JoinColumn(name = "typeacte_id")
-    private TypeActe typeActe;
+    @Enumerated(EnumType.STRING)
+    private EPorteActe typeActe;
     
 
 	public Long getId() {
@@ -62,21 +61,29 @@ public class Acte extends CommonEntity{
 		this.reference = reference;
 	}
 
-	public String getStatus() {
-		return status;
+	public String getLibelle() {
+		return libelle;
 	}
 
-	public void setStatus(String status) {
-		this.status = status;
+	public void setLibelle(String libelle) {
+		this.libelle = libelle;
 	}
 
-	public String getAmpliation() {
-		return ampliation;
+	public String getTemplateUri() {
+		return templateUri;
 	}
 
-	public void setAmpliation(String ampliation) {
-		this.ampliation = ampliation;
+	public void setTemplateUri(String templateUri) {
+		this.templateUri = templateUri;
 	}
-    
-    
+
+	public EPorteActe getTypeActe() {
+		return typeActe;
+	}
+
+	public void setTypeActe(EPorteActe typeActe) {
+		this.typeActe = typeActe;
+	}
+
+    s
 }
