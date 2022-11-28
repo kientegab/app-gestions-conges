@@ -454,12 +454,19 @@ public class AgentService {
         agent.setPassword(encryptedPassword);
         agent.setResetKey(RandomUtil.generateResetKey());
         agent.setResetDate(Instant.now());
+        agent.setMatriculeResp(request.getMatriculeResp());
 
         Set<Profile> profiles = new HashSet<>();
         profiles.add(profileRepository.findByName("USER").get());
         agent.setProfiles(profiles);
         agentRepository.save(agent);
-
+        if (request.getStructure().getId() != null) {
+            Structure structure = structureRepository.findById(request.getStructure().getId()).orElseThrow(() -> new CustomException("Structure with id = " + request.getStructure().getId() + " does not exist !"));
+            AgentStructure agentStructure = new AgentStructure();
+            agentStructure.setAgent(agent);
+            agentStructure.setStructure(structure);
+            agentStructureRepository.save(agentStructure);//dd
+        }
         this.clearAgentCaches(agent);
 
         log.debug(

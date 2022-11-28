@@ -1,22 +1,18 @@
 package bf.mfptps.appgestionsconges.entities;
 
-import org.hibernate.annotations.*;
-import org.hibernate.annotations.Cache;
-
-import javax.persistence.*;
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.Table;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import java.util.*;
+import javax.persistence.*;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.FilterDef;
+import org.hibernate.annotations.ParamDef;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
-
-@Entity
-@Table(name = "demande")
+@javax.persistence.Entity
+@javax.persistence.Table(name = "demande")
 @SQLDelete(sql = "UPDATE demande SET deleted = true WHERE id=?")
 @Where(clause = "deleted = false")
 @FilterDef(
@@ -65,13 +61,13 @@ public class Demande extends CommonEntity {
 
     @ManyToOne
     @JoinColumn(name = "type_demande_id")
-    private TypeDemande typeDemande ;
+    private TypeDemande typeDemande;
 
     @ManyToOne
-    @JoinColumn(name = "utilisateur_id")
-    private Utilisateur utilisateur ;
+    @JoinColumn(name = "agent_id")
+    private Utilisateur utilisateur;
     @OneToMany(mappedBy = "demande", cascade = CascadeType.ALL)
-    @JsonIgnoreProperties(value = { "demande" }, allowSetters = true)
+    @JsonIgnoreProperties(value = {"demande"}, allowSetters = true)
     private Set<Document> documents = new HashSet<>();
 
     public Long getId() {
@@ -171,17 +167,21 @@ public class Demande extends CommonEntity {
     }
 
     public Set<Document> getDocuments() {
-		return documents;
-	}
+        return documents;
+    }
 
-	public void setDocuments(Set<Document> documents) {
-		this.documents = documents;
-	}
+    public void setDocuments(Set<Document> documents) {
+        this.documents = documents;
+    }
 
-	@Override
+    @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Demande demande = (Demande) o;
         return id.equals(demande.id);
     }
@@ -193,20 +193,20 @@ public class Demande extends CommonEntity {
 
     @Override
     public String toString() {
-        return "Demande{" +
-                "id=" + id +
-                ", numeroDemande='" + numeroDemande + '\'' +
-                ", lieuJouissanceBF='" + lieuJouissanceBF + '\'' +
-                ", lieuJouissanceEtrang='" + lieuJouissanceEtrang + '\'' +
-                ", refLastDecision='" + refLastDecision + '\'' +
-                ", situationSND='" + situationSND + '\'' +
-                ", dureeAbsence=" + dureeAbsence +
-                ", periodeDebut=" + periodeDebut +
-                ", periodeFin=" + periodeFin +
-                ", motifAbsence=" + motifAbsence +
-                ", typeDemande=" + typeDemande +
-                ", utilisateur=" + utilisateur +
-                ", documents=" + documents +
-                '}';
+        return "Demande{"
+                + "id=" + id
+                + ", numeroDemande='" + numeroDemande + '\''
+                + ", lieuJouissanceBF='" + lieuJouissanceBF + '\''
+                + ", lieuJouissanceEtrang='" + lieuJouissanceEtrang + '\''
+                + ", refLastDecision='" + refLastDecision + '\''
+                + ", situationSND='" + situationSND + '\''
+                + ", dureeAbsence=" + dureeAbsence
+                + ", periodeDebut=" + periodeDebut
+                + ", periodeFin=" + periodeFin
+                + ", motifAbsence=" + motifAbsence
+                + ", typeDemande=" + typeDemande
+                + ", utilisateur=" + utilisateur
+                + ", documents=" + documents
+                + '}';
     }
 }
