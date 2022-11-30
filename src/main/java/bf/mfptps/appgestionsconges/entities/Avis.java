@@ -44,7 +44,7 @@ public class Avis extends CommonEntity {
 
     @Column(name = "avis_dg", length = 254)
     private String avisDG;
-
+    
     @ManyToOne
     @JoinColumn(name = "demande_id")
     private Demande demande;
