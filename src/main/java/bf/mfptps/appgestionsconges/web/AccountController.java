@@ -5,8 +5,11 @@ import bf.mfptps.appgestionsconges.repositories.AgentRepository;
 import bf.mfptps.appgestionsconges.security.SecurityUtils;
 import bf.mfptps.appgestionsconges.service.AgentService;
 import bf.mfptps.appgestionsconges.service.MailService;
+import bf.mfptps.appgestionsconges.service.dto.ActivateCompteRequest;
+import bf.mfptps.appgestionsconges.service.dto.ActivateCompteResponse;
 import bf.mfptps.appgestionsconges.service.dto.ActivatedPassword;
 import bf.mfptps.appgestionsconges.service.dto.AgentDTO;
+import bf.mfptps.appgestionsconges.service.dto.CreateCompteRequest;
 import bf.mfptps.appgestionsconges.service.dto.PasswordChangeDTO;
 import bf.mfptps.appgestionsconges.web.exceptions.BadRequestAlertException;
 import bf.mfptps.appgestionsconges.web.exceptions.CustomException;
@@ -22,6 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -234,5 +238,25 @@ public class AccountController {
     private static boolean checkPasswordLength(String password) {
         return !StringUtils.isEmpty(password) && password.length() >= ManagedAgentVM.PASSWORD_MIN_LENGTH
                 && password.length() <= ManagedAgentVM.PASSWORD_MAX_LENGTH;
+    }
+
+    @GetMapping(path = "/activate-agent")
+    public ResponseEntity<ActivateCompteResponse> verifierCompte(@RequestBody ActivateCompteRequest request) {
+        log.info("Activation compte {}", request);
+        ActivateCompteResponse response = agentService.activateCompte(request);
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping(path = "/validate-compte")
+    public ResponseEntity<Agent> validateCompte(@RequestBody CreateCompteRequest request) {
+        log.info("Acitvation du nouveau compte {}", request);
+        Agent response = null;
+        try {
+            response = agentService.create(request);
+            return ResponseEntity.created(null).body(response);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            throw e;
+        }
     }
 }
