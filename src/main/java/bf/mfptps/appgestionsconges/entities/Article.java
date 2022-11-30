@@ -7,6 +7,7 @@ package bf.mfptps.appgestionsconges.entities;
 
 import bf.mfptps.appgestionsconges.config.Constants;
 import java.util.Objects;
+import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -52,6 +53,9 @@ public class Article extends CommonEntity {
     @Column(name = "libelle")
     private String attributLibelle;
 
+    @OneToMany(mappedBy = "article")
+    private Set<ArticleTypeDemande> articleTypeDemandes;
+
     public Long getId() {
         return id;
     }
@@ -74,6 +78,14 @@ public class Article extends CommonEntity {
 
     public void setAttributLibelle(String attributLibelle) {
         this.attributLibelle = attributLibelle;
+    }
+
+    public Set<ArticleTypeDemande> getArticleTypeDemandes() {
+        return articleTypeDemandes;
+    }
+
+    public void setArticleTypeDemandes(Set<ArticleTypeDemande> articleTypeDemandes) {
+        this.articleTypeDemandes = articleTypeDemandes;
     }
 
     @Override
@@ -100,7 +112,11 @@ public class Article extends CommonEntity {
 
     @Override
     public String toString() {
-        return "Article{" + "id=" + id + ", code=" + code + ", attributLibelle=" + attributLibelle + '}';
+        return "Article{" +
+                "id=" + id +
+                ", code='" + code + '\'' +
+                ", attributLibelle='" + attributLibelle + '\'' +
+                ", articleTypeDemandes=" + articleTypeDemandes +
+                '}';
     }
-
 }

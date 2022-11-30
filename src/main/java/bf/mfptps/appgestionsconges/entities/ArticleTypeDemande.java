@@ -14,8 +14,8 @@ import java.util.Objects;
  * @author TEGUERA
  */
 @Entity
-@Table(name = "type_visa")
-@SQLDelete(sql = "UPDATE type_visa SET deleted = true WHERE id=?")
+@Table(name = "article_type_demande")
+@SQLDelete(sql = "UPDATE article_type_demande SET deleted = true WHERE id=?")
 @Where(clause = "deleted = false")
 @FilterDef(
         name = "deletedFilter",
@@ -26,48 +26,49 @@ import java.util.Objects;
         condition = "deleted = :isDeleted"
 )
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class TypeVisa extends CommonEntity {
+public class ArticleTypeDemande extends  CommonEntity{
+
     @EmbeddedId
-    private TypeVisaKey id = new TypeVisaKey();
+    ArticleTypeDemandeKey id;
 
     @ManyToOne
-    @MapsId("visaId")
-    @JoinColumn(name = "visa_id")
-    private Visa visa;
+    @MapsId("articleId")
+    @JoinColumn(name = "article_id")
+    Article article;
 
 
     @ManyToOne
     @MapsId("typeDemandeId")
     @JoinColumn(name = "type_demande_id")
-    private TypeDemande typeDemande;
+    TypeDemande typeDemande;
 
     @NotNull
     private Long numeroOrdre;
 
-    public TypeVisa() {
+    public ArticleTypeDemande() {
     }
 
-    public TypeVisa(TypeVisaKey id, Visa visa, TypeDemande typeDemande, Long numeroOrdre) {
+    public ArticleTypeDemande(ArticleTypeDemandeKey id, Article article, TypeDemande typeDemande, Long numeroOrdre) {
         this.id = id;
-        this.visa = visa;
+        this.article = article;
         this.typeDemande = typeDemande;
         this.numeroOrdre = numeroOrdre;
     }
 
-    public TypeVisaKey getId() {
+    public ArticleTypeDemandeKey getId() {
         return id;
     }
 
-    public void setId(TypeVisaKey id) {
+    public void setId(ArticleTypeDemandeKey id) {
         this.id = id;
     }
 
-    public Visa getVisa() {
-        return visa;
+    public Article getArticle() {
+        return article;
     }
 
-    public void setVisa(Visa visa) {
-        this.visa = visa;
+    public void setArticle(Article article) {
+        this.article = article;
     }
 
     public TypeDemande getTypeDemande() {
@@ -90,8 +91,8 @@ public class TypeVisa extends CommonEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        TypeVisa typeVisa = (TypeVisa) o;
-        return id.equals(typeVisa.id);
+        ArticleTypeDemande that = (ArticleTypeDemande) o;
+        return id.equals(that.id);
     }
 
     @Override
@@ -101,9 +102,9 @@ public class TypeVisa extends CommonEntity {
 
     @Override
     public String toString() {
-        return "TypeVisa{" +
+        return "ArticleTypeDemande{" +
                 "id=" + id +
-                ", visa=" + visa +
+                ", article=" + article +
                 ", typeDemande=" + typeDemande +
                 ", numeroOrdre=" + numeroOrdre +
                 '}';

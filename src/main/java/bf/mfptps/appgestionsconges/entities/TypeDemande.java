@@ -1,8 +1,10 @@
 package bf.mfptps.appgestionsconges.entities;
 
+import net.minidev.json.annotate.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.*;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.*;
@@ -25,7 +27,7 @@ import java.util.Set;
             condition = "deleted = :isDeleted"
     )
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    public class TypeDemande extends CommonEntity {
+    public class TypeDemande {
 
         @Id
         @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
@@ -44,8 +46,13 @@ import java.util.Set;
         private String description;
         
 
-        @OneToMany(mappedBy = "typeDemande")
-        private Set<TypeVisa> typeVisas;
+        @OneToMany(mappedBy = "typeDemande", cascade = CascadeType.ALL)
+        @JsonIgnore
+        private Set<TypeVisa> typeVisas = new HashSet<>();
+
+        @OneToMany(mappedBy = "typeDemande", cascade = CascadeType.ALL)
+        @JsonIgnore
+        private Set<ArticleTypeDemande> articleTypeDemandes;
         
         @Column(name ="solde_annuel")
         private Long soldeAnnuel;
@@ -97,8 +104,14 @@ import java.util.Set;
     public void addTypeVisa(TypeVisa typeVisa) {
         this.typeVisas.add(typeVisa);
     }
-    
-    
+
+    public Set<ArticleTypeDemande> getArticleTypeDemandes() {
+        return articleTypeDemandes;
+    }
+
+    public void setArticleTypeDemandes(Set<ArticleTypeDemande> articleTypeDemandes) {
+        this.articleTypeDemandes = articleTypeDemandes;
+    }
 
     public Long getSoldeAnnuel() {
 		return soldeAnnuel;
@@ -137,6 +150,7 @@ import java.util.Set;
                 ", modePaie=" + modePaie +
                 ", description='" + description + '\'' +
                 ", typeVisas=" + typeVisas +
+                ", articleTypeDemandes=" + articleTypeDemandes +
                 ", soldeAnnuel=" + soldeAnnuel +
                 ", code='" + code + '\'' +
                 '}';

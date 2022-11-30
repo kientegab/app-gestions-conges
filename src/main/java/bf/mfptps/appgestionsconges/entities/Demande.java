@@ -34,16 +34,16 @@ public class Demande extends CommonEntity {
     @Column(name = "numero_demande", length = 254, unique = true, nullable = false)
     private String numeroDemande;
 
-    @Column(name = "lieu_jouissance_bf", length = 254)
+    @Column(name = "lieu_jouissance_bf", length = 254, nullable = true)
     private String lieuJouissanceBF;
 
-    @Column(name = "lieu_jouissance_etrang", length = 254)
+    @Column(name = "lieu_jouissance_etrang", length = 254, nullable = true)
     private String lieuJouissanceEtrang;
 
-    @Column(name = "ref_last_decision", length = 254)
+    @Column(name = "ref_last_decision", length = 254, nullable = true)
     private String refLastDecision;
 
-    @Column(name = "situation_snd", length = 254)
+    @Column(name = "situation_snd", length = 254, nullable = true)
     private String situationSND;
 
     @Column(name = "duree_absence", length = 254)
@@ -54,6 +54,12 @@ public class Demande extends CommonEntity {
 
     @Column(name = "periode_fin", length = 254)
     private Date periodeFin;
+
+    @Column(name = "tranche", length = 254)
+    private String tranche;
+
+    @Column(name = "statut", length = 254)
+    private String statut;
 
     @ManyToOne
     @JoinColumn(name = "motif_absence_id")
@@ -174,6 +180,22 @@ public class Demande extends CommonEntity {
         this.documents = documents;
     }
 
+    public String getTranche() {
+        return tranche;
+    }
+
+    public void setTranche(String tranche) {
+        this.tranche = tranche;
+    }
+
+    public String getStatut() {
+        return statut;
+    }
+
+    public void setStatut(String statut) {
+        this.statut = statut;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -193,20 +215,22 @@ public class Demande extends CommonEntity {
 
     @Override
     public String toString() {
-        return "Demande{"
-                + "id=" + id
-                + ", numeroDemande='" + numeroDemande + '\''
-                + ", lieuJouissanceBF='" + lieuJouissanceBF + '\''
-                + ", lieuJouissanceEtrang='" + lieuJouissanceEtrang + '\''
-                + ", refLastDecision='" + refLastDecision + '\''
-                + ", situationSND='" + situationSND + '\''
-                + ", dureeAbsence=" + dureeAbsence
-                + ", periodeDebut=" + periodeDebut
-                + ", periodeFin=" + periodeFin
-                + ", motifAbsence=" + motifAbsence
-                + ", typeDemande=" + typeDemande
-                + ", utilisateur=" + utilisateur
-                + ", documents=" + documents
-                + '}';
+        return "Demande{" +
+                "id=" + id +
+                ", numeroDemande='" + numeroDemande + '\'' +
+                ", lieuJouissanceBF='" + lieuJouissanceBF + '\'' +
+                ", lieuJouissanceEtrang='" + lieuJouissanceEtrang + '\'' +
+                ", refLastDecision='" + refLastDecision + '\'' +
+                ", situationSND='" + situationSND + '\'' +
+                ", dureeAbsence=" + dureeAbsence +
+                ", periodeDebut=" + periodeDebut +
+                ", periodeFin=" + periodeFin +
+                ", tranche='" + tranche + '\'' +
+                ", statut='" + statut + '\'' +
+                ", motifAbsence=" + motifAbsence +
+                ", typeDemande=" + typeDemande +
+                ", utilisateur=" + utilisateur +
+                ", documents=" + documents +
+                '}';
     }
 }

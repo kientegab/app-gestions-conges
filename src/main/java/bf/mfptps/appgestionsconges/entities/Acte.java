@@ -27,4 +27,10 @@ public class Acte extends CommonEntity{
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
+
+    @Column(name = "annee")
+    private String annee;
+
+    @Column(name = "refActe")
+    private String refActe;
 }
