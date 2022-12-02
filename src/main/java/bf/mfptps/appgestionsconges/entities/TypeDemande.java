@@ -1,90 +1,86 @@
 package bf.mfptps.appgestionsconges.entities;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.*;
-
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import javax.persistence.*;
+import org.hibernate.annotations.*;
+import org.hibernate.annotations.Cache;
+import javax.validation.constraints.NotNull;
 
+@javax.persistence.Entity
+@javax.persistence.Table(name = "type_demande")
+@SQLDelete(sql = "UPDATE type_demande SET deleted = true WHERE id=?")
+@Where(clause = "deleted = false")
+@FilterDef(
+        name = "deletedFilter",
+        parameters = @ParamDef(name = "isDeleted", type = "boolean")
+)
+@Filter(
+        name = "deletedFilter",
+        condition = "deleted = :isDeleted"
+)
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+public class TypeDemande extends CommonEntity {
 
-@Entity
-    @Table(name = "type_demande")
-    @SQLDelete(sql = "UPDATE type_demande SET deleted = true WHERE id=?")
-    @Where(clause = "deleted = false")
-    @FilterDef(
-            name = "deletedFilter",
-            parameters = @ParamDef(name = "isDeleted", type = "boolean")
-    )
-    @Filter(
-            name = "deletedFilter",
-            condition = "deleted = :isDeleted"
-    )
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    public class TypeDemande extends CommonEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
+    @SequenceGenerator(name = "sequenceGenerator")
+    private Long id;
 
-        @Id
-        @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
-        @SequenceGenerator(name = "sequenceGenerator")
-        private Long id;
-
-        @NotNull
+    @NotNull
 //        @Size(min = 1, max = 50)
-        @Column(name = "libelle", unique = true, nullable = false)
-        private String libelle;
+    @Column(name = "libelle", unique = true, nullable = false)
+    private String libelle;
 
-        @Column(name = "mode_paie",length = 254, unique = true)
-        private Boolean modePaie;
+    @Column(name = "mode_paie", length = 254, unique = true)
+    private Boolean modePaie;
 
-        @Column(name = "description")
-        private String description;
-        
+    @Column(name = "description")
+    private String description;
 
-        @OneToMany(mappedBy = "typeDemande")
-        private Set<TypeVisa> typeVisas;
-        
-        @Column(name ="solde_annuel")
-        private Long soldeAnnuel;
+    @Column(name = "remote_value")
+    private Long remoteValue;
 
-        @Column(name ="code")
-        private String code;
+    @OneToMany(mappedBy = "typeDemande")
+    private Set<TypeVisa> typeVisas;
 
+    @Column(name = "solde_annuel")
+    private Long soldeAnnuel;
 
-        public Long getId() {
-            return id;
-        }
+    @Column(name = "code")
+    private String code;
 
-        public void setId(Long id) {
-            this.id = id;
-        }
+    public Long getId() {
+        return id;
+    }
 
-        public String getLibelle() {
-            return libelle;
-        }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-        public void setLibelle(String libelle) {
-            this.libelle = libelle;
-        }
+    public String getLibelle() {
+        return libelle;
+    }
 
-        public Boolean getModePaie() {
-            return modePaie;
-        }
+    public void setLibelle(String libelle) {
+        this.libelle = libelle;
+    }
 
-        public void setModePaie(Boolean modePaie) {
-            this.modePaie = modePaie;
-        }
+    public Boolean getModePaie() {
+        return modePaie;
+    }
 
-        public String getDescription() {
-            return description;
-        }
+    public void setModePaie(Boolean modePaie) {
+        this.modePaie = modePaie;
+    }
 
-        public void setDescription(String description) {
-            this.description = description;
-        }
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
     public Set<TypeVisa> getTypeVisas() {
         return typeVisas;
@@ -97,16 +93,14 @@ import java.util.Set;
     public void addTypeVisa(TypeVisa typeVisa) {
         this.typeVisas.add(typeVisa);
     }
-    
-    
 
     public Long getSoldeAnnuel() {
-		return soldeAnnuel;
-	}
+        return soldeAnnuel;
+    }
 
-	public void setSoldeAnnuel(Long soldeAnnuel) {
-		this.soldeAnnuel = soldeAnnuel;
-	}
+    public void setSoldeAnnuel(Long soldeAnnuel) {
+        this.soldeAnnuel = soldeAnnuel;
+    }
 
     public String getCode() {
         return code;
@@ -116,10 +110,22 @@ import java.util.Set;
         this.code = code;
     }
 
+    public Long getRemoteValue() {
+        return remoteValue;
+    }
+
+    public void setRemoteValue(Long remoteValue) {
+        this.remoteValue = remoteValue;
+    }
+
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         TypeDemande that = (TypeDemande) o;
         return id.equals(that.id);
     }
@@ -131,14 +137,14 @@ import java.util.Set;
 
     @Override
     public String toString() {
-        return "TypeDemande{" +
-                "id=" + id +
-                ", libelle='" + libelle + '\'' +
-                ", modePaie=" + modePaie +
-                ", description='" + description + '\'' +
-                ", typeVisas=" + typeVisas +
-                ", soldeAnnuel=" + soldeAnnuel +
-                ", code='" + code + '\'' +
-                '}';
+        return "TypeDemande{"
+                + "id=" + id
+                + ", libelle='" + libelle + '\''
+                + ", modePaie=" + modePaie
+                + ", description='" + description + '\''
+                + ", typeVisas=" + typeVisas
+                + ", soldeAnnuel=" + soldeAnnuel
+                + ", code='" + code + '\''
+                + '}';
     }
 }
