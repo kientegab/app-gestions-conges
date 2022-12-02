@@ -1,11 +1,18 @@
 package bf.mfptps.appgestionsconges.entities;
 
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import javax.persistence.*;
-import org.hibernate.annotations.*;
-import org.hibernate.annotations.Cache;
 import javax.validation.constraints.NotNull;
+import net.minidev.json.annotate.JsonIgnore;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.FilterDef;
+import org.hibernate.annotations.ParamDef;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 @javax.persistence.Entity
 @javax.persistence.Table(name = "type_demande")
@@ -41,8 +48,13 @@ public class TypeDemande extends CommonEntity {
     @Column(name = "remote_value")
     private Long remoteValue;
 
-    @OneToMany(mappedBy = "typeDemande")
-    private Set<TypeVisa> typeVisas;
+    @OneToMany(mappedBy = "typeDemande", cascade = javax.persistence.CascadeType.ALL)
+    @JsonIgnore
+    private Set<TypeVisa> typeVisas = new HashSet<>();
+
+    @OneToMany(mappedBy = "typeDemande", cascade = javax.persistence.CascadeType.ALL)
+    @JsonIgnore
+    private Set<ArticleTypeDemande> articleTypeDemandes;
 
     @Column(name = "solde_annuel")
     private Long soldeAnnuel;
@@ -94,6 +106,14 @@ public class TypeDemande extends CommonEntity {
         this.typeVisas.add(typeVisa);
     }
 
+    public Set<ArticleTypeDemande> getArticleTypeDemandes() {
+        return articleTypeDemandes;
+    }
+
+    public void setArticleTypeDemandes(Set<ArticleTypeDemande> articleTypeDemandes) {
+        this.articleTypeDemandes = articleTypeDemandes;
+    }
+
     public Long getSoldeAnnuel() {
         return soldeAnnuel;
     }
@@ -137,14 +157,7 @@ public class TypeDemande extends CommonEntity {
 
     @Override
     public String toString() {
-        return "TypeDemande{"
-                + "id=" + id
-                + ", libelle='" + libelle + '\''
-                + ", modePaie=" + modePaie
-                + ", description='" + description + '\''
-                + ", typeVisas=" + typeVisas
-                + ", soldeAnnuel=" + soldeAnnuel
-                + ", code='" + code + '\''
-                + '}';
+        return "TypeDemande{" + "id=" + id + ", libelle=" + libelle + ", modePaie=" + modePaie + ", description=" + description + ", remoteValue=" + remoteValue + ", typeVisas=" + typeVisas + ", articleTypeDemandes=" + articleTypeDemandes + ", soldeAnnuel=" + soldeAnnuel + ", code=" + code + '}';
     }
+
 }
