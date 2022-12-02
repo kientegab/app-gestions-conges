@@ -621,7 +621,8 @@ CREATE TABLE public.type_demande (
     description character varying(255),
     libelle character varying(255) NOT NULL,
     mode_paie boolean,
-    solde_annuel bigint
+    solde_annuel bigint,
+    remote_value bigint
 );
 
 
