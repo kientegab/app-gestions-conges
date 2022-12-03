@@ -1,22 +1,18 @@
 package bf.mfptps.appgestionsconges.entities;
 
-import org.hibernate.annotations.*;
-import org.hibernate.annotations.Cache;
-
-import javax.persistence.*;
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.Table;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import java.util.*;
+import javax.persistence.*;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.FilterDef;
+import org.hibernate.annotations.ParamDef;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
-
-@Entity
-@Table(name = "demande")
+@javax.persistence.Entity
+@javax.persistence.Table(name = "demande")
 @SQLDelete(sql = "UPDATE demande SET deleted = true WHERE id=?")
 @Where(clause = "deleted = false")
 @FilterDef(
@@ -38,16 +34,16 @@ public class Demande extends CommonEntity {
     @Column(name = "numero_demande", length = 254, unique = true, nullable = false)
     private String numeroDemande;
 
-    @Column(name = "lieu_jouissance_bf", length = 254)
+    @Column(name = "lieu_jouissance_bf", length = 254, nullable = true)
     private String lieuJouissanceBF;
 
-    @Column(name = "lieu_jouissance_etrang", length = 254)
+    @Column(name = "lieu_jouissance_etrang", length = 254, nullable = true)
     private String lieuJouissanceEtrang;
 
-    @Column(name = "ref_last_decision", length = 254)
+    @Column(name = "ref_last_decision", length = 254, nullable = true)
     private String refLastDecision;
 
-    @Column(name = "situation_snd", length = 254)
+    @Column(name = "situation_snd", length = 254, nullable = true)
     private String situationSND;
 
     @Column(name = "duree_absence", length = 254)
@@ -59,19 +55,25 @@ public class Demande extends CommonEntity {
     @Column(name = "periode_fin", length = 254)
     private Date periodeFin;
 
+    @Column(name = "tranche", length = 254)
+    private String tranche;
+
+    @Column(name = "statut", length = 254)
+    private String statut;
+
     @ManyToOne
     @JoinColumn(name = "motif_absence_id")
     private MotifAbsence motifAbsence;
 
     @ManyToOne
     @JoinColumn(name = "type_demande_id")
-    private TypeDemande typeDemande ;
+    private TypeDemande typeDemande;
 
     @ManyToOne
-    @JoinColumn(name = "utilisateur_id")
-    private Utilisateur utilisateur ;
+    @JoinColumn(name = "agent_id")
+    private Utilisateur utilisateur;
     @OneToMany(mappedBy = "demande", cascade = CascadeType.ALL)
-    @JsonIgnoreProperties(value = { "demande" }, allowSetters = true)
+    @JsonIgnoreProperties(value = {"demande"}, allowSetters = true)
     private Set<Document> documents = new HashSet<>();
 
     public Long getId() {
@@ -171,17 +173,37 @@ public class Demande extends CommonEntity {
     }
 
     public Set<Document> getDocuments() {
-		return documents;
-	}
+        return documents;
+    }
 
-	public void setDocuments(Set<Document> documents) {
-		this.documents = documents;
-	}
+    public void setDocuments(Set<Document> documents) {
+        this.documents = documents;
+    }
 
-	@Override
+    public String getTranche() {
+        return tranche;
+    }
+
+    public void setTranche(String tranche) {
+        this.tranche = tranche;
+    }
+
+    public String getStatut() {
+        return statut;
+    }
+
+    public void setStatut(String statut) {
+        this.statut = statut;
+    }
+
+    @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Demande demande = (Demande) o;
         return id.equals(demande.id);
     }
@@ -203,6 +225,8 @@ public class Demande extends CommonEntity {
                 ", dureeAbsence=" + dureeAbsence +
                 ", periodeDebut=" + periodeDebut +
                 ", periodeFin=" + periodeFin +
+                ", tranche='" + tranche + '\'' +
+                ", statut='" + statut + '\'' +
                 ", motifAbsence=" + motifAbsence +
                 ", typeDemande=" + typeDemande +
                 ", utilisateur=" + utilisateur +

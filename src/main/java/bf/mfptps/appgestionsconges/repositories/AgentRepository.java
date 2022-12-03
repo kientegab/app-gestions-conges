@@ -8,6 +8,7 @@ package bf.mfptps.appgestionsconges.repositories;
 import bf.mfptps.appgestionsconges.entities.Agent;
 import bf.mfptps.appgestionsconges.service.dto.AgentStructureDTO;
 import java.time.Instant;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.cache.annotation.Cacheable;
@@ -81,4 +82,15 @@ public interface AgentRepository extends JpaRepository<Agent, Long>, JpaSpecific
             + "AND a.id = :id "
             + "AND ags.agent.id = a.id ")
     AgentStructureDTO findAgentById(@Param("id") long id);
+
+    boolean existsByMatricule(String matricule);
+
+    @Query(value = "FROM Agent c where lower(c.matricule) = lower(:matricule) "
+            + " and  c.dateNaissance = :dateNaissance "
+            + " and  c.dateRecrutement = :dateRecrutement "
+            + " and  c.actif is false ")
+    Optional<Agent> activateCompte(
+            String matricule,
+            Date dateNaissance,
+            Date dateRecrutement);
 }

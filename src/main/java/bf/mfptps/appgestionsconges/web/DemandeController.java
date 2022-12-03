@@ -1,16 +1,22 @@
 package bf.mfptps.appgestionsconges.web;
 
+import bf.mfptps.appgestionsconges.entities.Demande;
+import bf.mfptps.appgestionsconges.service.DemandeService;
+import bf.mfptps.appgestionsconges.service.ModalitePaieService;
+import bf.mfptps.appgestionsconges.service.dto.DemandeDTO;
+import bf.mfptps.appgestionsconges.service.dto.PayInitData;
+import bf.mfptps.appgestionsconges.service.dto.PayReturnData;
+import bf.mfptps.appgestionsconges.utils.HeaderUtil;
+import bf.mfptps.appgestionsconges.utils.PaginationUtil;
+import bf.mfptps.appgestionsconges.utils.ResponseUtil;
+import bf.mfptps.appgestionsconges.web.exceptions.BadRequestAlertException;
+import bf.mfptps.appgestionsconges.web.exceptions.CustomException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
-
 import javax.validation.Valid;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,19 +32,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
-import bf.mfptps.appgestionsconges.entities.Demande;
-import bf.mfptps.appgestionsconges.service.DemandeService;
-import bf.mfptps.appgestionsconges.service.dto.DemandeDTO;
-import bf.mfptps.appgestionsconges.utils.HeaderUtil;
-import bf.mfptps.appgestionsconges.utils.PaginationUtil;
-import bf.mfptps.appgestionsconges.utils.ResponseUtil;
-import bf.mfptps.appgestionsconges.web.exceptions.BadRequestAlertException;
-import bf.mfptps.appgestionsconges.web.exceptions.CustomException;
 
 /**
  *
@@ -57,8 +53,12 @@ public class DemandeController {
 
     private final DemandeService demandeService;
 
-    public DemandeController(DemandeService demandeService) {
+    private final ModalitePaieService modalitePaieService;
+
+    public DemandeController(DemandeService demandeService,
+            ModalitePaieService modalitePaieService) {
         this.demandeService = demandeService;
+        this.modalitePaieService = modalitePaieService;
     }
 
     /**
@@ -69,16 +69,16 @@ public class DemandeController {
      * @throws URISyntaxException
      */
     @PostMapping(path = "/demandes")
-  //  @PreAuthorize("hasAnyAuthority(\"" + AppUtil.ADMIN + "\")")
-    public ResponseEntity<DemandeDTO> create(@Valid @RequestParam(value="demande") String demandeJson, @RequestParam(value ="files", required = false) MultipartFile[] fichiersJoint) throws URISyntaxException {
+    //  @PreAuthorize("hasAnyAuthority(\"" + AppUtil.ADMIN + "\")")
+    public ResponseEntity<DemandeDTO> create(@Valid @RequestParam(value = "demande") String demandeJson, @RequestParam(value = "files", required = false) MultipartFile[] fichiersJoint) throws URISyntaxException {
         log.debug("Création de la Demande : {}", demandeJson);
         ObjectMapper mapper = new ObjectMapper();
         DemandeDTO demande;
-		try {
-			demande = mapper.readValue(demandeJson, DemandeDTO.class);
-		} catch (Exception e) {
-			throw new CustomException("Echec lors du formatage des donnees du formulaire");
-		} 
+        try {
+            demande = mapper.readValue(demandeJson, DemandeDTO.class);
+        } catch (Exception e) {
+            throw new CustomException("Echec lors du formatage des donnees du formulaire");
+        }
         DemandeDTO dem = demandeService.create(demande, fichiersJoint);
         return ResponseEntity.created(new URI("/api/demandes/" + dem.getId()))
                 .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, dem.getId().toString()))
@@ -93,7 +93,7 @@ public class DemandeController {
      * @throws URISyntaxException
      */
     @PutMapping(path = "/demandes")
-   // @PreAuthorize("hasAnyAuthority(\"" + AppUtil.ADMIN + "\")")
+    // @PreAuthorize("hasAnyAuthority(\"" + AppUtil.ADMIN + "\")")
     public ResponseEntity<DemandeDTO> updateDemande(@Valid @RequestBody DemandeDTO demande) throws URISyntaxException {
         log.debug("Mis à jour de la Demande : {}", demande);
         if (demande.getId() == null) {
@@ -119,7 +119,6 @@ public class DemandeController {
         return ResponseEntity.ok().headers(headers).body(minsiteres.getContent());
     }
 
-
     @DeleteMapping(path = "/demandes/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         log.debug("Suppression de la Demande : {}", id);
@@ -130,4 +129,9 @@ public class DemandeController {
                 .build();
     }
 
+    @PostMapping(path = "/demandes/initPay")
+    public ResponseEntity<PayReturnData> initPay(@RequestBody PayInitData data) {
+        PayReturnData value = modalitePaieService.initPay(data);
+        return ResponseEntity.ok(value);
+    }
 }

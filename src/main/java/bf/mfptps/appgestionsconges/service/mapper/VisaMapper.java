@@ -15,12 +15,12 @@ public interface VisaMapper extends EntityMapper<VisaDTO, Visa> {
 
     Visa toEntity(VisaDTO visaDTO);
 
-    default Visa fromId(Long id) {
-        if (id == null) {
-            return null;
-        }
-        Visa visa = new Visa();
-        visa.setId(id);
-        return visa;
-    }
+//    default Visa fromId(Long id) {
+//        if (id == null) {
+//            return null;
+//        }
+//        Visa visa = new Visa();
+//        visa.setId(id);
+//        return visa;
+//    }
 }

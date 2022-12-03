@@ -51,6 +51,11 @@ public class VisaServiceImpl implements VisaService {
     }
 
     @Override
+    public Visa findVisaById(Long id) {
+        return visaRepository.findVisaById(id);
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public Page<VisaDTO> findAll(Pageable pageable) {
         return visaRepository.findAll(pageable).map(visaMapper::toDto);

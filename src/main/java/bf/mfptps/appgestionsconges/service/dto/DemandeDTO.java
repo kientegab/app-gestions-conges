@@ -1,8 +1,10 @@
 package bf.mfptps.appgestionsconges.service.dto;
 
+import bf.mfptps.appgestionsconges.entities.Utilisateur;
 import java.util.Date;
 
-public class DemandeDTO  {
+public class DemandeDTO {
+
     private Long id;
     private String numeroDemande;
     private String lieuJouissanceBF;
@@ -16,9 +18,9 @@ public class DemandeDTO  {
     private Date periodeFin;
     private MotifAbsenceDTO motifAbsence;
 
-    private TypeDemandeDTO typeDemande ;
+    private TypeDemandeDTO typeDemande;
 
-    private UtilisateurDTO utilisateur ;
+    private Utilisateur utilisateur;
 
     public Long getId() {
         return id;
@@ -92,27 +94,28 @@ public class DemandeDTO  {
         this.periodeFin = periodeFin;
     }
 
-	public MotifAbsenceDTO getMotifAbsence() {
-		return motifAbsence;
-	}
+    public MotifAbsenceDTO getMotifAbsence() {
+        return motifAbsence;
+    }
 
-	public void setMotifAbsence(MotifAbsenceDTO motifAbsence) {
-		this.motifAbsence = motifAbsence;
-	}
+    public void setMotifAbsence(MotifAbsenceDTO motifAbsence) {
+        this.motifAbsence = motifAbsence;
+    }
 
-	public TypeDemandeDTO getTypeDemande() {
-		return typeDemande;
-	}
+    public TypeDemandeDTO getTypeDemande() {
+        return typeDemande;
+    }
 
-	public void setTypeDemande(TypeDemandeDTO typeDemande) {
-		this.typeDemande = typeDemande;
-	}
+    public void setTypeDemande(TypeDemandeDTO typeDemande) {
+        this.typeDemande = typeDemande;
+    }
 
-	public UtilisateurDTO getUtilisateur() {
-		return utilisateur;
-	}
+    public Utilisateur getUtilisateur() {
+        return utilisateur;
+    }
 
-	public void setUtilisateur(UtilisateurDTO utilisateur) {
-		this.utilisateur = utilisateur;
-	}
+    public void setUtilisateur(Utilisateur utilisateur) {
+        this.utilisateur = utilisateur;
+    }
+
 }

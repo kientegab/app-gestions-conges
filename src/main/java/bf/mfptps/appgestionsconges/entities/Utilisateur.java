@@ -1,21 +1,21 @@
 package bf.mfptps.appgestionsconges.entities;
 
-import org.hibernate.annotations.*;
-import org.hibernate.annotations.Cache;
-
+import java.util.*;
 import javax.persistence.*;
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.FilterDef;
+import org.hibernate.annotations.ParamDef;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 /**
  *
  * @author TEGUERA
  */
-@Entity
-@Table(name = "utilisateur")
+@javax.persistence.Entity
+@javax.persistence.Table(name = "utilisateur")
 @SQLDelete(sql = "UPDATE utilisateur SET deleted = true WHERE id=?")
 @Where(clause = "deleted = false")
 @FilterDef(
@@ -62,6 +62,7 @@ public class Utilisateur extends CommonEntity {
 
     @OneToMany
     private Set<Profile> profiles = new HashSet<Profile>();
+
     public Long getId() {
         return id;
     }
@@ -144,8 +145,12 @@ public class Utilisateur extends CommonEntity {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Utilisateur that = (Utilisateur) o;
         return id.equals(that.id);
     }
@@ -157,17 +162,17 @@ public class Utilisateur extends CommonEntity {
 
     @Override
     public String toString() {
-        return "Utilisateur{" +
-                "id=" + id +
-                ", matricule='" + matricule + '\'' +
-                ", nom='" + nom + '\'' +
-                ", prenom='" + prenom + '\'' +
-                ", email='" + email + '\'' +
-                ", telephone='" + telephone + '\'' +
-                ", actif=" + actif +
-                ", motDPasse='" + motDPasse + '\'' +
-                ", structure=" + structure +
-                ", profiles=" + profiles +
-                '}';
+        return "Utilisateur{"
+                + "id=" + id
+                + ", matricule='" + matricule + '\''
+                + ", nom='" + nom + '\''
+                + ", prenom='" + prenom + '\''
+                + ", email='" + email + '\''
+                + ", telephone='" + telephone + '\''
+                + ", actif=" + actif
+                + ", motDPasse='" + motDPasse + '\''
+                + ", structure=" + structure
+                + ", profiles=" + profiles
+                + '}';
     }
 }

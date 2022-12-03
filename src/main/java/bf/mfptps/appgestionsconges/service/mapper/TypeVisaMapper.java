@@ -15,12 +15,12 @@ public interface TypeVisaMapper extends EntityMapper<TypeVisaDTO, TypeVisa> {
 
     TypeVisa toEntity(TypeVisaDTO typeVisaDTO);
 
-    default TypeVisa fromId(Long id) {
-        if (id == null) {
-            return null;
-        }
-        TypeVisa typeVisa = new TypeVisa();
-        typeVisa.setId(id);
-        return typeVisa;
-    }
+//    default TypeVisa fromId(Long id) {
+//        if (id == null) {
+//            return null;
+//        }
+//        TypeVisa typeVisa = new TypeVisa();
+//        typeVisa.setId(id);
+//        return typeVisa;
+//    }
 }

@@ -21,6 +21,10 @@ public class AgentDTO {
     @Size(min = 1, max = 50)
     private String matricule;
 
+    @Pattern(regexp = Constants.LOGIN_REGEX)
+    @Size(min = 1, max = 50)
+    private String matriculeResp;
+
     @Size(max = 50)
     private String nom;
 
@@ -55,6 +59,7 @@ public class AgentDTO {
     public AgentDTO(Agent agent) {
         this.id = agent.getId();
         this.matricule = agent.getMatricule();
+        this.matriculeResp = agent.getMatriculeResp();
         this.nom = agent.getNom();
         this.prenom = agent.getPrenom();
         this.telephone = agent.getTelephone();
@@ -192,10 +197,19 @@ public class AgentDTO {
         this.structureId = structureId;
     }
 
+    public String getMatriculeResp() {
+        return matriculeResp;
+    }
+
+    public void setMatriculeResp(String matriculeResp) {
+        this.matriculeResp = matriculeResp;
+    }
+
     @Override
     public String toString() {
         return "AgentDTO{"
                 + "matricule='" + matricule + '\''
+                + "matriculeResp='" + matriculeResp + '\''
                 + ", nom='" + nom + '\''
                 + ", prenom='" + prenom + '\''
                 + ", email='" + email + '\''

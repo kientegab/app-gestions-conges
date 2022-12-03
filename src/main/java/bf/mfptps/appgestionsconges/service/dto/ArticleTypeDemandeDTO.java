@@ -1,46 +1,55 @@
 package bf.mfptps.appgestionsconges.service.dto;
 
-import bf.mfptps.appgestionsconges.entities.CommonEntity;
-import bf.mfptps.appgestionsconges.entities.TypeDemande;
-import bf.mfptps.appgestionsconges.entities.TypeVisaKey;
-import bf.mfptps.appgestionsconges.entities.Visa;
 
-import javax.persistence.EmbeddedId;
+import bf.mfptps.appgestionsconges.entities.Article;
+import bf.mfptps.appgestionsconges.entities.ArticleTypeDemandeKey;
+import bf.mfptps.appgestionsconges.entities.TypeDemande;
+
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.MapsId;
+import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
-public class TypeVisaDTO extends CommonEntity {
-    TypeVisaKey id;
+/**
+ *
+ * @author TEGUERA
+ */
 
-    private Visa visa;
+public class ArticleTypeDemandeDTO {
 
-    private TypeDemande typeDemande;
+    ArticleTypeDemandeKey id;
+
+    private Article article;
+
+    private  TypeDemande typeDemande;
 
     private Long numeroOrdre;
 
-    public TypeVisaDTO() {
+    public ArticleTypeDemandeDTO() {
     }
 
-    public TypeVisaDTO(TypeVisaKey id, Visa visa, TypeDemande typeDemande, Long numeroOrdre) {
+    public ArticleTypeDemandeDTO(ArticleTypeDemandeKey id, Article article, TypeDemande typeDemande, Long numeroOrdre) {
         this.id = id;
-        this.visa = visa;
+        this.article = article;
         this.typeDemande = typeDemande;
         this.numeroOrdre = numeroOrdre;
     }
 
-    public TypeVisaKey getId() {
+    public ArticleTypeDemandeKey getId() {
         return id;
     }
 
-    public void setId(TypeVisaKey id) {
+    public void setId(ArticleTypeDemandeKey id) {
         this.id = id;
     }
 
-    public Visa getVisa() {
-        return visa;
+    public Article getArticle() {
+        return article;
     }
 
-    public void setVisa(Visa visa) {
-        this.visa = visa;
+    public void setArticle(Article article) {
+        this.article = article;
     }
 
     public TypeDemande getTypeDemande() {
@@ -63,7 +72,7 @@ public class TypeVisaDTO extends CommonEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        TypeVisaDTO that = (TypeVisaDTO) o;
+        ArticleTypeDemandeDTO that = (ArticleTypeDemandeDTO) o;
         return id.equals(that.id);
     }
 
@@ -74,9 +83,9 @@ public class TypeVisaDTO extends CommonEntity {
 
     @Override
     public String toString() {
-        return "TypeVisaDTO{" +
+        return "ArticleTypeDemandeDTO{" +
                 "id=" + id +
-                ", visa=" + visa +
+                ", article=" + article +
                 ", typeDemande=" + typeDemande +
                 ", numeroOrdre=" + numeroOrdre +
                 '}';

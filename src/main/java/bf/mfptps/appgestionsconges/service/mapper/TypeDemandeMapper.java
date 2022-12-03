@@ -15,12 +15,12 @@ public interface TypeDemandeMapper extends EntityMapper<TypeDemandeDTO, TypeDema
 
     TypeDemande toEntity(TypeDemandeDTO typeDemandeDTO);
 
-    default TypeDemande fromId(Long id) {
-        if (id == null) {
-            return null;
-        }
-        TypeDemande typeDemande = new TypeDemande();
-        typeDemande.setId(id);
-        return typeDemande;
-    }
+//    default TypeDemande fromId(Long id) {
+//        if (id == null) {
+//            return null;
+//        }
+//        TypeDemande typeDemande = new TypeDemande();
+//        typeDemande.setId(id);
+//        return typeDemande;
+//    }
 }
