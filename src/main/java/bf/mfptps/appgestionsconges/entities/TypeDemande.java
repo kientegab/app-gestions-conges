@@ -39,7 +39,7 @@ public class TypeDemande extends CommonEntity {
     @Column(name = "libelle", unique = true, nullable = false)
     private String libelle;
 
-    @Column(name = "mode_paie", length = 254, unique = true)
+    @Column(name = "mode_paie")
     private Boolean modePaie;
 
     @Column(name = "description")

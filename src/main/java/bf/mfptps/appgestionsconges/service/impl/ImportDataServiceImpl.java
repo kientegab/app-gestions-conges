@@ -76,6 +76,7 @@ fetch first 100 rows only
     }
 
     @Override
+    @Transactional(rollbackFor = CustomException.class)
     public void importerCorps(MultipartFile file) {
         try {
             if (AppUtil.TYPE_EXCEL.equals(file.getContentType())) {
