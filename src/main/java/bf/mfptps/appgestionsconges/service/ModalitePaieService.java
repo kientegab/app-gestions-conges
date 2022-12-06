@@ -6,6 +6,8 @@
 package bf.mfptps.appgestionsconges.service;
 
 import bf.mfptps.appgestionsconges.service.dto.ModalitePaieDTO;
+import bf.mfptps.appgestionsconges.service.dto.PayInitData;
+import bf.mfptps.appgestionsconges.service.dto.PayReturnData;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,7 +24,13 @@ public interface ModalitePaieService {
 
     Optional<ModalitePaieDTO> findOne(long id);
 
+    boolean updateStatut(long id, boolean statut);
+
     Page<ModalitePaieDTO> findAll(Pageable pageable);
+
+    Page<ModalitePaieDTO> findAllOperateurActif(Pageable pageable);
+
+    PayReturnData initPay(PayInitData initData);
 
     void deleteOne(Long id);
 }
