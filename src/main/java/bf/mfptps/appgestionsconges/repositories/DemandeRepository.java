@@ -24,5 +24,5 @@ public interface DemandeRepository extends JpaRepository<Demande, Long>, JpaSpec
             + "AND d.deleted = false")
     Page<Ministere> findAll(String numeroDemande, Pageable pageable);
 
-    Page<Demande> findAllByUtilisateurMatriculeAndUtilisateurStructureId(String matricule, Long structureId);
+    Page<Demande> findAllByUtilisateurMatriculeAndUtilisateurStructureId(String matricule, Long structureId, Pageable pageable);
 }
