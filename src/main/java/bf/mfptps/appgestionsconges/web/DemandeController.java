@@ -134,4 +134,10 @@ public class DemandeController {
         PayReturnData value = modalitePaieService.initPay(data);
         return ResponseEntity.ok(value);
     }
+
+    @GetMapping(path = "/demandes/{matricule}/{structure}")
+    public ResponseEntity<List<DemandeDTO>> getAllByMatriculeStructure(@PathVariable String matricule, @PathVariable String structure) {
+        return null;
+    }
+
 }

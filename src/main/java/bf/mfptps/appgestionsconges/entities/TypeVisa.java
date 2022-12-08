@@ -27,8 +27,13 @@ import java.util.Objects;
 )
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class TypeVisa extends CommonEntity {
-    @EmbeddedId
-    private TypeVisaKey id = new TypeVisaKey();
+//    @EmbeddedId
+//    private TypeVisaKey id = new TypeVisaKey();
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
+    @SequenceGenerator(name = "sequenceGenerator")
+    private Long id;
 
     @ManyToOne
     @MapsId("visaId")
@@ -47,18 +52,34 @@ public class TypeVisa extends CommonEntity {
     public TypeVisa() {
     }
 
-    public TypeVisa(TypeVisaKey id, Visa visa, TypeDemande typeDemande, Long numeroOrdre) {
+    public TypeVisa(Long id, Visa visa, TypeDemande typeDemande, Long numeroOrdre) {
         this.id = id;
         this.visa = visa;
         this.typeDemande = typeDemande;
         this.numeroOrdre = numeroOrdre;
     }
 
-    public TypeVisaKey getId() {
+    // public TypeVisa(TypeVisaKey id, Visa visa, TypeDemande typeDemande, Long numeroOrdre) {
+//        this.id = id;
+//        this.visa = visa;
+//        this.typeDemande = typeDemande;
+//        this.numeroOrdre = numeroOrdre;
+//    }
+
+//    public TypeVisaKey getId() {
+//        return id;
+//    }
+//
+//    public void setId(TypeVisaKey id) {
+//        this.id = id;
+//    }
+
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(TypeVisaKey id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -85,6 +106,30 @@ public class TypeVisa extends CommonEntity {
     public void setNumeroOrdre(Long numeroOrdre) {
         this.numeroOrdre = numeroOrdre;
     }
+
+//    @Override
+//    public boolean equals(Object o) {
+//        if (this == o) return true;
+//        if (o == null || getClass() != o.getClass()) return false;
+//        TypeVisa typeVisa = (TypeVisa) o;
+//        return id.equals(typeVisa.id);
+//    }
+//
+//    @Override
+//    public int hashCode() {
+//        return Objects.hash(id);
+//    }
+//
+//    @Override
+//    public String toString() {
+//        return "TypeVisa{" +
+//                "id=" + id +
+//                ", visa=" + visa +
+//                ", typeDemande=" + typeDemande +
+//                ", numeroOrdre=" + numeroOrdre +
+//                '}';
+//    }
+
 
     @Override
     public boolean equals(Object o) {
