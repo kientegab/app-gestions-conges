@@ -51,8 +51,8 @@ public class Agent extends CommonEntity {
     @Column(length = 5, nullable = false)
     private String cleMatricule;//lettre clee du matricule
 
-    @Email
-    @Size(min = 5, max = 254)
+//    @Email //bloc commenté pour eviter des erreurs (par exemple : xxx.xx@xx.xx.xx) d'import
+//    @Size(min = 5, max = 254)
     @Column(length = 254, unique = true, nullable = true)
     private String email;
 
@@ -119,7 +119,7 @@ public class Agent extends CommonEntity {
     @Column(name = "reset_date")
     private Instant resetDate = null;
 
-    @Column(name = "telephone", length = 20)
+    @Column(name = "telephone", length = 50)//augmenté de 20 à 50 car l'import recoit des données du genre "xx xx xx xx/xx xx xx xx/xx xx xx xx"
     private String telephone;
 
     @JsonIgnore
