@@ -5,6 +5,7 @@ import bf.mfptps.appgestionsconges.entities.Demande;
 import bf.mfptps.appgestionsconges.entities.Document;
 import bf.mfptps.appgestionsconges.entities.TypeDemande;
 import bf.mfptps.appgestionsconges.entities.Utilisateur;
+import bf.mfptps.appgestionsconges.enums.EStatusDemande;
 import bf.mfptps.appgestionsconges.repositories.DemandeRepository;
 import bf.mfptps.appgestionsconges.repositories.TypeDemandeRepository;
 import bf.mfptps.appgestionsconges.repositories.UtilisateurRepository;
@@ -67,56 +68,58 @@ public class DemandeServiceImpl implements DemandeService {
                 //TODO: comparer le solde  de conge utilisateur au solde global du type de demande
             }
 
-        }
+		}
+		
+		//TODO: Gerer la regle de gestion document joint;
+		
+		if(fichiersJoint!=null && fichiersJoint.length>0) {
+			Set<Document> documents = new HashSet<Document>();
+			for(MultipartFile file: fichiersJoint) {
+				if(!file.isEmpty()) {
+					try {
+						String fileUri = AppUtil.saveUploadFileToServer(applicationProperties.getAppUploadsStorage(), userStorage, file);
+						 Document document = new Document();
+						 document.setDemande(demande);
+						 document.setUrl(fileUri);
+						 //TODO : Agenerer automatiquement
+						 document.setReference(""+ System.currentTimeMillis());
+						documents.add(document);
+					} catch (Exception e) {
+						log.error("Failed to save file on server", e);
+						throw new CustomException("Echec lors de l'enregistrement du fichier sur le server : " +e.getMessage());
+					}
+				}
+			}
+			
+			demande.setDocuments(documents);
+		}
 
-        //TODO: Gerer la regle de gestion document joint;
-        if (fichiersJoint != null && fichiersJoint.length > 0) {
-            Set<Document> documents = new HashSet<Document>();
-            for (MultipartFile file : fichiersJoint) {
-                if (!file.isEmpty()) {
-                    try {
-                        String fileUri = AppUtil.saveUploadFileToServer(applicationProperties.getAppUploadsStorage(), userStorage, file);
-                        Document document = new Document();
-                        document.setDemande(demande);
-                        document.setUrl(fileUri);
-                        //TODO : Agenerer automatiquement
-                        document.setReference("" + System.currentTimeMillis());
-                        documents.add(document);
-                    } catch (Exception e) {
-                        log.error("Failed to save file on server", e);
-                        throw new CustomException("Echec lors de l'enregistrement du fichier sur le server : " + e.getMessage());
-                    }
-                }
-            }
-            demande.setDocuments(documents);
-        }
+		demande.setStatusDemande(EStatusDemande.INITIATION);
+		return demandeMapper.toDto(demandeRepository.save(demande));
+	}
 
-        return demandeMapper.toDto(demandeRepository.save(demande));
-    }
+	@Override
+	public DemandeDTO update(DemandeDTO demandeDTO) {
+		Demande demande = demandeMapper.toEntity(demandeDTO);
+		return demandeMapper.toDto( demandeRepository.save(demande));
+	}
 
-    @Override
-    public DemandeDTO update(DemandeDTO demandeDTO) {
-        Demande demande = demandeMapper.toEntity(demandeDTO);
-        return demandeMapper.toDto(demandeRepository.save(demande));
-    }
+	@Override
+	@Transactional(readOnly = true)
+	public Optional<Demande> get(String numeroDemande) {
+		return demandeRepository.findByNumeroDemande(numeroDemande);		
+	}
 
-    @Override
-    @Transactional(readOnly = true)
-    public Optional<Demande> get(String numeroDemande) {
-        return demandeRepository.findByNumeroDemande(numeroDemande);
-
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public Page<DemandeDTO> findAll(Pageable pageable) {
-        return demandeRepository.findAll(pageable).map(demandeMapper::toDto);
-    }
-
-    @Override
-    public void delete(Long code) {
-        demandeRepository.deleteById(code);
-    }
+	@Override
+	@Transactional(readOnly = true)
+	public Page<DemandeDTO> findAll(Pageable pageable) {
+		return demandeRepository.findAll(pageable).map(demandeMapper::toDto);
+	}
+	
+	@Override
+	public void delete(Long code) {
+		demandeRepository.deleteById(code);
+	}
 
     @Override
     @Transactional(readOnly = true)

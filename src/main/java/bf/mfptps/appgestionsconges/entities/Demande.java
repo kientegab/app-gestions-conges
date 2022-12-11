@@ -1,5 +1,15 @@
 package bf.mfptps.appgestionsconges.entities;
 
+import org.hibernate.annotations.*;
+import org.hibernate.annotations.Cache;
+
+import bf.mfptps.appgestionsconges.enums.EStatusDemande;
+
+import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.*;
 import javax.persistence.*;
@@ -67,7 +77,9 @@ public class Demande extends CommonEntity {
 
     @ManyToOne
     @JoinColumn(name = "type_demande_id")
-    private TypeDemande typeDemande;
+    private TypeDemande typeDemande ;
+    
+    
 
     @ManyToOne
     @JoinColumn(name = "agent_id")
@@ -75,6 +87,9 @@ public class Demande extends CommonEntity {
     @OneToMany(mappedBy = "demande", cascade = CascadeType.ALL)
     @JsonIgnoreProperties(value = {"demande"}, allowSetters = true)
     private Set<Document> documents = new HashSet<>();
+    
+    @Column(name = "status")
+    private EStatusDemande statusDemande;
 
     public Long getId() {
         return id;
@@ -176,25 +191,17 @@ public class Demande extends CommonEntity {
         return documents;
     }
 
-    public void setDocuments(Set<Document> documents) {
-        this.documents = documents;
-    }
+	public void setDocuments(Set<Document> documents) {
+		this.documents = documents;
+	}
 
-    public String getTranche() {
-        return tranche;
-    }
+	public EStatusDemande getStatusDemande() {
+		return statusDemande;
+	}
 
-    public void setTranche(String tranche) {
-        this.tranche = tranche;
-    }
-
-    public String getStatut() {
-        return statut;
-    }
-
-    public void setStatut(String statut) {
-        this.statut = statut;
-    }
+	public void setStatusDemande(EStatusDemande statusDemande) {
+		this.statusDemande = statusDemande;
+	}
 
     @Override
     public boolean equals(Object o) {
@@ -231,6 +238,7 @@ public class Demande extends CommonEntity {
                 ", typeDemande=" + typeDemande +
                 ", utilisateur=" + utilisateur +
                 ", documents=" + documents +
+                ", statusDemande=" + statusDemande +
                 '}';
     }
 }
