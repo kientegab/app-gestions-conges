@@ -15,6 +15,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.DecimalFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import javax.validation.constraints.Size;
 import lombok.extern.slf4j.Slf4j;
@@ -120,6 +123,19 @@ public class AppUtil {
             throw new Exception("Failed to write file on server " + e.getMessage());
         }
 
+    }
+    
+    public static long getDifferenceDays(Date d1, Date d2) {
+        long diff = d2.getTime() - d1.getTime();
+        return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+    }
+    
+    public static int getCurrentYear() {
+    	Date date = new Date();
+    	Calendar cal = Calendar.getInstance();
+    	cal.setTime(date);
+    	
+    	return cal.get(Calendar.YEAR);
     }
 
 }

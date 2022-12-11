@@ -45,6 +45,8 @@ public class Acte extends CommonEntity{
     @JoinColumn(name = "typeacte_id")
     private TypeActe typeActe;
     
+    @Column(name = "annee")
+    private String annee;
 
 	public Long getId() {
 		return id;
