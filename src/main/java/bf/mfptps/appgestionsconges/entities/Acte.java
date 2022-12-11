@@ -62,11 +62,11 @@ public class Acte extends CommonEntity{
 		this.reference = reference;
 	}
 
-	public String getStatus() {
+	public EStatusActe getStatus() {
 		return status;
 	}
 
-	public void setStatus(String status) {
+	public void setStatus(EStatusActe status) {
 		this.status = status;
 	}
 

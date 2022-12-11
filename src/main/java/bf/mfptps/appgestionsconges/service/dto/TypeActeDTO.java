@@ -11,7 +11,7 @@ public class TypeActeDTO{
     
     private String templateUri;
     
-    private EPorteActe typeActe;
+    private EPorteActe porteActe;
     
 
 	public Long getId() {
@@ -46,12 +46,12 @@ public class TypeActeDTO{
 		this.templateUri = templateUri;
 	}
 
-	public EPorteActe getTypeActe() {
-		return typeActe;
+	public EPorteActe getPorteActe() {
+		return porteActe;
 	}
 
-	public void setTypeActe(EPorteActe typeActe) {
-		this.typeActe = typeActe;
+	public void setPorteActe(EPorteActe porteActe) {
+		this.porteActe = porteActe;
 	}
     
 }

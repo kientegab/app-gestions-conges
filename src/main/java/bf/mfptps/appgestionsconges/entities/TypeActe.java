@@ -1,13 +1,24 @@
 package bf.mfptps.appgestionsconges.entities;
 
-import org.hibernate.annotations.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.FilterDef;
+import org.hibernate.annotations.ParamDef;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import bf.mfptps.appgestionsconges.enums.EPorteActe;
-
-import javax.persistence.*;
-import javax.persistence.Entity;
-import javax.persistence.Table;
 
 @Entity
 @Table(name = "type_acte")
@@ -42,7 +53,7 @@ public class TypeActe extends CommonEntity{
     
     @ManyToOne
     @Enumerated(EnumType.STRING)
-    private EPorteActe typeActe;
+    private EPorteActe porteActe;
     
 
 	public Long getId() {
@@ -77,13 +88,11 @@ public class TypeActe extends CommonEntity{
 		this.templateUri = templateUri;
 	}
 
-	public EPorteActe getTypeActe() {
-		return typeActe;
+	public EPorteActe getPorteActe() {
+		return porteActe;
 	}
 
-	public void setTypeActe(EPorteActe typeActe) {
-		this.typeActe = typeActe;
+	public void setPorteActe(EPorteActe porteActe) {
+		this.porteActe = porteActe;
 	}
-
-    s
 }
