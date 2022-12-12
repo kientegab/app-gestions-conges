@@ -1,14 +1,13 @@
 package bf.mfptps.appgestionsconges.enums;
 
-public enum EStatusDemande {
-	INITIATION("INITIATION", "INITIATION"),
-	VALIDE("VALIDE", "VALIDE"),
-	REJETE("REJETE", "REJETE");
+public enum ETrancheDemande {
+	INDIVIDUEL("INDIVIDUEL", "INDIVIDUEL"),
+    GROUPE("GROUPE", "GROUPE");
 
     protected String value;
     protected String label;
 
-    EStatusDemande(String value,
+    ETrancheDemande(String value,
                   String pLabel)
     {
         this.value = value;
@@ -25,9 +24,9 @@ public enum EStatusDemande {
         return this.value;
     }
 
-    public static EStatusDemande getByValue(String value)
+    public static ETrancheDemande getByValue(String value)
     {
-        for (EStatusDemande val : EStatusDemande.values())
+        for (ETrancheDemande val : ETrancheDemande.values())
         {
             if (val.getValue().equals(value))
             {
@@ -40,9 +39,9 @@ public enum EStatusDemande {
     public static String[] getLabels()
     {
 
-        String[] labels = new String[EStatusDemande.values().length];
+        String[] labels = new String[ETrancheDemande.values().length];
         int      index  = 0;
-        for (EStatusDemande val : EStatusDemande.values())
+        for (ETrancheDemande val : ETrancheDemande.values())
         {
             labels[index] = val.getLabel();
             index++ ;
@@ -55,9 +54,9 @@ public enum EStatusDemande {
         return getByValue(value).getLabel();
     }
 
-    public static EStatusDemande getByLabel(String label)
+    public static ETrancheDemande getByLabel(String label)
     {
-        for (EStatusDemande val : EStatusDemande.values())
+        for (ETrancheDemande val : ETrancheDemande.values())
         {
             if (val.getLabel().equals(label))
             {
@@ -69,7 +68,7 @@ public enum EStatusDemande {
 
     public static String getValueByLabel(String label)
     {
-        EStatusDemande eTranslationKind = getByLabel(label);
+        ETrancheDemande eTranslationKind = getByLabel(label);
         if (null != eTranslationKind)
         {
             return getByLabel(label).getValue();

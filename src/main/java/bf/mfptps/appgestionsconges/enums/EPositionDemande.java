@@ -1,14 +1,16 @@
 package bf.mfptps.appgestionsconges.enums;
 
-public enum EStatusDemande {
-	INITIATION("INITIATION", "INITIATION"),
-	VALIDE("VALIDE", "VALIDE"),
-	REJETE("REJETE", "REJETE");
+public enum EPositionDemande {
+	DEMANDEUR("DEMANDEUR", "DEMANDEUR"),
+	SH("SH", "Supperieur Hierarchique"),
+	DRH("DRH", "Direction des ressources humaines"),
+	SG("SG", "Secretariat generale"),
+	DGFP("DGFP", "DGFP");
 
     protected String value;
     protected String label;
 
-    EStatusDemande(String value,
+    EPositionDemande(String value,
                   String pLabel)
     {
         this.value = value;
@@ -25,9 +27,9 @@ public enum EStatusDemande {
         return this.value;
     }
 
-    public static EStatusDemande getByValue(String value)
+    public static EPositionDemande getByValue(String value)
     {
-        for (EStatusDemande val : EStatusDemande.values())
+        for (EPositionDemande val : EPositionDemande.values())
         {
             if (val.getValue().equals(value))
             {
@@ -40,9 +42,9 @@ public enum EStatusDemande {
     public static String[] getLabels()
     {
 
-        String[] labels = new String[EStatusDemande.values().length];
+        String[] labels = new String[EPositionDemande.values().length];
         int      index  = 0;
-        for (EStatusDemande val : EStatusDemande.values())
+        for (EPositionDemande val : EPositionDemande.values())
         {
             labels[index] = val.getLabel();
             index++ ;
@@ -55,9 +57,9 @@ public enum EStatusDemande {
         return getByValue(value).getLabel();
     }
 
-    public static EStatusDemande getByLabel(String label)
+    public static EPositionDemande getByLabel(String label)
     {
-        for (EStatusDemande val : EStatusDemande.values())
+        for (EPositionDemande val : EPositionDemande.values())
         {
             if (val.getLabel().equals(label))
             {
@@ -69,7 +71,7 @@ public enum EStatusDemande {
 
     public static String getValueByLabel(String label)
     {
-        EStatusDemande eTranslationKind = getByLabel(label);
+        EPositionDemande eTranslationKind = getByLabel(label);
         if (null != eTranslationKind)
         {
             return getByLabel(label).getValue();

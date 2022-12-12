@@ -6,6 +6,8 @@
 package bf.mfptps.appgestionsconges.repositories;
 
 import bf.mfptps.appgestionsconges.entities.Agent;
+import bf.mfptps.appgestionsconges.entities.TypeDemande;
+import bf.mfptps.appgestionsconges.entities.Utilisateur;
 import bf.mfptps.appgestionsconges.service.dto.AgentStructureDTO;
 import java.time.Instant;
 import java.util.Date;
@@ -93,4 +95,7 @@ public interface AgentRepository extends JpaRepository<Agent, Long>, JpaSpecific
             String matricule,
             Date dateNaissance,
             Date dateRecrutement);
+
+    @Query("SELECT a FROM Agent a WHERE a.matricule=:MATRICULE")
+	Optional<Agent> findByMatricule(@Param("MATRICULE") String matricule);
 }
