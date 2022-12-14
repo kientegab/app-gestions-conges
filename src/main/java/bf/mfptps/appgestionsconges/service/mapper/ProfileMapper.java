@@ -15,8 +15,6 @@ import org.mapstruct.Mapper;
  */
 @Mapper(componentModel = "spring")
 public interface ProfileMapper {
-
     ProfileDTO toDTO(Profile profile);
-
     Profile toEntity(ProfileDTO profileDTO);
 }

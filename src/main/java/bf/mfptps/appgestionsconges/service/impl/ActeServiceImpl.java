@@ -64,4 +64,10 @@ public class ActeServiceImpl implements ActeService {
         acteRepository.deleteById(id);
     }
 
+	@Override
+	public ActeDTO update(ActeDTO acteDTO) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

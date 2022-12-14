@@ -34,6 +34,10 @@ public class Acte extends CommonEntity{
     @Column(name = "reference", nullable = false, unique = true)
     private String reference;
     
+    @Column
+    private String enteteMinistere;
+    
+    
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
     private EStatusActe status;

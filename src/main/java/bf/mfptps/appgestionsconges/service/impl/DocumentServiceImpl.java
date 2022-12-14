@@ -55,7 +55,7 @@ public class DocumentServiceImpl implements DocumentService {
 
             Document document = new Document();
             document.setDemande(demande);
-            String userStorage = demande.getUtilisateur().getPrenom();
+            String userStorage = demande.getAgent().getMatricule();
 
             String fileUri = AppUtil.saveUploadFileToServer(applicationProperties.getAppUploadsStorage(), userStorage,
                     file);
@@ -81,8 +81,7 @@ public class DocumentServiceImpl implements DocumentService {
             Files.deleteIfExists(oldFile.toPath());
 
             Demande demande = document.getDemande();
-            Utilisateur user = demande.getUtilisateur();
-            String userStorage = user.getPrenom();
+            String userStorage = demande.getAgent().getMatricule();
 
             String fileUri = AppUtil.saveUploadFileToServer(applicationProperties.getAppUploadsStorage(), userStorage,
                     file);
