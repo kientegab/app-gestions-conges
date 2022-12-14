@@ -25,9 +25,9 @@ public interface DemandeRepository extends JpaRepository<Demande, Long>, JpaSpec
             + "AND d.deleted = false")
     Page<Demande> findAll(String numeroDemande, Pageable pageable);
 
-    Page<Demande> findAllByUtilisateurMatriculeAndUtilisateurStructureId(String matricule, Long structureId, Pageable pageable);
+   // Page<Demande> findAllByAgentMatriculeAndAgentStructureId(String matricule, Long structureId, Pageable pageable);
 
-    @Query("SELECT COUNT(d) FROM Demande d JOIN d.utilisateur u Join u.structure s"
+  /*  @Query("SELECT COUNT(d) FROM Demande d JOIN d.agent a Join a.structure s"
     		+ " WHERE s.sigle =:SIGLE")
-	Long countStructureDemande(@Param("SIGLE") String sigle);
+	Long countStructureDemande(@Param("SIGLE") String sigle);*/
 }

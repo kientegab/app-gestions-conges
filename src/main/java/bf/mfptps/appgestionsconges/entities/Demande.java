@@ -94,6 +94,7 @@ public class Demande extends CommonEntity {
     @ManyToOne
     @JoinColumn(name = "agent_id")
     private Agent agent;
+    
     @OneToMany(mappedBy = "demande", cascade = CascadeType.ALL)
     @JsonIgnoreProperties(value = {"demande"}, allowSetters = true)
     private Set<Document> documents = new HashSet<>();
@@ -112,6 +113,10 @@ public class Demande extends CommonEntity {
     
     @Column(name="motif_rejet")
     private String motifRejet;
+    
+    @ManyToOne
+    @JoinColumn(name = "acte_id")
+    private Acte acte;
     
     public Long getId() {
         return id;
@@ -256,14 +261,20 @@ public class Demande extends CommonEntity {
 		this.trancheDemande = trancheDemande;
 	}
 	
-	
-
 	public String getMotifRejet() {
 		return motifRejet;
 	}
 
 	public void setMotifRejet(String motifRejet) {
 		this.motifRejet = motifRejet;
+	}
+
+	public Acte getActe() {
+		return acte;
+	}
+
+	public void setActe(Acte acte) {
+		this.acte = acte;
 	}
 
 	@Override
@@ -286,13 +297,13 @@ public class Demande extends CommonEntity {
  
 	@Override
 	public String toString() {
-		return "Demande {id=" + id + ", numeroDemande=" + numeroDemande + ", lieuJouissanceBF=" + lieuJouissanceBF
+		return "Demande { id=" + id + ", numeroDemande=" + numeroDemande + ", lieuJouissanceBF=" + lieuJouissanceBF
 				+ ", lieuJouissanceEtrang=" + lieuJouissanceEtrang + ", refLastDecision=" + refLastDecision
 				+ ", situationSND=" + situationSND + ", dureeAbsence=" + dureeAbsence + ", periodeDebut=" + periodeDebut
 				+ ", periodeFin=" + periodeFin + ", tranche=" + tranche + ", statut=" + statut + ", motifAbsence="
 				+ motifAbsence + ", typeDemande=" + typeDemande + ", agent=" + agent + ", documents="
 				+ documents + ", statusDemande=" + statusDemande + ", positionDemande=" + positionDemande
-				+ ", trancheDemande=" + trancheDemande + ", motifRejet=" + motifRejet + "}";
+				+ ", trancheDemande=" + trancheDemande + ", motifRejet=" + motifRejet + ", acte=" + acte  + "}";
 	}
     
     

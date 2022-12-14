@@ -190,7 +190,9 @@ public class DemandeServiceImpl implements DemandeService {
 	}
 
 	private String demandeRefgenerator(String userStructureSigle) {
-		Long countDemande = demandeRepository.countStructureDemande(userStructureSigle);
+	//	Long countDemande = demandeRepository.countStructureDemande(userStructureSigle);
+		
+		Long countDemande = demandeRepository.count();
 
 		return userStructureSigle + ""+  String.format("%04d", countDemande++) ;
 	}
