@@ -1,10 +1,10 @@
 package bf.mfptps.appgestionsconges.service.dto;
 
-import bf.mfptps.appgestionsconges.entities.Utilisateur;
 import java.util.Date;
 
-public class DemandeDTO {
+import bf.mfptps.appgestionsconges.enums.EStatusDemande;
 
+public class DemandeDTO {
     private Long id;
     private String numeroDemande;
     private String lieuJouissanceBF;
@@ -20,7 +20,10 @@ public class DemandeDTO {
 
     private TypeDemandeDTO typeDemande;
 
-    private Utilisateur utilisateur;
+    private AgentDTO agent ;
+    
+    private EStatusDemande statusDemande;
+    
 
     public Long getId() {
         return id;
@@ -110,12 +113,19 @@ public class DemandeDTO {
         this.typeDemande = typeDemande;
     }
 
-    public Utilisateur getUtilisateur() {
-        return utilisateur;
+    public AgentDTO getAgent() {
+        return agent;
     }
 
-    public void setUtilisateur(Utilisateur utilisateur) {
-        this.utilisateur = utilisateur;
+    public void setAgent(AgentDTO agent) {
+        this.agent = agent;
     }
 
+	public EStatusDemande getStatusDemande() {
+		return statusDemande;
+	}
+
+	public void setStatusDemande(EStatusDemande statusDemande) {
+		this.statusDemande = statusDemande;
+	}
 }

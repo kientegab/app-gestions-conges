@@ -1,11 +1,10 @@
 package bf.mfptps.appgestionsconges.service.dto;
 
-import bf.mfptps.appgestionsconges.entities.CommonEntity;
-import bf.mfptps.appgestionsconges.entities.Demande;
-
 import java.util.Objects;
 
-public class DocumentDTO extends CommonEntity {
+import bf.mfptps.appgestionsconges.entities.Demande;
+
+public class DocumentDTO {
 
     private Long id;
 
