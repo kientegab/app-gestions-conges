@@ -24,7 +24,7 @@ public interface AgentStructureRepository extends JpaRepository<AgentStructure, 
      */
     @Query("SELECT ast FROM AgentStructure ast, Agent a "
             + "WHERE ast.agent.id = a.id AND ast.actif = true "
-            + "AND a.matricule = :matricule OR a.email = :email")
+            + "AND (a.matricule = :matricule OR a.email = :email)")
     AgentStructure findOneByAgentMatriculeOrAgentEmail(String matricule, String email);
     
    /* @Query("SELECT COUNT(as) FROM AgentStructure as JOIN ad.agent a Join a.structure s"

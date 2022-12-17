@@ -78,6 +78,9 @@ public class DemandeController {
         try {
             demande = mapper.readValue(demandeJson, DemandeDTO.class);
         } catch (Exception e) {
+                log.error("Failed to parse string to Demande DTO", e);
+
+                e.printStackTrace( );
             throw new CustomException("Echec lors du formatage des donnees du formulaire");
         }
         DemandeDTO dem = demandeService.create(demande, fichiersJoint);

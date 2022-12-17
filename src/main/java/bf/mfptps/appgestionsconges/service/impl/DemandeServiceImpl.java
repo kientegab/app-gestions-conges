@@ -157,6 +157,7 @@ public class DemandeServiceImpl implements DemandeService {
 		}
 
 		demande.setStatusDemande(EStatusDemande.INITIATION);
+		demande.setPositionDemande(EPositionDemande.DEMANDEUR);
 		return demandeMapper.toDto(demandeRepository.save(demande));
 	}
 
@@ -217,7 +218,7 @@ public class DemandeServiceImpl implements DemandeService {
 		Optional<Avis> optionalAvis = avisRepository.findAvisByNumeroDemande(validationDTO.getNumeroDemande());
 		Avis avis = new Avis();
 		
-		if(!demandeur.getMatricule().equalsIgnoreCase(connectedAgent.getMatricule())) {
+		if(!demandeur.getMatriculeResp().equalsIgnoreCase(connectedAgent.getMatricule())) {
 			throw new CustomException("Seul le supérieur hiérarchique de demandeur peut éffectuer cette action!!!");
 		}
 		
@@ -243,7 +244,12 @@ public class DemandeServiceImpl implements DemandeService {
 		avis.setAvisSH(validationDTO.getAvis());
 		avis.getDemande().setPositionDemande(EPositionDemande.SH);
 		avis.setDateAvisSH(new Date());
-		avisRepository.save(avis);
+		try {
+			avisRepository.save(avis);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new CustomException("Failde to save avis");
+		}
 		
 		return demandeMapper.toDto(demande);
 	}
@@ -340,7 +346,7 @@ public class DemandeServiceImpl implements DemandeService {
 		}
 		
 		avis.setAvisDRH(validationDTO.getAvis());
-		avis.getDemande().setPositionDemande(EPositionDemande.DGFP);
+		avis.getDemande().setPositionDemande(EPositionDemande.DRH);
 		avis.setDateAvisDRH(new Date());
 		avisRepository.save(avis);
 		

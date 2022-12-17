@@ -2,7 +2,9 @@ package bf.mfptps.appgestionsconges.service.dto;
 
 import java.util.Date;
 
+import bf.mfptps.appgestionsconges.enums.EPositionDemande;
 import bf.mfptps.appgestionsconges.enums.EStatusDemande;
+import bf.mfptps.appgestionsconges.enums.ETrancheDemande;
 
 public class DemandeDTO {
     private Long id;
@@ -24,6 +26,16 @@ public class DemandeDTO {
     
     private EStatusDemande statusDemande;
     
+    private String motifRejet;
+    private EPositionDemande positionDemande;
+    private ETrancheDemande trancheDemande;
+    public String getMotifRejet() {
+        return motifRejet;
+    }
+
+    public void setMotifRejet(String motifRejet) {
+        this.motifRejet = motifRejet;
+    }
 
     public Long getId() {
         return id;
@@ -128,4 +140,23 @@ public class DemandeDTO {
 	public void setStatusDemande(EStatusDemande statusDemande) {
 		this.statusDemande = statusDemande;
 	}
+
+    public void setPositionDemande(EPositionDemande positionDemande) {
+        this.positionDemande = positionDemande;
+    }
+
+    public void setTrancheDemande(ETrancheDemande trancheDemande) {
+        this.trancheDemande = trancheDemande;
+    }
+
+    public EPositionDemande getPositionDemande() {
+        return positionDemande;
+    }
+
+    public ETrancheDemande getTrancheDemande() {
+        return trancheDemande;
+    }
+
+    
+    
 }

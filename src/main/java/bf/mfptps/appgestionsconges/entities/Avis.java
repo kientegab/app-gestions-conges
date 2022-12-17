@@ -48,7 +48,7 @@ public class Avis extends CommonEntity {
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
-    @NotNull
+   // @NotNull
     @Size(min = 1, max = 50)
     @Column(name = "avis_drh", length = 254)
     private String avisDRH;
@@ -75,7 +75,7 @@ public class Avis extends CommonEntity {
     @Column(name = "date_avis_dg")
     private Date dateAvisDG;
 
-    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "demande_id")
     private Demande demande;
 
