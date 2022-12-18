@@ -244,62 +244,63 @@ public class ActeServiceImpl implements ActeService {
 				//CTR ctr = CTR.Factory.parse(obj.newInputStream());
 				XWPFRun bufferrun = new XWPFRun(ctr, (IRunBody)paragraph);
 				String text = bufferrun.getText(0);
-				log.error("BOX TEXT ====> {}", text);
 				if (text != null) {
-					log.error("BOX TEXT ====> {}", text);
 					if(text.contains("$ENTETE_MINISTERE$")){
-						log.error("BOX TEXT ?INI====> {}", text);
 						text = text.replace("$ENTETE_MINISTERE$", acte.getEnteteMinistere());
 						bufferrun.setText(text, 0);
-					}else if(text.contains("$REFERENCE_ACTE$")) {
+					} if(text.contains("$REFERENCE_ACTE$")) {
 						text = text.replace("$REFERENCE_ACTE$", acte.getReference());
 						bufferrun.setText(text, 0);
-					}else if(text.contains("$DATE_ACTE$")) {
+					} if(text.contains("$DATE_ACTE$")) {
 
 						text = text.replace("$DATE_ACTE$", simpleDateFormat.format(new Date()));
 						bufferrun.setText(text, 0);
-					}else if(text.contains("$TOTAL_HEURES$")) {
-						Long hours = demande.getDureeAbsence()*24;
-						text = text.replace("$TOTAL_HEURES$", ""+hours);
+					} if(text.contains("$SOLDEPRIS$")) {
+						long soldePris = demande.getTypeDemande().getSoldeAnnuel() - agentSolde.getSoldeRestant();
+						text = text.replace("$SOLDEPRIS$", ""+soldePris);
 						bufferrun.setText(text, 0);
-					}else if(text.contains("$NOM_PRENOM_AGENT$")) {
-						String nomPrenom = "" + agent.getNom() + StringUtils.hasText(agent.getNomJeuneFille()) != null ? "/"+ agent.getNomJeuneFille():"" + " " + agent.getPrenom();  				 
+					} if(text.contains("$SOLDERESTE$")) {
+						text = text.replace("$SOLDERESTE$", ""+agentSolde.getSoldeRestant());
+						bufferrun.setText(text, 0);
+					} if(text.contains("$TOTALHEURES$")) {
+						Long hours = demande.getDureeAbsence()*24;
+						text = text.replace("$TOTALHEURES$", ""+hours);
+						bufferrun.setText(text, 0);
+					} if(text.contains("$NOM_PRENOM_AGENT$")) {
+						String nomPrenom = "" + agent.getNom() + (StringUtils.hasText(agent.getNomJeuneFille())  ? "/"+ agent.getNomJeuneFille():"") + " " + agent.getPrenom();  				 
 						text = text.replace("$NOM_PRENOM_AGENT$", nomPrenom);
 						bufferrun.setText(text, 0);
-					}else if(text.contains("$MATRICULE_AGENT$")) {
+					} if(text.contains("$MATRICULE_AGENT$")) {
 						text = text.replace("$MATRICULE_AGENT$", agent.getMatricule());
 						bufferrun.setText(text, 0);
-					}else if(text.contains("$FONCTION_AGENT$")) {
+					} if(text.contains("$FONCTION_AGENT$")) {
 						text = text.replace("$FONCTION_AGENT$", agent.getCorps().getLibelleCorps());
 						bufferrun.setText(text, 0);
-					}else if(text.contains("$DATE_DEBUT$")) {
+					} if(text.contains("$DATE_DEBUT$")) {
 						text = text.replace("$DATE_DEBUT$", simpleDateFormat.format(demande.getPeriodeDebut()));
 						bufferrun.setText(text, 0);
-					}else if(text.contains("$DATE_FIN$")) {
+					} if(text.contains("$DATE_FIN$")) {
 						text = text.replace("$DATE_FIN$", simpleDateFormat.format(demande.getPeriodeFin()));
 						bufferrun.setText(text, 0);
-					}else if(text.contains("$MOTIF_ABSENCE$")) {
+					} if(text.contains("$MOTIF_ABSENCE$")) {
 						String motifAbsence = null!=  demande.getMotifAbsence() ?  demande.getMotifAbsence().getLibelle(): "";
 						text = text.replace("$MOTIF_ABSENCE$", motifAbsence);
 						bufferrun.setText(text, 0);
-					}else if(text.contains("$SOLDE_PRIS$")) {
-						long soldePris = demande.getTypeDemande().getSoldeAnnuel() - agentSolde.getSoldeRestant();
-						text = text.replace("$SOLDE_PRIS$", ""+soldePris);
-						bufferrun.setText(text, 0);
-					}else if(text.contains("$SOLDE_RESTE$")) {
-						text = text.replace("$SOLDE_RESTE$", ""+agentSolde.getSoldeRestant());
-						bufferrun.setText(text, 0);
-					}else if(text.contains("$ANNEE$")) {
+					} if(text.contains("$ANNEE$")) {
 						text = text.replace("$ANNEE$", acte.getAnnee());
 						bufferrun.setText(text, 0);
-					}else if(text.contains("$RESPONSABLE_ACTE$")) {
+					} if(text.contains("$RESPONSABLE_ACTE$")) {
 						text = text.replace("$RESPONSABLE_ACTE$", acte.getNomPrenomCreator());
 						bufferrun.setText(text, 0);
-					}else if(text.contains("$TITRE_RESPONSABLE$")) {
+					} if(text.contains("$TITRE_RESPONSABLE$")) {
 						text = text.replace("$TITRE_RESPONSABLE$", acte.getTitreCreator());
 						bufferrun.setText(text, 0);
-					}else if(text.contains("$AMPLIATION$")) {
+					} if(text.contains("$AMPLIATION$")) {
 						text = text.replace("$AMPLIATION$", acte.getAmpliation());
+						bufferrun.setText(text, 0);
+					} if(text.contains("$STRUCTURE_AGENT$")) {
+						String structureAgent = agentstruct.getStructure()!=null ? agentstruct.getStructure().getLibelle():"";
+						text = text.replace("$STRUCTURE_AGENT$", structureAgent);
 						bufferrun.setText(text, 0);
 					}
 				}
@@ -309,8 +310,11 @@ public class ActeServiceImpl implements ActeService {
 
 			for (XWPFRun run : paragraph.getRuns()) {
 				String text = run.getText(0);
-				textReplaceProcess(acte, simpleDateFormat, demande, agent, agentSolde, run, text);
+				
+				textReplaceProcess(acte, simpleDateFormat, demande, agent,  agentstruct, agentSolde, run, text);
 			}
+			
+			log.error("PARAGRAPH ----> {}", paragraph.getText());
 		}
 
 
@@ -334,63 +338,67 @@ public class ActeServiceImpl implements ActeService {
 		}
 	}
 
-	private void textReplaceProcess(Acte acte, SimpleDateFormat simpleDateFormat, Demande demande, Agent agent,
+	private void textReplaceProcess(Acte acte, SimpleDateFormat simpleDateFormat, Demande demande, Agent agent,  AgentStructure agentstruct, 
 			AgentSolde agentSolde, XWPFRun run, String text) {
-		log.error("param =====> {}", text);
 		if (text != null) {
-			log.error("text =====> {}", text);
+			SimpleDateFormat df =  new SimpleDateFormat("dd/MM/yyyy", new Locale("fr", "FR"));
 			if(text.contains("$ENTETE_MINISTERE$")){
 				text = text.replace("$ENTETE_MINISTERE$", acte.getEnteteMinistere());
 				run.setText(text, 0);
-			}else if(text.contains("$REFERENCE_ACTE$")) {
+			} if(text.contains("$REFERENCE_ACTE$")) {
 				text = text.replace("$REFERENCE_ACTE$", acte.getReference());
 				run.setText(text, 0);
-			}else if(text.contains("$DATE_ACTE$")) {
+			} if(text.contains("$SOLDEPRIS$")) {
+				long soldePris = demande.getTypeDemande().getSoldeAnnuel() - agentSolde.getSoldeRestant();
+				text = text.replace("$SOLDEPRIS$", ""+soldePris);
+				run.setText(text, 0);
+			} if(text.contains("$SOLDERESTE$")) {
+				text = text.replace("$SOLDERESTE$", ""+agentSolde.getSoldeRestant());
+				run.setText(text, 0);
+			}  if(text.contains("$DATE_ACTE$")) {
 
 				text = text.replace("$DATE_ACTE$", simpleDateFormat.format(new Date()));
 				run.setText(text, 0);
-			}else if(text.contains("$TOTAL_HEURES$")) {
+			} if(text.contains("$TOTALHEURES$")) {
 				Long hours = demande.getDureeAbsence()*24;
-				text = text.replace("$TOTAL_HEURES$", ""+hours);
+				text = text.replace("$TOTALHEURES$", ""+hours);
 				run.setText(text, 0);
-			}else if(text.contains("$NOM_PRENOM_AGENT$")) {
-				String nomPrenom = "" + agent.getNom() + StringUtils.hasText(agent.getNomJeuneFille()) != null ? "/"+ agent.getNomJeuneFille():"" + " " + agent.getPrenom();  				 
+			} if(text.contains("$NOM_PRENOM_AGENT$")) {
+				String nomPrenom = "" + agent.getNom() + (StringUtils.hasText(agent.getNomJeuneFille()) ? "/"+ agent.getNomJeuneFille():"") + " " + agent.getPrenom();  				 
 				text = text.replace("$NOM_PRENOM_AGENT$", nomPrenom);
 				run.setText(text, 0);
-			}else if(text.contains("$MATRICULE_AGENT$")) {
+			} if(text.contains("$MATRICULE_AGENT$")) {
 				text = text.replace("$MATRICULE_AGENT$", agent.getMatricule());
 				run.setText(text, 0);
-			}else if(text.contains("$FONCTION_AGENT$")) {
-				text = text.replace("$FONCTION_AGENT$", agent.getCorps().getLibelleCorps());
+			} if(text.contains("$FONCTION_AGENT$")) {
+				String corps = agent.getCorps()!=null ? agent.getCorps().getLibelleCorps(): "";
+				text = text.replace("$FONCTION_AGENT$",corps);
 				run.setText(text, 0);
-			}else if(text.contains("$DATE_DEBUT$")) {
-				text = text.replace("$DATE_DEBUT$", simpleDateFormat.format(demande.getPeriodeDebut()));
+			} if(text.contains("$DATE_DEBUT$")) {
+				text = text.replace("$DATE_DEBUT$", df.format(demande.getPeriodeDebut()));
 				run.setText(text, 0);
-			}else if(text.contains("$DATE_FIN$")) {
-				text = text.replace("$DATE_FIN$", simpleDateFormat.format(demande.getPeriodeFin()));
+			} if(text.contains("$DATE_FIN$")) {
+				text = text.replace("$DATE_FIN$", df.format(demande.getPeriodeFin()));
 				run.setText(text, 0);
-			}else if(text.contains("$MOTIF_ABSENCE$")) {
+			} if(text.contains("$MOTIF_ABSENCE$")) {
 				String motifAbsence = null!=  demande.getMotifAbsence() ?  demande.getMotifAbsence().getLibelle(): "";
 				text = text.replace("$MOTIF_ABSENCE$", motifAbsence);
 				run.setText(text, 0);
-			}else if(text.contains("$SOLDE_PRIS$")) {
-				long soldePris = demande.getTypeDemande().getSoldeAnnuel() - agentSolde.getSoldeRestant();
-				text = text.replace("$SOLDE_PRIS$", ""+soldePris);
-				run.setText(text, 0);
-			}else if(text.contains("$SOLDE_RESTE$")) {
-				text = text.replace("$SOLDE_RESTE$", ""+agentSolde.getSoldeRestant());
-				run.setText(text, 0);
-			}else if(text.contains("$ANNEE$")) {
+			} if(text.contains("$ANNEE$")) {
 				text = text.replace("$ANNEE$", acte.getAnnee());
 				run.setText(text, 0);
-			}else if(text.contains("$RESPONSABLE_ACTE$")) {
+			} if(text.contains("$RESPONSABLE_ACTE$")) {
 				text = text.replace("$RESPONSABLE_ACTE$", acte.getNomPrenomCreator());
 				run.setText(text, 0);
-			}else if(text.contains("$TITRE_RESPONSABLE$")) {
+			} if(text.contains("$TITRE_RESPONSABLE$")) {
 				text = text.replace("$TITRE_RESPONSABLE$", acte.getTitreCreator());
 				run.setText(text, 0);
-			}else if(text.contains("$AMPLIATION$")) {
+			} if(text.contains("$AMPLIATION$")) {
 				text = text.replace("$AMPLIATION$", acte.getAmpliation());
+				run.setText(text, 0);
+			} if(text.contains("$STRUCTURE_AGENT$")) {
+				String structureAgent = agentstruct.getStructure()!=null ? agentstruct.getStructure().getLibelle():"";
+				text = text.replace("$STRUCTURE_AGENT$", structureAgent);
 				run.setText(text, 0);
 			}
 		}
