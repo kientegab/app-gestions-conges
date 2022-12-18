@@ -23,6 +23,9 @@ public class ActeDTO{
     private String annee;
     
     private Set<DemandeDTO> demandes = new HashSet<>();
+    
+    private String nomPrenomCreator;
+    private String titreCreator;
 
 	public Long getId() {
 		return id;
@@ -87,5 +90,21 @@ public class ActeDTO{
 	public void setDemandes(Set<DemandeDTO> demandes) {
 		this.demandes = demandes;
 	}
-        
+
+	public String getNomPrenomCreator() {
+		return nomPrenomCreator;
+	}
+
+	public void setNomPrenomCreator(String nomPrenomCreator) {
+		this.nomPrenomCreator = nomPrenomCreator;
+	}
+
+	public String getTitreCreator() {
+		return titreCreator;
+	}
+
+	public void setTitreCreator(String titreCreator) {
+		this.titreCreator = titreCreator;
+	}
+
 }

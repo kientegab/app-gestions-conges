@@ -70,8 +70,8 @@ public class TypeActeController {
      */
     @PostMapping
     //@PreAuthorize("hasAnyAuthority(\"" + AppUtil.ADMIN + "\")")
-    public ResponseEntity<TypeActeDTO> create(@Valid @RequestParam(value = "demande") String typeActeJson, @RequestParam(value = "file") MultipartFile templateFile) throws URISyntaxException {
-        log.debug("Création de typeDemande : {}", typeActeJson);
+    public ResponseEntity<TypeActeDTO> create(@Valid @RequestParam(value = "typeacte") String typeActeJson, @RequestParam(value = "file") MultipartFile templateFile) throws URISyntaxException {
+        log.debug("Création de typeActe : {}", typeActeJson);
         ObjectMapper mapper = new ObjectMapper();
         TypeActeDTO typeActeDTO;
         try {
@@ -90,8 +90,8 @@ public class TypeActeController {
 
     @PutMapping
     //@PreAuthorize("hasAnyAuthority(\"" + AppUtil.ADMIN + "\")")
-    public ResponseEntity<TypeActeDTO> update(@Valid @RequestParam(value = "demande") String typeActeJson, @RequestParam(value = "file", required = true) MultipartFile templateFile) throws URISyntaxException {
-        log.debug("Mis à jour de typeDemande : {}", typeActeJson);
+    public ResponseEntity<TypeActeDTO> update(@Valid @RequestParam(value = "typeacte") String typeActeJson, @RequestParam(value = "file", required = true) MultipartFile templateFile) throws URISyntaxException {
+        log.debug("Mis à jour de typeActe : {}", typeActeJson);
         
         ObjectMapper mapper = new ObjectMapper();
         TypeActeDTO typeActeDTO;
@@ -119,7 +119,7 @@ public class TypeActeController {
      */
     @GetMapping(path = "/{id}")
     public ResponseEntity<TypeActe> findOne(@PathVariable Long id) {
-        log.debug("Consultation d'un typeDemande : {}", id);
+        log.debug("Consultation d'un typeActe : {}", id);
         Optional<TypeActe> result = typeActeService.findOne(id);
         return ResponseUtil.wrapOrNotFound(result);
     }
