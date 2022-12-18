@@ -16,21 +16,21 @@ import org.springframework.web.multipart.MultipartFile;
 
 import bf.mfptps.appgestionsconges.config.ApplicationProperties;
 import bf.mfptps.appgestionsconges.entities.Agent;
+import bf.mfptps.appgestionsconges.entities.AgentSolde;
 import bf.mfptps.appgestionsconges.entities.AgentStructure;
 import bf.mfptps.appgestionsconges.entities.Avis;
 import bf.mfptps.appgestionsconges.entities.Demande;
 import bf.mfptps.appgestionsconges.entities.Document;
 import bf.mfptps.appgestionsconges.entities.TypeDemande;
-import bf.mfptps.appgestionsconges.entities.UtilisateurSolde;
 import bf.mfptps.appgestionsconges.enums.EPositionDemande;
 import bf.mfptps.appgestionsconges.enums.EStatusDemande;
 import bf.mfptps.appgestionsconges.enums.ETypeValidation;
 import bf.mfptps.appgestionsconges.repositories.AgentRepository;
+import bf.mfptps.appgestionsconges.repositories.AgentSoldeRepository;
 import bf.mfptps.appgestionsconges.repositories.AgentStructureRepository;
 import bf.mfptps.appgestionsconges.repositories.AvisRepository;
 import bf.mfptps.appgestionsconges.repositories.DemandeRepository;
 import bf.mfptps.appgestionsconges.repositories.TypeDemandeRepository;
-import bf.mfptps.appgestionsconges.repositories.UserSoldeRepository;
 import bf.mfptps.appgestionsconges.service.DemandeService;
 import bf.mfptps.appgestionsconges.service.dto.DemandeDTO;
 import bf.mfptps.appgestionsconges.service.dto.ValidationDTO;
@@ -55,18 +55,18 @@ public class DemandeServiceImpl implements DemandeService {
 	private final DemandeRepository demandeRepository;
 	private final AgentRepository agentRepository;
 	private final TypeDemandeRepository typeDemandeRepository;
-	private final UserSoldeRepository   userSoldeRepository;
+	private final AgentSoldeRepository   agentSoldeRepository;
 	private final AvisRepository    avisRepository;
 	private final AgentStructureRepository agentStructureRepository;
 	private final DemandeMapper demandeMapper;
 	private final ApplicationProperties applicationProperties;
 
 	public DemandeServiceImpl(DemandeRepository demandeRepository, DemandeMapper demandeMapper,
-			AgentRepository agentRepository, TypeDemandeRepository typeDemandeRepository, ApplicationProperties applicationProperties, UserSoldeRepository userSoldeRepository, AgentStructureRepository agentStructureRepository, AvisRepository avisRepository) {
+			AgentRepository agentRepository, TypeDemandeRepository typeDemandeRepository, ApplicationProperties applicationProperties, AgentSoldeRepository agentSoldeRepository, AgentStructureRepository agentStructureRepository, AvisRepository avisRepository) {
 		this.demandeRepository = demandeRepository;
 		this.agentRepository = agentRepository;
 		this.typeDemandeRepository = typeDemandeRepository;
-		this.userSoldeRepository = userSoldeRepository;
+		this.agentSoldeRepository = agentSoldeRepository;
 		this.avisRepository = avisRepository;
 		this.agentStructureRepository = agentStructureRepository;
 		this.demandeMapper = demandeMapper;
@@ -120,20 +120,20 @@ public class DemandeServiceImpl implements DemandeService {
 
 		//long demandeDays = AppUtil.getDifferenceDays(demande.getPeriodeDebut(), demande.getPeriodeFin());
 
-		Optional<UtilisateurSolde> optionalSolde = userSoldeRepository.findUserSoldeByYear(agent.getMatricule(), AppUtil.getCurrentYear(), typeDemande.getCode());
+		Optional<AgentSolde> optionalSolde = agentSoldeRepository.findUserSoldeByYear(agent.getMatricule(), AppUtil.getCurrentYear(), typeDemande.getCode());
 
 		if(optionalSolde.isPresent()) {
 			if(demande.getDureeAbsence()> optionalSolde.get().getSoldeRestant()) {
 				throw new CustomException("Vous avez atteint votre solde de demande de type ["+typeDemande.getLibelle()+"]");
 			}
 		}else {
-			UtilisateurSolde solde = new UtilisateurSolde();
+			AgentSolde solde = new AgentSolde();
 			solde.setAnnee(AppUtil.getCurrentYear());
 			solde.setMatricule(agent.getMatricule());
 			solde.setTypeDemande(typeDemande.getCode());
 			solde.setSoldeRestant(typeDemande.getSoldeAnnuel());
 
-			userSoldeRepository.save(solde);
+			agentSoldeRepository.save(solde);
 		}
 		if(fichiersJoint!=null && fichiersJoint.length>0) {
 			Set<Document> documents = new HashSet<Document>();

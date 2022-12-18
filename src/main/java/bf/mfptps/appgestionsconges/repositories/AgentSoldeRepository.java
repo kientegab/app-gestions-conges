@@ -18,7 +18,7 @@ public interface AgentSoldeRepository extends JpaRepository<AgentSolde, Long>, J
 	Optional<AgentSolde> findUserSoldeByYear(@Param("MATRICULE") String matricule, @Param("ANNEE") int annee, @Param("TYPEDEMANDE") String typeDemande);
 	
 	@Transactional
-	@Query("UPDATE UtilisateurSolde "
+	@Query("UPDATE AgentSolde "
 			+ " SET soldeRestant=(soldeRestant - :NOMBREJOUR)"
 			+ " WHERE id=:ID")
 	AgentSolde updateUserSolde(@Param("ID") Long id, @Param("NOMBREJOUR") int nombreJour);
