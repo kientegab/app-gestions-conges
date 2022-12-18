@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface TypeActeService {
 
@@ -14,7 +15,8 @@ public interface TypeActeService {
      * @param permission the entity to save.
      * @return the persisted entity.
      */
-    TypeActe save(TypeActe typeActe);
+    TypeActe save(TypeActe typeActe, MultipartFile fileMultipart);
+    TypeActe update(TypeActe typeActe, MultipartFile fileMultipart);
 
     /**
      * Get all the permission.

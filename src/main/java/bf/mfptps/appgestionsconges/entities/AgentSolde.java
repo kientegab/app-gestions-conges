@@ -15,7 +15,7 @@ import org.hibernate.annotations.Where;
  * @author TEGUERA
  */
 @javax.persistence.Entity
-@javax.persistence.Table(name = "UtilisateurSolde")
+@javax.persistence.Table(name = "AgentSolde")
 @SQLDelete(sql = "UPDATE UtilisateurSolde SET deleted = true WHERE id=?")
 @Where(clause = "deleted = false")
 @FilterDef(
@@ -28,7 +28,7 @@ import org.hibernate.annotations.Where;
 )
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 
-public class UtilisateurSolde extends CommonEntity {
+public class AgentSolde extends CommonEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")

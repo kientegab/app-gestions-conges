@@ -62,6 +62,11 @@ public class Acte extends CommonEntity{
     @JsonIgnoreProperties(value = {"acte"}, allowSetters = true)
     private Set<Demande> demandes = new HashSet<>();
 
+    @Column(name = "creator_names")
+    private String nomPrenomCreator;
+    @Column(name="creator_title")
+    private String titreCreator;
+    
 	public Long getId() {
 		return id;
 	}
@@ -124,6 +129,22 @@ public class Acte extends CommonEntity{
 
 	public void setDemandes(Set<Demande> demandes) {
 		this.demandes = demandes;
+	}
+
+	public String getNomPrenomCreator() {
+		return nomPrenomCreator;
+	}
+
+	public void setNomPrenomCreator(String nomPrenomCreator) {
+		this.nomPrenomCreator = nomPrenomCreator;
+	}
+
+	public String getTitreCreator() {
+		return titreCreator;
+	}
+
+	public void setTitreCreator(String titreCreator) {
+		this.titreCreator = titreCreator;
 	}
     
     
