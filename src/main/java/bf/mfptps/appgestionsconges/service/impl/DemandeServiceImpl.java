@@ -233,7 +233,7 @@ public class DemandeServiceImpl implements DemandeService {
 		 
 		 
 		if(ETypeValidation.APPROVED.equals( validationDTO.getEnumValidation())){
-			String typeDemandeCode = avis.getDemande().getNumeroDemande();
+			String typeDemandeCode = avis.getDemande().getTypeDemande().getCode();
 			if(typeDemandeCode.contains("JOUISS") || typeDemandeCode.contains("AUTRE")) {
 				avis.getDemande().setStatusDemande(EStatusDemande.VALIDE);
 			}

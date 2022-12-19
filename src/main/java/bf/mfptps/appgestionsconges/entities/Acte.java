@@ -58,7 +58,7 @@ public class Acte extends CommonEntity{
     @Column(name = "annee")
     private String annee;
     
-    @OneToMany(mappedBy = "acte",fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @OneToMany(mappedBy = "acte",fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonIgnoreProperties(value = {"acte"}, allowSetters = true)
     private Set<Demande> demandes = new HashSet<>();
 
