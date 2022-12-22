@@ -208,18 +208,40 @@
 			<artifactId>poi-ooxml</artifactId>
 			<version>5.1.0</version>
 		</dependency>
-		
-			<dependency>
+
+		<dependency>
+			<groupId>org.apache.xmlbeans</groupId>
+			<artifactId>xmlbeans</artifactId>
+			<version>5.1.0</version>
+		</dependency>
+
+		<dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi</artifactId>
 			<version>5.1.0</version>
 		</dependency>
-		
+
 		<dependency>
-		    <groupId>fr.opensagres.xdocreport</groupId>
-		    <artifactId>fr.opensagres.poi.xwpf.converter.pdf</artifactId>
-		    <version>2.0.3</version>
+			<groupId>fr.opensagres.xdocreport</groupId>
+			<artifactId>fr.opensagres.poi.xwpf.converter.pdf</artifactId>
+			<version>2.0.3</version>
 		</dependency>
+
+		<dependency>
+		  <groupId>net.sourceforge.barbecue</groupId>
+		  <artifactId>barbecue</artifactId>
+		  <version>1.5-beta1</version>
+		</dependency>
+		<dependency>
+    <groupId>com.google.zxing</groupId>
+    <artifactId>core</artifactId>
+    <version>3.3.0</version>
+</dependency>
+<dependency>
+    <groupId>com.google.zxing</groupId>
+    <artifactId>javase</artifactId>
+    <version>3.3.0</version>
+</dependency>
 		<!-- import CSV file -->
 		<dependency>
 			<groupId>org.apache.commons</groupId>
@@ -239,9 +261,10 @@
 			<type>jar</type>
 		</dependency>
 
-	
-		
 
+
+		<!-- <dependency> <groupId>net.sf.saxon</groupId> <artifactId>Saxon-HE</artifactId> 
+			<version>9.7.0-3</version> </dependency> -->
 	</dependencies>
 
 	<build>

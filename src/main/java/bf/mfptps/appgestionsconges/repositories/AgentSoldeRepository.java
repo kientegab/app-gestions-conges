@@ -6,6 +6,7 @@ import javax.transaction.Transactional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -18,8 +19,9 @@ public interface AgentSoldeRepository extends JpaRepository<AgentSolde, Long>, J
 	Optional<AgentSolde> findUserSoldeByYear(@Param("MATRICULE") String matricule, @Param("ANNEE") int annee, @Param("TYPEDEMANDE") String typeDemande);
 	
 	@Transactional
+	@Modifying
 	@Query("UPDATE AgentSolde "
-			+ " SET soldeRestant=(soldeRestant - :NOMBREJOUR)"
+			+ " SET soldeRestant=:NOMBREJOUR"
 			+ " WHERE id=:ID")
-	AgentSolde updateUserSolde(@Param("ID") Long id, @Param("NOMBREJOUR") int nombreJour);
+	int updateUserSolde(@Param("ID") Long id, @Param("NOMBREJOUR") Long nombreJour);
 }

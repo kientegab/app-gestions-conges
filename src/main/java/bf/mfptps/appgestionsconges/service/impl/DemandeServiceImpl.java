@@ -15,6 +15,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import bf.mfptps.appgestionsconges.config.ApplicationProperties;
+import bf.mfptps.appgestionsconges.entities.Acte;
 import bf.mfptps.appgestionsconges.entities.Agent;
 import bf.mfptps.appgestionsconges.entities.AgentSolde;
 import bf.mfptps.appgestionsconges.entities.AgentStructure;
@@ -37,6 +38,7 @@ import bf.mfptps.appgestionsconges.service.dto.ValidationDTO;
 import bf.mfptps.appgestionsconges.service.mapper.DemandeMapper;
 import bf.mfptps.appgestionsconges.utils.AppUtil;
 import bf.mfptps.appgestionsconges.web.exceptions.CustomException;
+import liquibase.pro.packaged.lo;
 
 /**
  *
@@ -118,12 +120,12 @@ public class DemandeServiceImpl implements DemandeService {
 			throw new CustomException("Saisir la période de début et la période de fin de la demande.");
 		}
 
-		//long demandeDays = AppUtil.getDifferenceDays(demande.getPeriodeDebut(), demande.getPeriodeFin());
+		long demandeDays = AppUtil.getDifferenceDays(demande.getPeriodeDebut(), demande.getPeriodeFin());
 
 		Optional<AgentSolde> optionalSolde = agentSoldeRepository.findUserSoldeByYear(agent.getMatricule(), AppUtil.getCurrentYear(), typeDemande.getCode());
 
 		if(optionalSolde.isPresent()) {
-			if(demande.getDureeAbsence()> optionalSolde.get().getSoldeRestant()) {
+			if(demandeDays > optionalSolde.get().getSoldeRestant()) {
 				throw new CustomException("Vous avez atteint votre solde de demande de type ["+typeDemande.getLibelle()+"]");
 			}
 		}else {
@@ -132,8 +134,8 @@ public class DemandeServiceImpl implements DemandeService {
 			solde.setMatricule(agent.getMatricule());
 			solde.setTypeDemande(typeDemande.getCode());
 			solde.setSoldeRestant(typeDemande.getSoldeAnnuel());
-
 			agentSoldeRepository.save(solde);
+			demande.setDureeAbsence(demandeDays);
 		}
 		if(fichiersJoint!=null && fichiersJoint.length>0) {
 			Set<Document> documents = new HashSet<Document>();
@@ -236,6 +238,7 @@ public class DemandeServiceImpl implements DemandeService {
 			String typeDemandeCode = avis.getDemande().getTypeDemande().getCode();
 			if(typeDemandeCode.contains("JOUISS") || typeDemandeCode.contains("AUTRE")) {
 				avis.getDemande().setStatusDemande(EStatusDemande.VALIDE);
+				updateUserSolde(avis);
 			}
 		}else {
 			avis.getDemande().setStatusDemande(EStatusDemande.REJETE);
@@ -277,6 +280,7 @@ public class DemandeServiceImpl implements DemandeService {
 		
 		if(islastValidationNode) {
 			avis.getDemande().setStatusDemande(EStatusDemande.VALIDE);
+			updateUserSolde(avis);
 		}
 		
 		avis.setAvisSG(validationDTO.getAvis());
@@ -309,6 +313,7 @@ public class DemandeServiceImpl implements DemandeService {
 		
 		if(islastValidationNode) {
 			avis.getDemande().setStatusDemande(EStatusDemande.VALIDE);
+			updateUserSolde(avis);
 		}
 		
 		avis.setAvisDG(validationDTO.getAvis());
@@ -343,6 +348,7 @@ public class DemandeServiceImpl implements DemandeService {
 		
 		if(islastValidationNode) {
 			avis.getDemande().setStatusDemande(EStatusDemande.VALIDE);
+			updateUserSolde(avis);
 		}
 		
 		avis.setAvisDRH(validationDTO.getAvis());
@@ -351,6 +357,15 @@ public class DemandeServiceImpl implements DemandeService {
 		avisRepository.save(avis);
 		
 		return demandeMapper.toDto( avis.getDemande());
+	}
+
+	private void updateUserSolde(Avis avis) {
+		AgentSolde agentSolde = agentSoldeRepository
+				.findUserSoldeByYear(avis.getDemande().getAgent().getMatricule(), AppUtil.getCurrentYear(), 
+						avis.getDemande().getTypeDemande().getCode()).orElseThrow(() -> new CustomException("Echec lors de la recuperation du solde annuel de l'agent"));
+		log.error("UPDATE SOLDE   ");
+		long nobreRestant = agentSolde.getSoldeRestant() - avis.getDemande().getDureeAbsence();
+		agentSoldeRepository.updateUserSolde(agentSolde.getId(), nobreRestant);
 	}
 
 }
