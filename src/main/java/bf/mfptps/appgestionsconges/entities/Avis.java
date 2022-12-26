@@ -71,11 +71,12 @@ public class Avis extends CommonEntity {
 
     @Column(name = "avis_dg", length = 254)
     private String avisDG;
-    
+
     @Column(name = "date_avis_dg")
     private Date dateAvisDG;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+//    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "demande_id")
     private Demande demande;
 
