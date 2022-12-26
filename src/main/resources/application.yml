@@ -137,6 +137,6 @@ spring:
     platform: postgres
     url: jdbc:postgresql:localhost:5432/dbconges
     username: postgres
-    password: admin
+    password: 1222
     hikari:
       auto-commit: false

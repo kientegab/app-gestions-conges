@@ -11,6 +11,6 @@ import bf.mfptps.appgestionsconges.entities.Avis;
 
 public interface AvisRepository extends JpaRepository<Avis, Long>, JpaSpecificationExecutor<Avis> {
 
-	@Query("SELECT a FROM Avis a JOIN a.demande d WHERE d.numeroDemande=:NUMERODEMANDE and a.deleted=false;")
+	@Query("SELECT a FROM Avis a JOIN a.demande d WHERE d.numeroDemande=:NUMERODEMANDE and a.deleted=false")
 	Optional<Avis> findAvisByNumeroDemande(@Param("NUMERODEMANDE")String numeroDemande);
 }

@@ -13,7 +13,7 @@ public interface ActeMapper {
     @Mappings({
         @Mapping(target = "reference", source = "acte.reference")
     })
-    ActeDTO toDto(ActeDTO acteDTO);
+    ActeDTO toDto(Acte acte);
 
     @Mappings({
         @Mapping(target = "reference", source = "acteDTO.reference")

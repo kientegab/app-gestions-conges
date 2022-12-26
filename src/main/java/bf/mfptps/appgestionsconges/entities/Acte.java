@@ -5,9 +5,15 @@ import org.hibernate.annotations.Cache;
 
 import bf.mfptps.appgestionsconges.enums.EStatusActe;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.*;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "acte")
@@ -34,6 +40,10 @@ public class Acte extends CommonEntity{
     @Column(name = "reference", nullable = false, unique = true)
     private String reference;
     
+    @Column
+    private String enteteMinistere;
+    
+    
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
     private EStatusActe status;
@@ -47,7 +57,16 @@ public class Acte extends CommonEntity{
     
     @Column(name = "annee")
     private String annee;
+    
+    @OneToMany(mappedBy = "acte",fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JsonIgnoreProperties(value = {"acte"}, allowSetters = true)
+    private Set<Demande> demandes = new HashSet<>();
 
+    @Column(name = "creator_names")
+    private String nomPrenomCreator;
+    @Column(name="creator_title")
+    private String titreCreator;
+    
 	public Long getId() {
 		return id;
 	}
@@ -78,6 +97,54 @@ public class Acte extends CommonEntity{
 
 	public void setAmpliation(String ampliation) {
 		this.ampliation = ampliation;
+	}
+
+	public String getEnteteMinistere() {
+		return enteteMinistere;
+	}
+
+	public void setEnteteMinistere(String enteteMinistere) {
+		this.enteteMinistere = enteteMinistere;
+	}
+
+	public TypeActe getTypeActe() {
+		return typeActe;
+	}
+
+	public void setTypeActe(TypeActe typeActe) {
+		this.typeActe = typeActe;
+	}
+
+	public String getAnnee() {
+		return annee;
+	}
+
+	public void setAnnee(String annee) {
+		this.annee = annee;
+	}
+
+	public Set<Demande> getDemandes() {
+		return demandes;
+	}
+
+	public void setDemandes(Set<Demande> demandes) {
+		this.demandes = demandes;
+	}
+
+	public String getNomPrenomCreator() {
+		return nomPrenomCreator;
+	}
+
+	public void setNomPrenomCreator(String nomPrenomCreator) {
+		this.nomPrenomCreator = nomPrenomCreator;
+	}
+
+	public String getTitreCreator() {
+		return titreCreator;
+	}
+
+	public void setTitreCreator(String titreCreator) {
+		this.titreCreator = titreCreator;
 	}
     
     

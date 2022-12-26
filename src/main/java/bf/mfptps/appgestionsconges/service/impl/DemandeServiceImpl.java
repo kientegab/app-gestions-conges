@@ -15,28 +15,30 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import bf.mfptps.appgestionsconges.config.ApplicationProperties;
+import bf.mfptps.appgestionsconges.entities.Acte;
 import bf.mfptps.appgestionsconges.entities.Agent;
+import bf.mfptps.appgestionsconges.entities.AgentSolde;
 import bf.mfptps.appgestionsconges.entities.AgentStructure;
 import bf.mfptps.appgestionsconges.entities.Avis;
 import bf.mfptps.appgestionsconges.entities.Demande;
 import bf.mfptps.appgestionsconges.entities.Document;
 import bf.mfptps.appgestionsconges.entities.TypeDemande;
-import bf.mfptps.appgestionsconges.entities.UtilisateurSolde;
 import bf.mfptps.appgestionsconges.enums.EPositionDemande;
 import bf.mfptps.appgestionsconges.enums.EStatusDemande;
 import bf.mfptps.appgestionsconges.enums.ETypeValidation;
 import bf.mfptps.appgestionsconges.repositories.AgentRepository;
+import bf.mfptps.appgestionsconges.repositories.AgentSoldeRepository;
 import bf.mfptps.appgestionsconges.repositories.AgentStructureRepository;
 import bf.mfptps.appgestionsconges.repositories.AvisRepository;
 import bf.mfptps.appgestionsconges.repositories.DemandeRepository;
 import bf.mfptps.appgestionsconges.repositories.TypeDemandeRepository;
-import bf.mfptps.appgestionsconges.repositories.UserSoldeRepository;
 import bf.mfptps.appgestionsconges.service.DemandeService;
 import bf.mfptps.appgestionsconges.service.dto.DemandeDTO;
 import bf.mfptps.appgestionsconges.service.dto.ValidationDTO;
 import bf.mfptps.appgestionsconges.service.mapper.DemandeMapper;
 import bf.mfptps.appgestionsconges.utils.AppUtil;
 import bf.mfptps.appgestionsconges.web.exceptions.CustomException;
+import liquibase.pro.packaged.lo;
 
 /**
  *
@@ -55,18 +57,18 @@ public class DemandeServiceImpl implements DemandeService {
 	private final DemandeRepository demandeRepository;
 	private final AgentRepository agentRepository;
 	private final TypeDemandeRepository typeDemandeRepository;
-	private final UserSoldeRepository   userSoldeRepository;
+	private final AgentSoldeRepository   agentSoldeRepository;
 	private final AvisRepository    avisRepository;
 	private final AgentStructureRepository agentStructureRepository;
 	private final DemandeMapper demandeMapper;
 	private final ApplicationProperties applicationProperties;
 
 	public DemandeServiceImpl(DemandeRepository demandeRepository, DemandeMapper demandeMapper,
-			AgentRepository agentRepository, TypeDemandeRepository typeDemandeRepository, ApplicationProperties applicationProperties, UserSoldeRepository userSoldeRepository, AgentStructureRepository agentStructureRepository, AvisRepository avisRepository) {
+			AgentRepository agentRepository, TypeDemandeRepository typeDemandeRepository, ApplicationProperties applicationProperties, AgentSoldeRepository agentSoldeRepository, AgentStructureRepository agentStructureRepository, AvisRepository avisRepository) {
 		this.demandeRepository = demandeRepository;
 		this.agentRepository = agentRepository;
 		this.typeDemandeRepository = typeDemandeRepository;
-		this.userSoldeRepository = userSoldeRepository;
+		this.agentSoldeRepository = agentSoldeRepository;
 		this.avisRepository = avisRepository;
 		this.agentStructureRepository = agentStructureRepository;
 		this.demandeMapper = demandeMapper;
@@ -118,22 +120,22 @@ public class DemandeServiceImpl implements DemandeService {
 			throw new CustomException("Saisir la période de début et la période de fin de la demande.");
 		}
 
-		//long demandeDays = AppUtil.getDifferenceDays(demande.getPeriodeDebut(), demande.getPeriodeFin());
+		long demandeDays = AppUtil.getDifferenceDays(demande.getPeriodeDebut(), demande.getPeriodeFin());
 
-		Optional<UtilisateurSolde> optionalSolde = userSoldeRepository.findUserSoldeByYear(agent.getMatricule(), AppUtil.getCurrentYear(), typeDemande.getCode());
+		Optional<AgentSolde> optionalSolde = agentSoldeRepository.findUserSoldeByYear(agent.getMatricule(), AppUtil.getCurrentYear(), typeDemande.getCode());
 
 		if(optionalSolde.isPresent()) {
-			if(demande.getDureeAbsence()> optionalSolde.get().getSoldeRestant()) {
+			if(demandeDays > optionalSolde.get().getSoldeRestant()) {
 				throw new CustomException("Vous avez atteint votre solde de demande de type ["+typeDemande.getLibelle()+"]");
 			}
 		}else {
-			UtilisateurSolde solde = new UtilisateurSolde();
+			AgentSolde solde = new AgentSolde();
 			solde.setAnnee(AppUtil.getCurrentYear());
 			solde.setMatricule(agent.getMatricule());
 			solde.setTypeDemande(typeDemande.getCode());
 			solde.setSoldeRestant(typeDemande.getSoldeAnnuel());
-
-			userSoldeRepository.save(solde);
+			agentSoldeRepository.save(solde);
+			demande.setDureeAbsence(demandeDays);
 		}
 		if(fichiersJoint!=null && fichiersJoint.length>0) {
 			Set<Document> documents = new HashSet<Document>();
@@ -157,6 +159,7 @@ public class DemandeServiceImpl implements DemandeService {
 		}
 
 		demande.setStatusDemande(EStatusDemande.INITIATION);
+		demande.setPositionDemande(EPositionDemande.DEMANDEUR);
 		return demandeMapper.toDto(demandeRepository.save(demande));
 	}
 
@@ -190,7 +193,9 @@ public class DemandeServiceImpl implements DemandeService {
 	}
 
 	private String demandeRefgenerator(String userStructureSigle) {
-		Long countDemande = demandeRepository.countStructureDemande(userStructureSigle);
+	//	Long countDemande = demandeRepository.countStructureDemande(userStructureSigle);
+		
+		Long countDemande = demandeRepository.count();
 
 		return userStructureSigle + ""+  String.format("%04d", countDemande++) ;
 	}
@@ -215,7 +220,7 @@ public class DemandeServiceImpl implements DemandeService {
 		Optional<Avis> optionalAvis = avisRepository.findAvisByNumeroDemande(validationDTO.getNumeroDemande());
 		Avis avis = new Avis();
 		
-		if(!demandeur.getMatricule().equalsIgnoreCase(connectedAgent.getMatricule())) {
+		if(!demandeur.getMatriculeResp().equalsIgnoreCase(connectedAgent.getMatricule())) {
 			throw new CustomException("Seul le supérieur hiérarchique de demandeur peut éffectuer cette action!!!");
 		}
 		
@@ -230,9 +235,10 @@ public class DemandeServiceImpl implements DemandeService {
 		 
 		 
 		if(ETypeValidation.APPROVED.equals( validationDTO.getEnumValidation())){
-			String typeDemandeCode = avis.getDemande().getNumeroDemande();
+			String typeDemandeCode = avis.getDemande().getTypeDemande().getCode();
 			if(typeDemandeCode.contains("JOUISS") || typeDemandeCode.contains("AUTRE")) {
 				avis.getDemande().setStatusDemande(EStatusDemande.VALIDE);
+				updateUserSolde(avis);
 			}
 		}else {
 			avis.getDemande().setStatusDemande(EStatusDemande.REJETE);
@@ -241,7 +247,12 @@ public class DemandeServiceImpl implements DemandeService {
 		avis.setAvisSH(validationDTO.getAvis());
 		avis.getDemande().setPositionDemande(EPositionDemande.SH);
 		avis.setDateAvisSH(new Date());
-		avisRepository.save(avis);
+		try {
+			avisRepository.save(avis);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new CustomException("Failde to save avis");
+		}
 		
 		return demandeMapper.toDto(demande);
 	}
@@ -269,6 +280,7 @@ public class DemandeServiceImpl implements DemandeService {
 		
 		if(islastValidationNode) {
 			avis.getDemande().setStatusDemande(EStatusDemande.VALIDE);
+			updateUserSolde(avis);
 		}
 		
 		avis.setAvisSG(validationDTO.getAvis());
@@ -301,6 +313,7 @@ public class DemandeServiceImpl implements DemandeService {
 		
 		if(islastValidationNode) {
 			avis.getDemande().setStatusDemande(EStatusDemande.VALIDE);
+			updateUserSolde(avis);
 		}
 		
 		avis.setAvisDG(validationDTO.getAvis());
@@ -335,14 +348,24 @@ public class DemandeServiceImpl implements DemandeService {
 		
 		if(islastValidationNode) {
 			avis.getDemande().setStatusDemande(EStatusDemande.VALIDE);
+			updateUserSolde(avis);
 		}
 		
 		avis.setAvisDRH(validationDTO.getAvis());
-		avis.getDemande().setPositionDemande(EPositionDemande.DGFP);
+		avis.getDemande().setPositionDemande(EPositionDemande.DRH);
 		avis.setDateAvisDRH(new Date());
 		avisRepository.save(avis);
 		
 		return demandeMapper.toDto( avis.getDemande());
+	}
+
+	private void updateUserSolde(Avis avis) {
+		AgentSolde agentSolde = agentSoldeRepository
+				.findUserSoldeByYear(avis.getDemande().getAgent().getMatricule(), AppUtil.getCurrentYear(), 
+						avis.getDemande().getTypeDemande().getCode()).orElseThrow(() -> new CustomException("Echec lors de la recuperation du solde annuel de l'agent"));
+		log.error("UPDATE SOLDE   ");
+		long nobreRestant = agentSolde.getSoldeRestant() - avis.getDemande().getDureeAbsence();
+		agentSoldeRepository.updateUserSolde(agentSolde.getId(), nobreRestant);
 	}
 
 }

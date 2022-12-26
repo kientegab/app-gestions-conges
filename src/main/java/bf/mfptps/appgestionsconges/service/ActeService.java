@@ -5,6 +5,7 @@
  */
 package bf.mfptps.appgestionsconges.service;
 
+import java.io.File;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -28,4 +29,7 @@ public interface ActeService {
     Page<Acte> findAll(Pageable pageable);
 
     void delete(Long id);
+    
+    File generateActe(String referenceActe);
+    
 }

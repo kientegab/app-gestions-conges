@@ -51,7 +51,7 @@ public class TypeActe extends CommonEntity{
     @Column(name = "template_uri")
     private String templateUri;
     
-    @ManyToOne
+    @Column(name = "porte_acte")
     @Enumerated(EnumType.STRING)
     private EPorteActe porteActe;
     

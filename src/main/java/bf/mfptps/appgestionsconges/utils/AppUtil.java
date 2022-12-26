@@ -21,6 +21,8 @@ import java.util.concurrent.TimeUnit;
 
 import javax.validation.constraints.Size;
 import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import bf.mfptps.appgestionsconges.web.exceptions.CustomException;
@@ -111,7 +113,7 @@ public class AppUtil {
         try {
             byte[] bytes = file.getBytes();
             String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
-            Path path = Paths.get(uplaodStorage + File.separatorChar + userStorage + File.separatorChar + fileName);
+            Path path = Paths.get(uplaodStorage + (StringUtils.hasText(userStorage) ? File.separatorChar + userStorage : "" ) + File.separatorChar + fileName);
             File dir = new File(path.toString());
             if (!dir.exists()) {
                 dir.getParentFile().mkdirs();
