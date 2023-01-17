@@ -9,11 +9,16 @@ import bf.mfptps.appgestionsconges.repositories.AgentStructureRepository;
 import bf.mfptps.appgestionsconges.repositories.ProfileRepository;
 import bf.mfptps.appgestionsconges.repositories.StructureRepository;
 import bf.mfptps.appgestionsconges.security.SecurityUtils;
+import bf.mfptps.appgestionsconges.service.dto.ActivateCompteRequest;
+import bf.mfptps.appgestionsconges.service.dto.ActivateCompteResponse;
 import bf.mfptps.appgestionsconges.service.dto.AgentDTO;
 import bf.mfptps.appgestionsconges.service.dto.AgentStructureDTO;
+import bf.mfptps.appgestionsconges.service.dto.CreateCompteRequest;
+import bf.mfptps.appgestionsconges.service.mapper.AgentMapper;
 import bf.mfptps.appgestionsconges.utils.AppUtil;
 import bf.mfptps.appgestionsconges.utils.RandomUtil;
 import bf.mfptps.appgestionsconges.web.exceptions.CustomException;
+import bf.mfptps.appgestionsconges.web.exceptions.EntityNotFoundException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
@@ -48,15 +53,17 @@ public class AgentService {
     private final AgentStructureRepository agentStructureRepository;
 
     private final CacheManager cacheManager;
+    private final AgentMapper  agentMapper;
 
     public AgentService(AgentRepository agentRepository, PasswordEncoder passwordEncoder,
-            ProfileRepository profileRepository, CacheManager cacheManager, StructureRepository structureRepository, AgentStructureRepository agentStructureRepository) {
+            ProfileRepository profileRepository, CacheManager cacheManager, StructureRepository structureRepository, AgentStructureRepository agentStructureRepository, AgentMapper agentMapper) {
         this.agentRepository = agentRepository;
         this.passwordEncoder = passwordEncoder;
         this.profileRepository = profileRepository;
         this.cacheManager = cacheManager;
         this.structureRepository = structureRepository;
         this.agentStructureRepository = agentStructureRepository;
+		this.agentMapper = agentMapper;
     }
 
     public Optional<Agent> activateRegistration(String key, String password) {
@@ -130,11 +137,18 @@ public class AgentService {
         newAgent.setActivationKey(RandomUtil.generateActivationKey());
         Set<Profile> profiles = new HashSet<>();
         if (agentDTO.getProfiles() != null) {
-            profiles = agentDTO.getProfiles().stream()
-                    .map(profileRepository::findByName)
-                    .filter(Optional::isPresent)
+        	
+        	profiles = agentDTO.getProfiles().stream()
+        			.map((prof) ->  profileRepository.findByName(prof.getName()))
+        			.filter(Optional::isPresent)
                     .map(Optional::get)
                     .collect(Collectors.toSet());
+//        	
+//            profiles = agentDTO.getProfiles().stream()
+//                    .map(profileRepository::findByName)
+//                    .filter(Optional::isPresent)
+//                    .map(Optional::get)
+//                    .collect(Collectors.toSet());
             newAgent.setProfiles(profiles);
         } else {
             profiles.add(profileRepository.findByName("USER").get());
@@ -177,7 +191,7 @@ public class AgentService {
 
                     return agent;
                 })
-                .map(AgentDTO::new);
+                .map(agentMapper::toDto);
 
     }
 
@@ -217,7 +231,7 @@ public class AgentService {
         agent.setActif(agentDTO.isActif());
         if (agentDTO.getProfiles() != null) {
             Set<Profile> profiles = agentDTO.getProfiles().stream()
-                    .map(profileRepository::findByName)
+                    .map((prof) -> profileRepository.findByName(prof.getName()))
                     .filter(Optional::isPresent)
                     .map(Optional::get)
                     .collect(Collectors.toSet());
@@ -253,7 +267,7 @@ public class AgentService {
                     Set<Profile> managedProfiles = agent.getProfiles();
                     managedProfiles.clear();
                     agentDTO.getProfiles().stream()
-                            .map(profileRepository::findByName)
+                            .map((prof) -> profileRepository.findByName(prof.getName()))
                             .filter(Optional::isPresent)
                             .map(Optional::get)
                             .forEach(managedProfiles::add);
@@ -261,7 +275,7 @@ public class AgentService {
                     log.debug("Changed Information for Agent: {}", agent);
                     return agent;
                 })
-                .map(AgentDTO::new);
+                .map(agentMapper::toDto);
     }
 
     public void deleteAgent(String matricule) {
@@ -311,7 +325,7 @@ public class AgentService {
 
     @Transactional(readOnly = true)
     public Page<AgentDTO> getAllManagedAgents(Pageable pageable) {
-        return agentRepository.findAll(pageable).map(AgentDTO::new);
+        return agentRepository.findAll(pageable).map(agentMapper::toDto);
     }
 
     /**
@@ -326,9 +340,9 @@ public class AgentService {
         Page<AgentDTO> result;
 
         if (SecurityUtils.isCurrentUserInRole(AppUtil.ADMIN)) {//S'il sagit d'un admin, on renvoie tous les agents sans exception
-            result = agentRepository.findAll(pageable).map(AgentDTO::new);
+            result = agentRepository.findAll(pageable).map(agentMapper::toDto);
         } else {
-            result = agentRepository.findAllByStructure(structureId, pageable).map(AgentDTO::new);
+            result = agentRepository.findAllByStructure(structureId, pageable).map(agentMapper::toDto);
         }
         return result;
     }
@@ -343,7 +357,7 @@ public class AgentService {
 
     @Transactional(readOnly = true)
     public Optional<AgentDTO> getAgentWithProfilesByMatricule(String matricule) {
-        return agentRepository.findOneWithProfilesByMatricule(matricule).map(AgentDTO::new);
+        return agentRepository.findOneWithProfilesByMatricule(matricule).map(agentMapper::toDto);
     }
 
     /* @Transactional(readOnly = true)
@@ -352,7 +366,7 @@ public class AgentService {
     } */
     @Transactional(readOnly = true)
     public Optional<AgentDTO> getAgentWithProfiles() {
-        return SecurityUtils.getCurrentUserMatricule().flatMap(agentRepository::findOneWithProfilesByMatricule).map(AgentDTO::new);
+        return SecurityUtils.getCurrentUserMatricule().flatMap(agentRepository::findOneWithProfilesByMatricule).map(agentMapper::toDto);
     }
 
     /**
@@ -405,4 +419,69 @@ public class AgentService {
 
         return response;
     }
+
+    public ActivateCompteResponse activateCompte(ActivateCompteRequest request) {
+        /*  ActivateCompteResponse result = new ActivateCompteResponse();
+        Agent agent = agentRepository.activateCompte(
+                request.getMatricule(),
+                request.getDateNaissance(),
+                request.getDateRecrutement())
+                .orElseThrow(() -> new EntityNotFoundException("Aucun candidat trouve avec le numero matricule '%s'", request.getMatricule()));
+        if (agent.isActif()) {
+            log.error("Agent is already active");
+            throw new CustomException("L'agent est déja actif ");
+        } else {*/
+
+        return agentRepository.activateCompte(
+                request.getMatricule(),
+                request.getDateNaissance(),
+                request.getDateRecrutement())
+                .map(agent -> {
+                    return ActivateCompteResponse.builder()
+                            .activate(true)
+                            .build();
+                })
+                .orElse(new ActivateCompteResponse(false));
+    }
+
+    private Agent getAgent(String matricule) {
+        Agent agent = agentRepository.findOneByMatricule(matricule)
+                .orElseThrow(() -> new EntityNotFoundException("Aucun candidat trouve avec le numero matricule '%s'", matricule));
+        if (agent.isActif()) {
+            log.error("Agent is already active");
+            throw new CustomException("L'agent est déja actif ");
+        }
+        return agent;
+    }
+
+    @Transactional
+    public Agent create(CreateCompteRequest request) {
+
+        Agent agent = getAgent(request.getMatricule().toLowerCase());
+        agent.activate();
+        agent.setEmail(request.getEmail());
+        String encryptedPassword = passwordEncoder.encode(request.getPassword());
+        agent.setPassword(encryptedPassword);
+        agent.setResetKey(RandomUtil.generateResetKey());
+        agent.setResetDate(Instant.now());
+        agent.setMatriculeResp(request.getMatriculeResp());
+
+        Set<Profile> profiles = new HashSet<>();
+        profiles.add(profileRepository.findByName("USER").get());
+        agent.setProfiles(profiles);
+        agentRepository.save(agent);
+        if (request.getStructure().getId() != null) {
+            Structure structure = structureRepository.findById(request.getStructure().getId()).orElseThrow(() -> new CustomException("Structure with id = " + request.getStructure().getId() + " does not exist !"));
+            AgentStructure agentStructure = new AgentStructure();
+            agentStructure.setAgent(agent);
+            agentStructure.setStructure(structure);
+            agentStructureRepository.save(agentStructure);//dd
+        }
+        this.clearAgentCaches(agent);
+
+        log.debug(
+                "Created Information for Agent: {}", agent);
+        return agent;
+    }
+
 }

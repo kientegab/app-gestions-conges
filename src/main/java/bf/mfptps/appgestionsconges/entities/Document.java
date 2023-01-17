@@ -1,12 +1,24 @@
 package bf.mfptps.appgestionsconges.entities;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.*;
-
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.persistence.*;
 import java.util.Objects;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.FilterDef;
+import org.hibernate.annotations.ParamDef;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 @Entity
 @Table(name = "document")
@@ -28,7 +40,7 @@ public class Document extends CommonEntity{
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
-    @Column(name = "reference", length = 254)
+    @Column(name = "reference", length = 254, unique = true, nullable = false)
     private String reference;
 
     @Column(name = "url", length = 254)
@@ -37,6 +49,9 @@ public class Document extends CommonEntity{
     @ManyToOne
     @JoinColumn(name = "demande_id")
     private Demande demande;
+    
+    @Column(name="nom_document")
+    private String nomDocument;
 
     public Long getId() {
         return id;
@@ -70,7 +85,15 @@ public class Document extends CommonEntity{
         this.demande = demande;
     }
 
-    @Override
+    public String getNomDocument() {
+		return nomDocument;
+	}
+
+	public void setNomDocument(String nomDocument) {
+		this.nomDocument = nomDocument;
+	}
+
+	@Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

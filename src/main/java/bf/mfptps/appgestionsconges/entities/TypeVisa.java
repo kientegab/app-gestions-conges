@@ -9,6 +9,10 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
+/**
+ *
+ * @author TEGUERA
+ */
 @Entity
 @Table(name = "type_visa")
 @SQLDelete(sql = "UPDATE type_visa SET deleted = true WHERE id=?")
@@ -23,25 +27,53 @@ import java.util.Objects;
 )
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class TypeVisa extends CommonEntity {
+//    @EmbeddedId
+//    private TypeVisaKey id = new TypeVisaKey();
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
-    @Column(name = "type_visa_id")
     private Long id;
 
     @ManyToOne
+    @MapsId("visaId")
     @JoinColumn(name = "visa_id")
     private Visa visa;
 
 
     @ManyToOne
+    @MapsId("typeDemandeId")
     @JoinColumn(name = "type_demande_id")
     private TypeDemande typeDemande;
 
     @NotNull
-    @Column(name = "numero_ordre", unique = true, nullable = false)
     private Long numeroOrdre;
+
+    public TypeVisa() {
+    }
+
+    public TypeVisa(Long id, Visa visa, TypeDemande typeDemande, Long numeroOrdre) {
+        this.id = id;
+        this.visa = visa;
+        this.typeDemande = typeDemande;
+        this.numeroOrdre = numeroOrdre;
+    }
+
+    // public TypeVisa(TypeVisaKey id, Visa visa, TypeDemande typeDemande, Long numeroOrdre) {
+//        this.id = id;
+//        this.visa = visa;
+//        this.typeDemande = typeDemande;
+//        this.numeroOrdre = numeroOrdre;
+//    }
+
+//    public TypeVisaKey getId() {
+//        return id;
+//    }
+//
+//    public void setId(TypeVisaKey id) {
+//        this.id = id;
+//    }
+
 
     public Long getId() {
         return id;
@@ -74,6 +106,29 @@ public class TypeVisa extends CommonEntity {
     public void setNumeroOrdre(Long numeroOrdre) {
         this.numeroOrdre = numeroOrdre;
     }
+
+//    @Override
+//    public boolean equals(Object o) {
+//        if (this == o) return true;
+//        if (o == null || getClass() != o.getClass()) return false;
+//        TypeVisa typeVisa = (TypeVisa) o;
+//        return id.equals(typeVisa.id);
+//    }
+//
+//    @Override
+//    public int hashCode() {
+//        return Objects.hash(id);
+//    }
+//
+//    @Override
+//    public String toString() {
+//        return "TypeVisa{" +
+//                "id=" + id +
+//                ", visa=" + visa +
+//                ", typeDemande=" + typeDemande +
+//                ", numeroOrdre=" + numeroOrdre +
+//                '}';
+//    }
 
 
     @Override

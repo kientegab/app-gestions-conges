@@ -109,4 +109,18 @@ public class ModalitePaieController {
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), result);
         return ResponseEntity.ok().headers(headers).body(result.getContent());
     }
+
+    @GetMapping(path = "/all-operateurs-actif")
+    public ResponseEntity<List<ModalitePaieDTO>> findAllOperateurActif(Pageable pageable) {
+        Page<ModalitePaieDTO> result = modalitePaieService.findAllOperateurActif(pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), result);
+        return ResponseEntity.ok().headers(headers).body(result.getContent());
+    }
+
+    @GetMapping(path = "update-statut/{id}/{statut}")
+    public ResponseEntity<Boolean> updateStaut(@PathVariable("id") Long id, @PathVariable("statut") boolean statut) {
+        log.debug("Modification du statut : {}", id);
+        boolean result = modalitePaieService.updateStatut(id, statut);
+        return ResponseEntity.ok(result);
+    }
 }
