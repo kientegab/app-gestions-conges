@@ -9,7 +9,8 @@ import javax.persistence.EmbeddedId;
 import java.util.Objects;
 
 public class TypeVisaDTO extends CommonEntity {
-    TypeVisaKey id;
+//    TypeVisaKey id;
+    private Long id;
 
     private Visa visa;
 
@@ -20,18 +21,35 @@ public class TypeVisaDTO extends CommonEntity {
     public TypeVisaDTO() {
     }
 
-    public TypeVisaDTO(TypeVisaKey id, Visa visa, TypeDemande typeDemande, Long numeroOrdre) {
+//    public TypeVisaDTO(TypeVisaKey id, Visa visa, TypeDemande typeDemande, Long numeroOrdre) {
+//        this.id = id;
+//        this.visa = visa;
+//        this.typeDemande = typeDemande;
+//        this.numeroOrdre = numeroOrdre;
+//    }
+
+
+    public TypeVisaDTO(Long id, Visa visa, TypeDemande typeDemande, Long numeroOrdre) {
         this.id = id;
         this.visa = visa;
         this.typeDemande = typeDemande;
         this.numeroOrdre = numeroOrdre;
     }
 
-    public TypeVisaKey getId() {
+//    public TypeVisaKey getId() {
+//        return id;
+//    }
+//
+//    public void setId(TypeVisaKey id) {
+//        this.id = id;
+//    }
+
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(TypeVisaKey id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -58,6 +76,30 @@ public class TypeVisaDTO extends CommonEntity {
     public void setNumeroOrdre(Long numeroOrdre) {
         this.numeroOrdre = numeroOrdre;
     }
+
+//    @Override
+//    public boolean equals(Object o) {
+//        if (this == o) return true;
+//        if (o == null || getClass() != o.getClass()) return false;
+//        TypeVisaDTO that = (TypeVisaDTO) o;
+//        return id.equals(that.id);
+//    }
+//
+//    @Override
+//    public int hashCode() {
+//        return Objects.hash(id);
+//    }
+//
+//    @Override
+//    public String toString() {
+//        return "TypeVisaDTO{" +
+//                "id=" + id +
+//                ", visa=" + visa +
+//                ", typeDemande=" + typeDemande +
+//                ", numeroOrdre=" + numeroOrdre +
+//                '}';
+//    }
+
 
     @Override
     public boolean equals(Object o) {

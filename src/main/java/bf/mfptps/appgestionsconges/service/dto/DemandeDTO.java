@@ -1,10 +1,12 @@
 package bf.mfptps.appgestionsconges.service.dto;
 
-import bf.mfptps.appgestionsconges.entities.Utilisateur;
 import java.util.Date;
 
-public class DemandeDTO {
+import bf.mfptps.appgestionsconges.enums.EPositionDemande;
+import bf.mfptps.appgestionsconges.enums.EStatusDemande;
+import bf.mfptps.appgestionsconges.enums.ETrancheDemande;
 
+public class DemandeDTO {
     private Long id;
     private String numeroDemande;
     private String lieuJouissanceBF;
@@ -20,7 +22,20 @@ public class DemandeDTO {
 
     private TypeDemandeDTO typeDemande;
 
-    private Utilisateur utilisateur;
+    private AgentDTO agent ;
+    
+    private EStatusDemande statusDemande;
+    
+    private String motifRejet;
+    private EPositionDemande positionDemande;
+    private ETrancheDemande trancheDemande;
+    public String getMotifRejet() {
+        return motifRejet;
+    }
+
+    public void setMotifRejet(String motifRejet) {
+        this.motifRejet = motifRejet;
+    }
 
     public Long getId() {
         return id;
@@ -110,12 +125,38 @@ public class DemandeDTO {
         this.typeDemande = typeDemande;
     }
 
-    public Utilisateur getUtilisateur() {
-        return utilisateur;
+    public AgentDTO getAgent() {
+        return agent;
     }
 
-    public void setUtilisateur(Utilisateur utilisateur) {
-        this.utilisateur = utilisateur;
+    public void setAgent(AgentDTO agent) {
+        this.agent = agent;
     }
 
+	public EStatusDemande getStatusDemande() {
+		return statusDemande;
+	}
+
+	public void setStatusDemande(EStatusDemande statusDemande) {
+		this.statusDemande = statusDemande;
+	}
+
+    public void setPositionDemande(EPositionDemande positionDemande) {
+        this.positionDemande = positionDemande;
+    }
+
+    public void setTrancheDemande(ETrancheDemande trancheDemande) {
+        this.trancheDemande = trancheDemande;
+    }
+
+    public EPositionDemande getPositionDemande() {
+        return positionDemande;
+    }
+
+    public ETrancheDemande getTrancheDemande() {
+        return trancheDemande;
+    }
+
+    
+    
 }
