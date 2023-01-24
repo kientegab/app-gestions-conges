@@ -99,7 +99,9 @@ public class ActeServiceImpl implements ActeService {
 			Demande demandeFromDb = demandeRepository.findByNumeroDemande(demande.getNumeroDemande())
 					.orElseThrow(()-> new CustomException("La demande portant le numero ["+ demande.getNumeroDemande() +"] n'existe pas ou a ete supprime"));
 			demande.setActe(acte);
+			demandeFromDb.setActe(acte);//----------
 			acteDemandes.add(demandeFromDb);
+			demandeRepository.save(demande);//-------
 		});
 		acte.setDemandes(acteDemandes);
 		acte.setTypeActe(typeActe);
