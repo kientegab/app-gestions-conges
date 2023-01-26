@@ -24,6 +24,7 @@ import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
 import org.apache.poi.xwpf.usermodel.PositionInParagraph;
 import org.apache.poi.xwpf.usermodel.TextSegment;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.apache.poi.xwpf.usermodel.XWPFHeader;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
 import org.apache.poi.xwpf.usermodel.XWPFTable;
@@ -69,18 +70,26 @@ public class WordReplacer
                 // on remplace dans les paragraph simple
                 replaceInParagraphs(doc.getParagraphs(), key, keysValues.getAsString(key));
 
-                for (XWPFTable tbl : doc.getTables())
-                {
-                    for (XWPFTableRow row : tbl.getRows())
-                    {
-                        for (XWPFTableCell cell : row.getTableCells())
-                        {
-                            // on remplace dans les paragraph inclus dans des cellules
-                            replaceInParagraphs(cell.getParagraphs(), key, keysValues.getAsString(key));
-                        }
-                    }
+                replaceTableText(keysValues, doc, key);
+                
+                List<XWPFHeader> headers = doc.getHeaderList();
+                for(XWPFHeader header : headers) {
+                	 replaceInParagraphs(header.getParagraphs(), key, keysValues.getAsString(key));
+                	for (XWPFTable tbl : header.getTables())
+            		{
+            		    for (XWPFTableRow row : tbl.getRows())
+            		    {
+            		        for (XWPFTableCell cell : row.getTableCells())
+            		        {
+            		            // on remplace dans les paragraph inclus dans des cellules
+            		            replaceInParagraphs(cell.getParagraphs(), key, keysValues.getAsString(key));
+            		        }
+            		    }
+            		}
                 }
+                
             }
+            
           
             
 			if(StringUtils.hasText(qrCodeText)){
@@ -113,6 +122,20 @@ public class WordReplacer
             
         }
     }
+
+	private void replaceTableText(JSONObject keysValues, XWPFDocument doc, String key) {
+		for (XWPFTable tbl : doc.getTables())
+		{
+		    for (XWPFTableRow row : tbl.getRows())
+		    {
+		        for (XWPFTableCell cell : row.getTableCells())
+		        {
+		            // on remplace dans les paragraph inclus dans des cellules
+		            replaceInParagraphs(cell.getParagraphs(), key, keysValues.getAsString(key));
+		        }
+		    }
+		}
+	}
 
     private void replaceInParagraphs(List<XWPFParagraph> xwpfParagraphs, String key, String value)
     {
