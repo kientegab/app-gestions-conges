@@ -1,0 +1,11 @@
+id;libelle;code;mode_paie;solde_annuel;description
+1;Congé annuel;CONGE_ANNUEL;;1;
+2;Congé maladie 1 à 10 jours;CONGE_MALADIE_1_10;;10;
+3;Congé maladie 11 à 30 jours;CONGE_MALADIE_11_30;;30;
+4;Congé maladie longue durée;CONGE_MALADIE_LONGUE_DUREE;;365;
+5;Congé maternité;CONGE_MATERNITE;;98;
+6;Congé fin service;CONGE_FSERVICE;;90;
+7;Jouissance annuelle;JOUISS_ANNUEL;;30;
+8;Jouissance examen;JOUISS_EXAMEN;;;
+9;Jouissance SND;JOUISS_SND;;20;
+10;Autres absences;AUTRE_ABSENCE;;10;

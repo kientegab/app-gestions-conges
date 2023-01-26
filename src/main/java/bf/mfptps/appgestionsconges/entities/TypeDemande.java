@@ -14,6 +14,8 @@ import org.hibernate.annotations.ParamDef;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @javax.persistence.Entity
 @javax.persistence.Table(name = "type_demande")
 @SQLDelete(sql = "UPDATE type_demande SET deleted = true WHERE id=?")
@@ -48,11 +50,11 @@ public class TypeDemande extends CommonEntity {
     @Column(name = "remote_value")
     private Long remoteValue;
 
-    @OneToMany(mappedBy = "typeDemande", cascade = javax.persistence.CascadeType.ALL)
-    @JsonIgnore
+    @OneToMany(mappedBy = "typeDemande", cascade = javax.persistence.CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonIgnoreProperties(value = {"typeDemande"}, allowSetters = true)
     private Set<TypeVisa> typeVisas = new HashSet<>();
 
-    @OneToMany(mappedBy = "typeDemande", cascade = javax.persistence.CascadeType.ALL)
+    @OneToMany(mappedBy = "typeDemande", cascade = javax.persistence.CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIgnore
     private Set<ArticleTypeDemande> articleTypeDemandes;
 
