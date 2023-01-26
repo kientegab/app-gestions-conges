@@ -43,6 +43,9 @@ public class Acte extends CommonEntity{
     @Column
     private String enteteMinistere;
     
+    @Column
+    private String enteteStructure;
+    
     
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
@@ -105,6 +108,14 @@ public class Acte extends CommonEntity{
 
 	public void setEnteteMinistere(String enteteMinistere) {
 		this.enteteMinistere = enteteMinistere;
+	}
+	
+	public String getEnteteStructure() {
+		return enteteStructure;
+	}
+
+	public void setEnteteStructure(String enteteStructure) {
+		this.enteteStructure = enteteStructure;
 	}
 
 	public TypeActe getTypeActe() {
