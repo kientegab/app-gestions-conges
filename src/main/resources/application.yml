@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 8089
   servlet:
     context-path: /conges
 application:
@@ -106,7 +106,7 @@ spring:
     type: com.zaxxer.hikari.HikariDataSource
     url: jdbc:postgresql://localhost:5432/dbconges
     username: postgres
-    password: admin #admin #rootPostgresql
+    password: rootPostgresql #admin #rootPostgresql
     hikari:
       poolName: Hikari
       auto-commit: false
