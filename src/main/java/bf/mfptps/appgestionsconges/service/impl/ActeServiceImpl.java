@@ -98,8 +98,10 @@ public class ActeServiceImpl implements ActeService {
 		acte.getDemandes().stream().forEach((demande) -> {
 			Demande demandeFromDb = demandeRepository.findByNumeroDemande(demande.getNumeroDemande())
 					.orElseThrow(()-> new CustomException("La demande portant le numero ["+ demande.getNumeroDemande() +"] n'existe pas ou a ete supprime"));
-			demande.setActe(acte);
+			
+			demandeFromDb.setActe(acte);
 			acteDemandes.add(demandeFromDb);
+			
 		});
 		acte.setDemandes(acteDemandes);
 		acte.setTypeActe(typeActe);
@@ -220,6 +222,7 @@ public class ActeServiceImpl implements ActeService {
 		 JSONObject keysValues = new JSONObject();
 
 		keysValues.put("$ENTETE_MINISTERE$", acte.getEnteteMinistere());
+		keysValues.put("$ENTETE_STRUCTURE$", acte.getEnteteStructure());
 		keysValues.put("$REFERENCE_ACTE$", acte.getReference());
 		keysValues.put("$DATE_ACTE$", simpleDateFormat.format(new Date()));
 		long soldePris = demande.getTypeDemande().getSoldeAnnuel() - agentSolde.getSoldeRestant();
@@ -235,6 +238,7 @@ public class ActeServiceImpl implements ActeService {
 		keysValues.put("$DATE_FIN$", simpleDateFormat.format(demande.getPeriodeFin()));
 		String motifAbsence = null!=  demande.getMotifAbsence() ?  demande.getMotifAbsence().getLibelle(): "";
 		keysValues.put("$MOTIF_ABSENCE$", motifAbsence);
+		keysValues.put("$TYPE_DEMANDE$", (demande.getTypeDemande()!=null? demande.getTypeDemande().getLibelle().toLowerCase() : "autorisation d’absence"));
 		keysValues.put("$ANNEE$", acte.getAnnee());
 		keysValues.put("$RESPONSABLE$", acte.getNomPrenomCreator());
 		keysValues.put("$TITRE_RESPONSABLE$", acte.getTitreCreator());
@@ -250,136 +254,6 @@ public class ActeServiceImpl implements ActeService {
 		}
 	}
 	
-	 private void printContentsOfTextBox(XWPFParagraph paragraph) {
-
-	        XmlObject[] textBoxObjects =  paragraph.getCTP().selectPath("declare namespace w='http://schemas.openxmlformats.org/wordprocessingml/2006/main' "
-	        		+ " declare namespace wps='http://schemas.microsoft.com/office/word/2010/wordprocessingShape' "
-	        		+ " declare namespace v='urn:schemas-microsoft-com:vml' .//*/wps:txbx/w:txbxContent | .//*/v:textbox/w:txbxContent");
-
-	        for (int i =0; i < textBoxObjects.length; i++) {
-	            XWPFParagraph embeddedPara = null;
-	            try {
-	            XmlObject[] paraObjects = textBoxObjects[i].
-	                selectChildren(
-	                new QName("http://schemas.openxmlformats.org/wordprocessingml/2006/main", "p"));
-
-	            for (int j=0; j<paraObjects.length; j++) {
-	                embeddedPara = new XWPFParagraph(
-	                    CTP.Factory.parse(paraObjects[j].xmlText()), paragraph.getBody());
-	                //Here you have your paragraph; 
-	                System.out.println(embeddedPara.getText());
-	                log.error("PARAGRA TEXT ====> {}", embeddedPara.getText());
-	            } 
-
-	            } catch (XmlException e) {
-	            //handle
-	            }
-	        }
-
-	     } 
-	 
-	 
-	 
-	 private  List<CTDrawing> getAllDrawings(XWPFRun run) throws Exception {
-		  CTR ctR = run.getCTR();
-		  XmlCursor cursor = ctR.newCursor();
-		  cursor.selectPath("declare namespace w='http://schemas.openxmlformats.org/wordprocessingml/2006/main' .//*/w:drawing");
-		  List<CTDrawing> drawings = new ArrayList<CTDrawing>();
-		  while (cursor.hasNextSelection()) {
-		   cursor.toNextSelection();
-		   XmlObject obj = cursor.getObject();
-		   CTDrawing drawing = CTDrawing.Factory.parse(obj.newInputStream());
-		   drawings.add(drawing);
-		  }
-		  return drawings;
-	}
-	 
-	 
-	 private  CTTxbxContent getTextBoxContent(CTDrawing drawing) throws Exception {
-		  XmlCursor cursor = drawing.newCursor();
-		  cursor.selectPath("declare namespace w='http://schemas.openxmlformats.org/wordprocessingml/2006/main' .//*/w:txbxContent");
-		  List<CTTxbxContent> txbxContents = new ArrayList<CTTxbxContent>();
-		  while (cursor.hasNextSelection()) {
-		   cursor.toNextSelection();
-		   XmlObject obj = cursor.getObject();
-		   CTTxbxContent txbxContent = CTTxbxContent.Factory.parse(obj.newInputStream());
-		   txbxContents.add(txbxContent);
-		   break;
-		  }
-		  CTTxbxContent txbxContent = null;
-		  if (txbxContents.size() > 0) {
-		   txbxContent = txbxContents.get(0);
-		  }
-		  return txbxContent;
-		 }
-	 
-
-	private void textReplaceProcess(Acte acte, SimpleDateFormat simpleDateFormat, Demande demande, Agent agent,  AgentStructure agentstruct, 
-			AgentSolde agentSolde, XWPFRun run, String text) {
-		if (text != null) {
-			SimpleDateFormat df =  new SimpleDateFormat("dd/MM/yyyy", new Locale("fr", "FR"));
-			if(text.contains("$ENTETE_MINISTERE$")){
-				text = text.replace("$ENTETE_MINISTERE$", acte.getEnteteMinistere());
-				run.setText(text, 0);
-			} if(text.contains("$REFERENCE_ACTE$")) {
-				text = text.replace("$REFERENCE_ACTE$", acte.getReference());
-				run.setText(text, 0);
-			} if(text.contains("$SOLDEPRIS$")) {
-				long soldePris = demande.getTypeDemande().getSoldeAnnuel() - agentSolde.getSoldeRestant();
-				text = text.replace("$SOLDEPRIS$", ""+soldePris);
-				run.setText(text, 0);
-			} if(text.contains("$SOLDERESTE$")) {
-				text = text.replace("$SOLDERESTE$", ""+agentSolde.getSoldeRestant());
-				run.setText(text, 0);
-			}  if(text.contains("$DATE_ACTE$")) {
-
-				text = text.replace("$DATE_ACTE$", simpleDateFormat.format(new Date()));
-				run.setText(text, 0);
-			} if(text.contains("$TOTALHEURES$")) {
-				Long hours = demande.getDureeAbsence()*24;
-				text = text.replace("$TOTALHEURES$", ""+hours);
-				run.setText(text, 0);
-			} if(text.contains("$NOM_PRENOM_AGENT$")) {
-				String nomPrenom = "" + agent.getNom() + (StringUtils.hasText(agent.getNomJeuneFille()) ? "/"+ agent.getNomJeuneFille():"") + " " + agent.getPrenom();  				 
-				text = text.replace("$NOM_PRENOM_AGENT$", nomPrenom);
-				run.setText(text, 0);
-			} if(text.contains("$MATRICULE_AGENT$")) {
-				text = text.replace("$MATRICULE_AGENT$", agent.getMatricule());
-				run.setText(text, 0);
-			} if(text.contains("$FONCTION_AGENT$")) {
-				String corps = agent.getCorps()!=null ? agent.getCorps().getLibelleCorps(): "";
-				text = text.replace("$FONCTION_AGENT$",corps);
-				run.setText(text, 0);
-			} if(text.contains("$DATE_DEBUT$")) {
-				text = text.replace("$DATE_DEBUT$", df.format(demande.getPeriodeDebut()));
-				run.setText(text, 0);
-			} if(text.contains("$DATE_FIN$")) {
-				text = text.replace("$DATE_FIN$", df.format(demande.getPeriodeFin()));
-				run.setText(text, 0);
-			} if(text.contains("$MOTIF_ABSENCE$")) {
-				String motifAbsence = null!=  demande.getMotifAbsence() ?  demande.getMotifAbsence().getLibelle(): "";
-				text = text.replace("$MOTIF_ABSENCE$", motifAbsence);
-				run.setText(text, 0);
-			} if(text.contains("$ANNEE$")) {
-				text = text.replace("$ANNEE$", acte.getAnnee());
-				run.setText(text, 0);
-			} if(text.contains("$RESPONSABLE_ACTE$")) {
-				text = text.replace("$RESPONSABLE_ACTE$", acte.getNomPrenomCreator());
-				run.setText(text, 0);
-			} if(text.contains("$TITRE_RESPONSABLE$")) {
-				text = text.replace("$TITRE_RESPONSABLE$", acte.getTitreCreator());
-				run.setText(text, 0);
-			} if(text.contains("$AMPLIATION$")) {
-				text = text.replace("$AMPLIATION$", acte.getAmpliation());
-				run.setText(text, 0);
-			} if(text.contains("$STRUCTURE_AGENT$")) {
-				String structureAgent = agentstruct.getStructure()!=null ? agentstruct.getStructure().getLibelle():"";
-				text = text.replace("$STRUCTURE_AGENT$", structureAgent);
-				run.setText(text, 0);
-			}
-		}
-	}
-
 	private File generate_groupe_acte(XWPFDocument document,Acte acte) {
 		List<XWPFParagraph> paragraphs=document.getParagraphs();
 		if( document.getTables().isEmpty()) {
