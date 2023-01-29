@@ -6,24 +6,30 @@ import bf.mfptps.appgestionsconges.entities.TypeVisa;
 import java.util.Objects;
 import java.util.Set;
 
-public class VisaDTO extends CommonEntity {
+public class VisaDTO {
 
     private Long id;
 
     private String code;
 
     private String libelle;
-
+/*
     private Set<TypeVisa> typeVisas;
-
+*/
     public VisaDTO() {
     }
-
+/*
     public VisaDTO(Long id, String code, String libelle, Set<TypeVisa> typeVisas) {
         this.id = id;
         this.code = code;
         this.libelle = libelle;
         this.typeVisas = typeVisas;
+    }*/
+
+    public VisaDTO(Long id, String code, String libelle) {
+        this.id = id;
+        this.code = code;
+        this.libelle = libelle;
     }
 
     public Long getId() {
@@ -49,7 +55,7 @@ public class VisaDTO extends CommonEntity {
     public void setLibelle(String libelle) {
         this.libelle = libelle;
     }
-
+/*
     public Set<TypeVisa> getTypeVisas() {
         return typeVisas;
     }
@@ -57,7 +63,7 @@ public class VisaDTO extends CommonEntity {
     public void setTypeVisas(Set<TypeVisa> typeVisas) {
         this.typeVisas = typeVisas;
     }
-
+*/
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -70,7 +76,7 @@ public class VisaDTO extends CommonEntity {
     public int hashCode() {
         return Objects.hash(id);
     }
-
+/*
     @Override
     public String toString() {
         return "VisaDTO{" +
@@ -80,4 +86,5 @@ public class VisaDTO extends CommonEntity {
                 ", typeVisas=" + typeVisas +
                 '}';
     }
+    */
 }

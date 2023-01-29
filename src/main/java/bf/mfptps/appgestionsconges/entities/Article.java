@@ -36,7 +36,7 @@ import org.hibernate.annotations.Where;
         name = "deletedFilter",
         condition = "deleted = :isDeleted"
 )
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+//@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class Article extends CommonEntity {
 
     @Id
@@ -52,10 +52,10 @@ public class Article extends CommonEntity {
 
     @Column(name = "libelle")
     private String attributLibelle;
-
+/*
     @OneToMany(mappedBy = "article")
     private Set<ArticleTypeDemande> articleTypeDemandes;
-
+*/
     public Long getId() {
         return id;
     }
@@ -79,7 +79,7 @@ public class Article extends CommonEntity {
     public void setAttributLibelle(String attributLibelle) {
         this.attributLibelle = attributLibelle;
     }
-
+/*
     public Set<ArticleTypeDemande> getArticleTypeDemandes() {
         return articleTypeDemandes;
     }
@@ -87,7 +87,7 @@ public class Article extends CommonEntity {
     public void setArticleTypeDemandes(Set<ArticleTypeDemande> articleTypeDemandes) {
         this.articleTypeDemandes = articleTypeDemandes;
     }
-
+*/
     @Override
     public int hashCode() {
         int hash = 7;
@@ -109,7 +109,7 @@ public class Article extends CommonEntity {
         final Article other = (Article) obj;
         return Objects.equals(this.id, other.id);
     }
-
+/*
     @Override
     public String toString() {
         return "Article{" +
@@ -119,4 +119,5 @@ public class Article extends CommonEntity {
                 ", articleTypeDemandes=" + articleTypeDemandes +
                 '}';
     }
+    */
 }

@@ -15,7 +15,9 @@ public class TypeDemandeDTO {
     private Boolean modePaie;
     private String description;
     private Long remoteValue;
+   /*
     private Set<TypeVisaDTO> typeVisas = new HashSet<>();
+    */
     private Long soldeAnnuel;
 
     private String code;
@@ -51,7 +53,7 @@ public class TypeDemandeDTO {
     public void setDescription(String description) {
         this.description = description;
     }
-
+/*
     public Set<TypeVisaDTO> getTypeVisas() {
         return typeVisas;
     }
@@ -63,7 +65,7 @@ public class TypeDemandeDTO {
     public void addTypeVisa(TypeVisaDTO typeVisa) {
         this.typeVisas.add(typeVisa);
     }
-
+*/
     public Long getSoldeAnnuel() {
         return soldeAnnuel;
     }
@@ -104,7 +106,7 @@ public class TypeDemandeDTO {
     public int hashCode() {
         return Objects.hash(id);
     }
-
+/*
     @Override
     public String toString() {
         return "TypeDemandeDTO{"
@@ -117,4 +119,5 @@ public class TypeDemandeDTO {
                 + ", code='" + code + '\''
                 + '}';
     }
+    */
 }

@@ -62,6 +62,7 @@ public class ArticleTypeDemandeServiceImpl implements ArticleTypeDemandeService 
 
     @Override
     public void deleteOne(Long id) {
+
         articleTypeDemandeRepository.deleteById(id);
     }
 

@@ -49,6 +49,7 @@ public class TypeDemandeServiceImpl implements TypeDemandeService {
     public TypeDemandeDTO create(TypeDemandeDTO typeDemandeDTO) {
         TypeDemande typeDemande = typeDemandeMapper.toEntity(typeDemandeDTO);
         TypeDemande finalTypeDemande = typeDemande;
+        /*
         typeDemande.setTypeVisas(finalTypeDemande.getTypeVisas()
                 .stream().map(typeVisa -> {
                     Visa visa = visaService.findVisaById(typeVisa.getVisa().getId());
@@ -60,6 +61,7 @@ public class TypeDemandeServiceImpl implements TypeDemandeService {
                 })
                 .collect(Collectors.toSet())
         );
+         */
         typeDemande = typeDemandeRepository.save(typeDemande);
         return typeDemandeMapper.toDto(typeDemande);
     }
