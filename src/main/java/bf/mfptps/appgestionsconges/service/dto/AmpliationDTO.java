@@ -12,7 +12,7 @@ import java.util.Objects;
  *
  * @author HEBIE
  */
-public class AmpliationDTO extends CommonEntity {
+public class AmpliationDTO  {
 
     private Long id;
 

@@ -37,14 +37,14 @@ public class ArticleTypeDemande extends  CommonEntity{
     private Long id;
 
     @ManyToOne
-    @MapsId("articleId")
-    @JoinColumn(name = "article_id")
+   // @MapsId("articleId")
+   // @JoinColumn(name = "article_id")
     Article article;
 
 
     @ManyToOne
-    @MapsId("typeDemandeId")
-    @JoinColumn(name = "type_demande_id")
+    //@MapsId("typeDemandeId")
+   // @JoinColumn(name = "type_demande_id")
     TypeDemande typeDemande;
 
     @NotNull

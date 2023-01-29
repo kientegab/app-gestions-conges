@@ -33,7 +33,7 @@ import org.hibernate.annotations.Where;
         name = "deletedFilter",
         condition = "deleted = :isDeleted"
 )
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+//@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class Ampliation extends CommonEntity {
 
     @Id
@@ -44,7 +44,7 @@ public class Ampliation extends CommonEntity {
     @NotNull
     @Pattern(regexp = Constants.LOGIN_REGEX)
     @Size(min = 1, max = 10)
-    @Column(length = 10)
+    //@Column(length = 10)
     private String code;
 
     @Column(nullable = false)
