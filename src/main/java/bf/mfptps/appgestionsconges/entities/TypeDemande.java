@@ -28,7 +28,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
         name = "deletedFilter",
         condition = "deleted = :isDeleted"
 )
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+//@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class TypeDemande extends CommonEntity {
 
     @Id
@@ -49,7 +49,7 @@ public class TypeDemande extends CommonEntity {
 
     @Column(name = "remote_value")
     private Long remoteValue;
-
+/*
     @OneToMany(mappedBy = "typeDemande", cascade = javax.persistence.CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIgnoreProperties(value = {"typeDemande"}, allowSetters = true)
     private Set<TypeVisa> typeVisas = new HashSet<>();
@@ -57,7 +57,7 @@ public class TypeDemande extends CommonEntity {
     @OneToMany(mappedBy = "typeDemande", cascade = javax.persistence.CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIgnore
     private Set<ArticleTypeDemande> articleTypeDemandes;
-
+*/
     @Column(name = "solde_annuel")
     private Long soldeAnnuel;
 
@@ -95,7 +95,7 @@ public class TypeDemande extends CommonEntity {
     public void setDescription(String description) {
         this.description = description;
     }
-
+/*
     public Set<TypeVisa> getTypeVisas() {
         return typeVisas;
     }
@@ -115,7 +115,7 @@ public class TypeDemande extends CommonEntity {
     public void setArticleTypeDemandes(Set<ArticleTypeDemande> articleTypeDemandes) {
         this.articleTypeDemandes = articleTypeDemandes;
     }
-
+*/
     public Long getSoldeAnnuel() {
         return soldeAnnuel;
     }
@@ -156,10 +156,10 @@ public class TypeDemande extends CommonEntity {
     public int hashCode() {
         return Objects.hash(id);
     }
-
+/*
     @Override
     public String toString() {
         return "TypeDemande{" + "id=" + id + ", libelle=" + libelle + ", modePaie=" + modePaie + ", description=" + description + ", remoteValue=" + remoteValue + ", typeVisas=" + typeVisas + ", articleTypeDemandes=" + articleTypeDemandes + ", soldeAnnuel=" + soldeAnnuel + ", code=" + code + '}';
     }
-
+*/
 }

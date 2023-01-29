@@ -8,7 +8,7 @@ import bf.mfptps.appgestionsconges.entities.Visa;
 import javax.persistence.EmbeddedId;
 import java.util.Objects;
 
-public class TypeVisaDTO extends CommonEntity {
+public class TypeVisaDTO {
 //    TypeVisaKey id;
     private Long id;
 
