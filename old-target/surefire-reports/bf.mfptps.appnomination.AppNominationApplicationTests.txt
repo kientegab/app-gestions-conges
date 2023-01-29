@@ -1,7 +1,0 @@
--------------------------------------------------------------------------------
-Test set: bf.mfptps.appnomination.AppNominationApplicationTests
--------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.353 s <<< FAILURE! - in bf.mfptps.appnomination.AppNominationApplicationTests
-bf.mfptps.appnomination.AppNominationApplicationTests  Time elapsed: 0.352 s  <<< ERROR!
-java.lang.IllegalStateException: Unable to find a @SpringBootConfiguration, you need to use @ContextConfiguration or @SpringBootTest(classes=...) with your test
-
