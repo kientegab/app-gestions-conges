@@ -1,18 +1,22 @@
 package bf.mfptps.appgestionsconges.entities;
 
 
+import net.minidev.json.annotate.JsonIgnore;
 import org.hibernate.annotations.*;
 import org.hibernate.annotations.Cache;
 
 import javax.persistence.*;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
+/**
+ *
+ * @author TEGUERA <teguera.zakaria@gmail.com>
+ */
 @Entity
 @Table(name = "visa")
 @SQLDelete(sql = "UPDATE visa SET deleted = true WHERE id=?")
@@ -42,8 +46,9 @@ public class Visa extends CommonEntity {
     @Column(name = "libelle", length = 254)
     private String libelle;
 
-    @OneToMany(mappedBy = "visa")
-    private Set<TypeVisa> typeVisas = new HashSet<TypeVisa>();
+    @OneToMany(mappedBy = "visa", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Set<TypeVisa> typeVisas = new HashSet<>();
 
     public Long getId() {
         return id;

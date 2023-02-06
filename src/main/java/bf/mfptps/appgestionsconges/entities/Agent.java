@@ -43,12 +43,17 @@ public class Agent extends CommonEntity {
     @Column(length = 50, unique = true, nullable = false)
     private String matricule;
 
+    @Pattern(regexp = Constants.LOGIN_REGEX)
+    @Size(min = 1, max = 50)
+    @Column(length = 50)
+    private String matriculeResp;
+
     @Column(length = 5, nullable = false)
     private String cleMatricule;//lettre clee du matricule
 
     @Email
     @Size(min = 5, max = 254)
-    @Column(length = 254, unique = true)
+    @Column(length = 254, unique = true, nullable = true)
     private String email;
 
     @JsonIgnore
@@ -366,6 +371,18 @@ public class Agent extends CommonEntity {
 
     public void setCorps(Corps corps) {
         this.corps = corps;
+    }
+
+    public void activate() {
+        this.actif = true;
+    }
+
+    public String getMatriculeResp() {
+        return matriculeResp;
+    }
+
+    public void setMatriculeResp(String matriculeResp) {
+        this.matriculeResp = matriculeResp;
     }
 
     @Override

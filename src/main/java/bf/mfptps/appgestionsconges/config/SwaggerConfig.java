@@ -28,7 +28,7 @@ public class SwaggerConfig {
         return new OpenAPI()
                 .components(new Components())
                 .info(new Info()
-                        .title("SGGCM API REST")
+                        .title("GESTION CONGES API REST")
                         .description("Swagger UI Integration for GESTION CONGES API REST.")
                         .version("1.0.0")
                         .contact(contact));

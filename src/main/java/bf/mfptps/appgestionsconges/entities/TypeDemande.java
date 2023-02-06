@@ -1,84 +1,98 @@
 package bf.mfptps.appgestionsconges.entities;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.*;
-
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import net.minidev.json.annotate.JsonIgnore;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.FilterDef;
+import org.hibernate.annotations.ParamDef;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
+@javax.persistence.Entity
+@javax.persistence.Table(name = "type_demande")
+@SQLDelete(sql = "UPDATE type_demande SET deleted = true WHERE id=?")
+@Where(clause = "deleted = false")
+@FilterDef(
+        name = "deletedFilter",
+        parameters = @ParamDef(name = "isDeleted", type = "boolean")
+)
+@Filter(
+        name = "deletedFilter",
+        condition = "deleted = :isDeleted"
+)
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+public class TypeDemande extends CommonEntity {
 
-@Entity
-    @Table(name = "type_demande")
-    @SQLDelete(sql = "UPDATE type_demande SET deleted = true WHERE id=?")
-    @Where(clause = "deleted = false")
-    @FilterDef(
-            name = "deletedFilter",
-            parameters = @ParamDef(name = "isDeleted", type = "boolean")
-    )
-    @Filter(
-            name = "deletedFilter",
-            condition = "deleted = :isDeleted"
-    )
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    public class TypeDemande extends CommonEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
+    @SequenceGenerator(name = "sequenceGenerator")
+    private Long id;
 
-        @Id
-        @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
-        @SequenceGenerator(name = "sequenceGenerator")
-        private Long id;
-
-        @NotNull
+    @NotNull
 //        @Size(min = 1, max = 50)
-        @Column(name = "libelle", unique = true, nullable = false)
-        private String libelle;
+    @Column(name = "libelle", unique = true, nullable = false)
+    private String libelle;
 
-        @Column(name = "mode_paie",length = 254, unique = true)
-        private Boolean modePaie;
+    @Column(name = "mode_paie", length = 254, unique = true)
+    private Boolean modePaie;
 
-        @Column(name = "description")
-        private String description;
+    @Column(name = "description")
+    private String description;
 
-        @OneToMany(mappedBy = "typeDemande")
-        private Set<TypeVisa> typeVisas = new HashSet<TypeVisa>();
+    @Column(name = "remote_value")
+    private Long remoteValue;
 
+    @OneToMany(mappedBy = "typeDemande", cascade = javax.persistence.CascadeType.ALL)
+    @JsonIgnore
+    private Set<TypeVisa> typeVisas = new HashSet<>();
 
-        public Long getId() {
-            return id;
-        }
+    @OneToMany(mappedBy = "typeDemande", cascade = javax.persistence.CascadeType.ALL)
+    @JsonIgnore
+    private Set<ArticleTypeDemande> articleTypeDemandes;
 
-        public void setId(Long id) {
-            this.id = id;
-        }
+    @Column(name = "solde_annuel")
+    private Long soldeAnnuel;
 
-        public String getLibelle() {
-            return libelle;
-        }
+    @Column(name = "code")
+    private String code;
 
-        public void setLibelle(String libelle) {
-            this.libelle = libelle;
-        }
+    public Long getId() {
+        return id;
+    }
 
-        public Boolean getModePaie() {
-            return modePaie;
-        }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-        public void setModePaie(Boolean modePaie) {
-            this.modePaie = modePaie;
-        }
+    public String getLibelle() {
+        return libelle;
+    }
 
-        public String getDescription() {
-            return description;
-        }
+    public void setLibelle(String libelle) {
+        this.libelle = libelle;
+    }
 
-        public void setDescription(String description) {
-            this.description = description;
-        }
+    public Boolean getModePaie() {
+        return modePaie;
+    }
+
+    public void setModePaie(Boolean modePaie) {
+        this.modePaie = modePaie;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
     public Set<TypeVisa> getTypeVisas() {
         return typeVisas;
@@ -92,10 +106,46 @@ import java.util.Set;
         this.typeVisas.add(typeVisa);
     }
 
+    public Set<ArticleTypeDemande> getArticleTypeDemandes() {
+        return articleTypeDemandes;
+    }
+
+    public void setArticleTypeDemandes(Set<ArticleTypeDemande> articleTypeDemandes) {
+        this.articleTypeDemandes = articleTypeDemandes;
+    }
+
+    public Long getSoldeAnnuel() {
+        return soldeAnnuel;
+    }
+
+    public void setSoldeAnnuel(Long soldeAnnuel) {
+        this.soldeAnnuel = soldeAnnuel;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public Long getRemoteValue() {
+        return remoteValue;
+    }
+
+    public void setRemoteValue(Long remoteValue) {
+        this.remoteValue = remoteValue;
+    }
+
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         TypeDemande that = (TypeDemande) o;
         return id.equals(that.id);
     }
@@ -107,12 +157,7 @@ import java.util.Set;
 
     @Override
     public String toString() {
-        return "TypeDemande{" +
-                "id=" + id +
-                ", libelle='" + libelle + '\'' +
-                ", modePaie=" + modePaie +
-                ", description='" + description + '\'' +
-                ", typeVisas=" + typeVisas +
-                '}';
+        return "TypeDemande{" + "id=" + id + ", libelle=" + libelle + ", modePaie=" + modePaie + ", description=" + description + ", remoteValue=" + remoteValue + ", typeVisas=" + typeVisas + ", articleTypeDemandes=" + articleTypeDemandes + ", soldeAnnuel=" + soldeAnnuel + ", code=" + code + '}';
     }
+
 }

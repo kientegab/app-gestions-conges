@@ -10,6 +10,10 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Objects;
 
+/**
+ *
+ * @author TEGUERA
+ */
 @Entity
 @Table(name = "avis")
 @SQLDelete(sql = "UPDATE avis SET deleted = true WHERE id=?")
