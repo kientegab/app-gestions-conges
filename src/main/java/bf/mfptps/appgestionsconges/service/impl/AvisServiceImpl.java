@@ -2,9 +2,15 @@ package bf.mfptps.appgestionsconges.service.impl;
 
 
 
+
+
 import bf.mfptps.appgestionsconges.entities.Avis;
 import bf.mfptps.appgestionsconges.entities.Demande;
 import bf.mfptps.appgestionsconges.repositories.AvisRepository;
+
+import bf.mfptps.appgestionsconges.entities.Demande;
+import bf.mfptps.appgestionsconges.repositories.AvisRepository;
+import bf.mfptps.appgestionsconges.repositories.DemandeRepository;
 import bf.mfptps.appgestionsconges.service.AvisService;
 import bf.mfptps.appgestionsconges.service.dto.AvisDTO;
 import bf.mfptps.appgestionsconges.service.dto.ValideDemandeDto;
@@ -27,6 +33,8 @@ import java.util.Optional;
 public class AvisServiceImpl implements AvisService {
 
     private final AvisRepository avisRepository;
+
+    DemandeRepository demandeRepository;
 
     private final AvisMapper avisMapper;
 
@@ -66,27 +74,29 @@ public class AvisServiceImpl implements AvisService {
         avisRepository.deleteById(id);
     }
 
-	@Override
-	public Demande valideAvis(ValideDemandeDto valideDemandeDto) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+
     
-    /*
-    public Demande valideAvis(ValideDemandeDto valideDemandeDto) {
+   
+ 	public Demande valideAvis(ValideDemandeDto valideDemandeDto) {
 		// TODO Auto-generated method stub
-		
+
+
 		Avis avis=new Avis();
 		avis.setAvisDG(valideDemandeDto.getAvisDG());
 		avis.setAvisDRH(valideDemandeDto.getAvisDRH());
 		avis.setAvisSG(valideDemandeDto.getAvisSG());
 		avis.setAvisSH(valideDemandeDto.getAvisSH());
+
+		avis.setDemande(demandeRepository.findById(valideDemandeDto.getDemande_id()).orElse(null));
 		
-		//avis.setDemande(demandeRepository.findById(valideDemandeDto.getDemande_id()).orElse(null));
 		return avisRepository.saveAndFlush(avis).getDemande();
 	}
+
+
     
-    */
+    
 	
+
+
 
 }

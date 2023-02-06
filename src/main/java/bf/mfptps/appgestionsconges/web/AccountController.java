@@ -240,7 +240,8 @@ public class AccountController {
                 && password.length() <= ManagedAgentVM.PASSWORD_MAX_LENGTH;
     }
 
-    @GetMapping(path = "/activate-agent")
+//    @GetMapping(path = "/activate-agent")
+    @PostMapping(path = "/activate-agent")
     public ResponseEntity<ActivateCompteResponse> verifierCompte(@RequestBody ActivateCompteRequest request) {
         log.info("Activation compte {}", request);
         ActivateCompteResponse response = agentService.activateCompte(request);

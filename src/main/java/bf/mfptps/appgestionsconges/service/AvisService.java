@@ -1,10 +1,10 @@
 package bf.mfptps.appgestionsconges.service;
 
 
+
 import bf.mfptps.appgestionsconges.entities.Demande;
 import bf.mfptps.appgestionsconges.service.dto.AvisDTO;
 import bf.mfptps.appgestionsconges.service.dto.ValideDemandeDto;
-
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,9 +25,9 @@ public interface AvisService {
 
     Page<AvisDTO> findAll(Pageable pageable);
 
+
 	void deleteOne(Long id);
 
-	Demande valideAvis(ValideDemandeDto valideDemandeDto);
+    public Demande valideAvis(ValideDemandeDto valideDemandeDto );
 
- 
 }

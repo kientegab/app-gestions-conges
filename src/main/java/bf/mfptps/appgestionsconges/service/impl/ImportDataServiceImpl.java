@@ -15,6 +15,7 @@ import bf.mfptps.appgestionsconges.service.ImportDataService;
 import bf.mfptps.appgestionsconges.utils.AppUtil;
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -76,6 +77,7 @@ fetch first 100 rows only
     }
 
     @Override
+    @Transactional(rollbackFor = CustomException.class)
     public void importerCorps(MultipartFile file) {
         try {
             if (AppUtil.TYPE_EXCEL.equals(file.getContentType())) {
@@ -92,6 +94,7 @@ fetch first 100 rows only
 
     //================================= DEBUT TRAITEMENT FILE AGENT ==================================
     private void traitementAgentExcel(List<Agent> agents) {
+        String password = passwordEncoder.encode(AppUtil.DEFAULT_PASSWORD);
         List<Agent> newAgents = new ArrayList<Agent>();
         List<Agent> agentsToUpdate = new ArrayList<Agent>();
 
@@ -99,7 +102,7 @@ fetch first 100 rows only
             Agent agentFromdb = agentRepository.findOneByMatricule(agent.getMatricule()).orElse(null);
             if (agentFromdb == null) {//faire une insertion car nouvelle ligne c
                 System.out.println("...................... A AJOUTER MATRICULE = " + agent.getMatricule());
-                agent.setPassword(passwordEncoder.encode(AppUtil.DEFAULT_PASSWORD));
+                agent.setPassword(password);
                 agent.setActif(false);
 
                 newAgents.add(agent);
@@ -129,11 +132,14 @@ fetch first 100 rows only
             }
         }
 
+        Long startCommit = System.currentTimeMillis();
         if (!newAgents.isEmpty()) {
             agentRepository.saveAll(newAgents);
+            System.out.println("\n...................... CONSTITUTION DE LISTE PERSISTABLE TERMINEE ! (commit time : " + (System.currentTimeMillis() - startCommit) + " mses).\n");
         }
         if (!agentsToUpdate.isEmpty()) {
             agentRepository.saveAll(agentsToUpdate);
+            System.out.println("\n...................... CONSTITUTION DE LISTE A UPDATE TERMINEE ! (commit time : " + (System.currentTimeMillis() - startCommit) + " mses).\n");
         }
     }
 
@@ -151,28 +157,34 @@ fetch first 100 rows only
                 XSSFRow row = worksheet.getRow(index);
                 agent.setMatricule("" + (int) row.getCell(0).getNumericCellValue());
                 agent.setCleMatricule(row.getCell(1).getStringCellValue());
-                agent.setNom(row.getCell(2).getStringCellValue());
-                agent.setPrenom(row.getCell(3).getStringCellValue());
-                agent.setNomJeuneFille(row.getCell(4).getStringCellValue());
-                agent.setSexe(Objects.equals(row.getCell(5).getStringCellValue(), "" + 'M') ? Sexe.MASCULIN : Sexe.FEMININ);
+                agent.setNom(row.getCell(2).getStringCellValue().isBlank() ? null : row.getCell(2).getStringCellValue());
+                agent.setPrenom(row.getCell(3).getStringCellValue().isBlank() ? null : row.getCell(3).getStringCellValue());
+                agent.setNomJeuneFille(row.getCell(4).getStringCellValue().isBlank() ? null : row.getCell(4).getStringCellValue());
+                agent.setSexe(Objects.equals(row.getCell(5).getStringCellValue(), "M") ? Sexe.MASCULIN : Sexe.FEMININ);
                 //agent.setDateNaissance(row.getCell(6).getDateCellValue());
-                agent.setLieuNaissance(row.getCell(7).getStringCellValue());
-                agent.setNoCNIB(row.getCell(8).getStringCellValue());
+                agent.setLieuNaissance(row.getCell(7).getStringCellValue().isBlank() ? null : row.getCell(7).getStringCellValue());
+                agent.setNoCNIB(row.getCell(8).getStringCellValue().isBlank() ? "GEN " + Instant.now().getNano() : row.getCell(8).getStringCellValue());
                 //agent.setDateRecrutement(row.getCell(9).getDateCellValue());
-                agent.setTelephone(row.getCell(10).getStringCellValue());
-                agent.setEmail(Objects.equals(row.getCell(11).getStringCellValue(), "") ? null : row.getCell(11).getStringCellValue());
-                agent.setQualite(row.getCell(12).getStringCellValue());
+                agent.setTelephone(row.getCell(10).getStringCellValue().isBlank() ? null : row.getCell(10).getStringCellValue());
+                agent.setEmail(row.getCell(11).getStringCellValue().isBlank() ? null : row.getCell(11).getStringCellValue());
+                agent.setQualite(row.getCell(12).getStringCellValue().isBlank() ? null : row.getCell(12).getStringCellValue());
                 //agent.setDateQualite(row.getCell(13).getDateCellValue());
-                agent.setCategorie(row.getCell(14).getStringCellValue());
-                agent.setEchelle(row.getCell(15).getStringCellValue());
-                agent.setEchellon(row.getCell(16).getStringCellValue());
-                agent.setPosition(row.getCell(17).getStringCellValue());
-                agent.setGrade(row.getCell(18).getStringCellValue());
-                agent.setAffectation(row.getCell(19).getStringCellValue());
+                agent.setCategorie(row.getCell(14).getStringCellValue().isBlank() ? null : row.getCell(14).getStringCellValue());
+                agent.setEchelle(row.getCell(15).getStringCellValue().isBlank() ? null : row.getCell(15).getStringCellValue());
+                agent.setEchellon(row.getCell(16).getStringCellValue().isBlank() ? null : row.getCell(16).getStringCellValue());
+                agent.setPosition(row.getCell(17).getStringCellValue().isBlank() ? null : row.getCell(17).getStringCellValue());
+                agent.setGrade(row.getCell(18).getStringCellValue().isBlank() ? null : row.getCell(18).getStringCellValue());
+                agent.setAffectation(row.getCell(19).getStringCellValue().isBlank() ? null : row.getCell(19).getStringCellValue());
 
                 Corps corps = corpsRepository.findByCodeCorps(row.getCell(20).getStringCellValue()).orElse(null);
                 if (corps != null) {
                     agent.setCorps(corps);
+                }
+                if (row.getCell(8).getStringCellValue().isBlank()
+                        || row.getCell(2).getStringCellValue().isBlank()
+                        || row.getCell(3).getStringCellValue().isBlank()
+                        || row.getCell(5).getStringCellValue().isBlank()) {
+                    System.out.println("\n...................... INCOHERENCE (CNIB|NOM|PRENOM|SEXE : NULL) DETECTEE ! (line : " + (++index) + ").");
                 }
 
                 agentsFromFile.add(agent);
@@ -200,11 +212,14 @@ fetch first 100 rows only
             }
         }
 
+        Long startCommit = System.currentTimeMillis();
         if (!newCorps.isEmpty()) {
             corpsRepository.saveAll(newCorps);
+            System.out.println("\n...................... CONSTITUTION DE LISTE PERSISTABLE TERMINEE ! (commit time : " + (System.currentTimeMillis() - startCommit) + " mses)\n");
         }
         if (!corpsToUpdate.isEmpty()) {
             corpsRepository.saveAll(corpsToUpdate);
+            System.out.println("\n...................... CONSTITUTION DE LISTE A UPDATE TERMINEE ! (commit time : " + (System.currentTimeMillis() - startCommit) + " mses)\n");
         }
 
     }
@@ -223,7 +238,7 @@ fetch first 100 rows only
                 XSSFRow row = worksheet.getRow(index);
 
                 corps.setCodeCorps("" + row.getCell(0).getStringCellValue());
-                corps.setLibelleCorps(row.getCell(1).getStringCellValue());
+                corps.setLibelleCorps("" + row.getCell(1).getStringCellValue());
 
                 corpsFromFile.add(corps);
             }

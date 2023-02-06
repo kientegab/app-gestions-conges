@@ -1,12 +1,17 @@
 package bf.mfptps.appgestionsconges.service.mapper;
 
 
+
 import org.mapstruct.Mapper;
 
 
 import bf.mfptps.appgestionsconges.entities.Avis;
 import bf.mfptps.appgestionsconges.service.dto.AvisDTO;
 
+
+import bf.mfptps.appgestionsconges.entities.Avis;
+import bf.mfptps.appgestionsconges.service.dto.AvisDTO;
+import org.mapstruct.Mapper;
 
 
 /**

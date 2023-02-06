@@ -49,6 +49,9 @@ public class Document extends CommonEntity{
     @ManyToOne
     @JoinColumn(name = "demande_id")
     private Demande demande;
+    
+    @Column(name="nom_document")
+    private String nomDocument;
 
     public Long getId() {
         return id;
@@ -82,7 +85,15 @@ public class Document extends CommonEntity{
         this.demande = demande;
     }
 
-    @Override
+    public String getNomDocument() {
+		return nomDocument;
+	}
+
+	public void setNomDocument(String nomDocument) {
+		this.nomDocument = nomDocument;
+	}
+
+	@Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

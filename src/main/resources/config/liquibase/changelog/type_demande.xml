@@ -1,30 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <databaseChangeLog
-        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
-        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-    <changeSet id="management_generator_1" author="TEGUERA">
+    <changeSet id="management_generator_3" author="TEGUERA">
         <createSequence sequenceName="sequence_generator_1" startValue="56" incrementBy="50"/>
     </changeSet>
 
-    <changeSet id="000000000000077" author="TEGUERA">
+    <changeSet id="00000000000003" author="TEGUERA">
+        <!-- creer d'abord la table type_demande -->
+        <createTable tableName="type_demande">
+            <column name="id" type="bigint" autoIncrement="true" incrementBy="1" >
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="libelle" type="varchar(254)">
+                <constraints unique="true" nullable="false" uniqueConstraintName="ux_libelle_in_typedemande"/>
+            </column>
+            <column name="code" type="varchar(254)"/>
+            <column name="mode_paie" type="boolean"/>
+            <column name="solde_annuel" type="bigint"/>
+            <column name="remote_value" type="bigint"/>
+            <column name="description" type="varchar(254)"/>
+            <column name="created_by" type="varchar(50)" defaultValue="system" >
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_date" type="timestamp" defaultValueDate="${now}"/>
+            <column name="last_modified_by" type="varchar(50)"/>
+            <column name="last_modified_date" type="timestamp"/>
+            <column name="deleted" type="boolean" valueBoolean="false" defaultValueComputed="false">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+
+        <!-- charger le fichier de donnees correspondant a la table type_demande -->
         <loadData
-                file="config/liquibase/data/types_demande.csv"
-                separator=";"
-                tableName="type_demande">
+            file="config/liquibase/data/types_demande.csv"
+            separator=";"
+            tableName="type_demande">
             <column name="id" type="numeric"/>
             <column name="libelle" type="string"/>
             <column name="code" type="string"/>
             <column name="mode_paie" type="boolean"/>
             <column name="solde_annuel" type="numeric"/>
-             <column name="remote_value" type="numeric"/>
+            <column name="remote_value" type="numeric"/>
             <column name="description" type="string"/>
         </loadData>
-
     </changeSet>
-
-
 </databaseChangeLog>

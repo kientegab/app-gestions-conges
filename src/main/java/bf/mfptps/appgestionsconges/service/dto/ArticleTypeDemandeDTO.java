@@ -5,10 +5,6 @@ import bf.mfptps.appgestionsconges.entities.Article;
 import bf.mfptps.appgestionsconges.entities.ArticleTypeDemandeKey;
 import bf.mfptps.appgestionsconges.entities.TypeDemande;
 
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.MapsId;
-import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
 /**
@@ -18,7 +14,8 @@ import java.util.Objects;
 
 public class ArticleTypeDemandeDTO {
 
-    ArticleTypeDemandeKey id;
+//    ArticleTypeDemandeKey id;
+    private Long id;
 
     private Article article;
 
@@ -29,18 +26,35 @@ public class ArticleTypeDemandeDTO {
     public ArticleTypeDemandeDTO() {
     }
 
-    public ArticleTypeDemandeDTO(ArticleTypeDemandeKey id, Article article, TypeDemande typeDemande, Long numeroOrdre) {
+//    public ArticleTypeDemandeDTO(ArticleTypeDemandeKey id, Article article, TypeDemande typeDemande, Long numeroOrdre) {
+//        this.id = id;
+//        this.article = article;
+//        this.typeDemande = typeDemande;
+//        this.numeroOrdre = numeroOrdre;
+//    }
+
+
+    public ArticleTypeDemandeDTO(Long id, Article article, TypeDemande typeDemande, Long numeroOrdre) {
         this.id = id;
         this.article = article;
         this.typeDemande = typeDemande;
         this.numeroOrdre = numeroOrdre;
     }
 
-    public ArticleTypeDemandeKey getId() {
+//    public ArticleTypeDemandeKey getId() {
+//        return id;
+//    }
+//
+//    public void setId(ArticleTypeDemandeKey id) {
+//        this.id = id;
+//    }
+
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(ArticleTypeDemandeKey id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -67,6 +81,30 @@ public class ArticleTypeDemandeDTO {
     public void setNumeroOrdre(Long numeroOrdre) {
         this.numeroOrdre = numeroOrdre;
     }
+
+//    @Override
+//    public boolean equals(Object o) {
+//        if (this == o) return true;
+//        if (o == null || getClass() != o.getClass()) return false;
+//        ArticleTypeDemandeDTO that = (ArticleTypeDemandeDTO) o;
+//        return id.equals(that.id);
+//    }
+//
+//    @Override
+//    public int hashCode() {
+//        return Objects.hash(id);
+//    }
+//
+//    @Override
+//    public String toString() {
+//        return "ArticleTypeDemandeDTO{" +
+//                "id=" + id +
+//                ", article=" + article +
+//                ", typeDemande=" + typeDemande +
+//                ", numeroOrdre=" + numeroOrdre +
+//                '}';
+//    }
+
 
     @Override
     public boolean equals(Object o) {

@@ -13,7 +13,8 @@ public class ApplicationProperties {
 
     private final Cache cache = new Cache();
     
-    private String appUploadsStorage = "/opt/uploads/";
+    private String appUploadsStorage = "/opt/GESTION_CONGES/uploads/";
+    private String appTemplatesStorage = "/opt/GESTION_CONGES/templates/";
 
     public String getName() {
         return name;
@@ -50,6 +51,15 @@ public class ApplicationProperties {
 	public void setAppUploadsStorage(String appUploadsStorage) {
 		this.appUploadsStorage = appUploadsStorage;
 	}
+	
+	public String getAppTemplatesStorage() {
+		return appTemplatesStorage;
+	}
+
+	public void setAppTemplatesStorage(String appTemplatesStorage) {
+		this.appTemplatesStorage = appTemplatesStorage;
+	}
+
 
 	public static class Security {
 
