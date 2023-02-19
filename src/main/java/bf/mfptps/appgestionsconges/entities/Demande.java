@@ -1,16 +1,38 @@
 package bf.mfptps.appgestionsconges.entities;
 
-import org.hibernate.annotations.*;
-import org.hibernate.annotations.Cache;
-
-import javax.persistence.*;
-import javax.persistence.Entity;
-import javax.persistence.Table;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
-@Entity
-@Table(name = "demande")
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.FilterDef;
+import org.hibernate.annotations.ParamDef;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
+
+import bf.mfptps.appgestionsconges.enums.EPositionDemande;
+import bf.mfptps.appgestionsconges.enums.EStatusDemande;
+import bf.mfptps.appgestionsconges.enums.ETrancheDemande;
+
+@javax.persistence.Entity
+@javax.persistence.Table(name = "demande")
 @SQLDelete(sql = "UPDATE demande SET deleted = true WHERE id=?")
 @Where(clause = "deleted = false")
 @FilterDef(
@@ -29,19 +51,19 @@ public class Demande extends CommonEntity {
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
-    @Column(name = "numero_demande", length = 254)
+    @Column(name = "numero_demande", length = 254, unique = true, nullable = false)
     private String numeroDemande;
 
-    @Column(name = "lieu_jouissance_bf", length = 254)
+    @Column(name = "lieu_jouissance_bf", length = 254, nullable = true)
     private String lieuJouissanceBF;
 
-    @Column(name = "lieu_jouissance_etrang", length = 254)
+    @Column(name = "lieu_jouissance_etrang", length = 254, nullable = true)
     private String lieuJouissanceEtrang;
 
-    @Column(name = "ref_last_decision", length = 254)
+    @Column(name = "ref_last_decision", length = 254, nullable = true)
     private String refLastDecision;
 
-    @Column(name = "situation_snd", length = 254)
+    @Column(name = "situation_snd", length = 254, nullable = true)
     private String situationSND;
 
     @Column(name = "duree_absence", length = 254)
@@ -53,6 +75,12 @@ public class Demande extends CommonEntity {
     @Column(name = "periode_fin", length = 254)
     private Date periodeFin;
 
+    // @Column(name = "tranche", length = 254)
+    // private String tranche;
+
+    // @Column(name = "statut", length = 254)
+    // private String statut;
+
     @ManyToOne
     @JoinColumn(name = "motif_absence_id")
     private MotifAbsence motifAbsence;
@@ -62,9 +90,32 @@ public class Demande extends CommonEntity {
     private TypeDemande typeDemande ;
 
     @ManyToOne
-    @JoinColumn(name = "utilisateur_id")
-    private Utilisateur utilisateur ;
-
+    @JoinColumn(name = "agent_id")
+    private Agent agent;
+    
+    @OneToMany(mappedBy = "demande", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties(value = {"demande"}, allowSetters = true)
+    private Set<Document> documents = new HashSet<>();
+    
+    @Column(name = "status")
+    @Enumerated(EnumType.STRING)
+    private EStatusDemande statusDemande;
+    
+    @Column(name = "position_demande")
+    @Enumerated(EnumType.STRING)
+    private EPositionDemande positionDemande;
+    
+    @Column
+    @Enumerated(EnumType.STRING)
+    private ETrancheDemande trancheDemande;
+    
+    @Column(name="motif_rejet")
+    private String motifRejet;
+    
+    @ManyToOne
+    @JoinColumn(name = "acte_id")
+    private Acte acte;
+    
     public Long getId() {
         return id;
     }
@@ -152,19 +203,86 @@ public class Demande extends CommonEntity {
     public void setTypeDemande(TypeDemande typeDemande) {
         this.typeDemande = typeDemande;
     }
+    public Agent getAgent() {
+		return agent;
+	}
 
-    public Utilisateur getUtilisateur() {
-        return utilisateur;
+	public void setAgent(Agent agent) {
+		this.agent = agent;
+	}
+
+	public Set<Document> getDocuments() {
+        return documents;
     }
 
-    public void setUtilisateur(Utilisateur utilisateur) {
-        this.utilisateur = utilisateur;
-    }
+	public void setDocuments(Set<Document> documents) {
+		this.documents = documents;
+	}
 
-    @Override
+	public EStatusDemande getStatusDemande() {
+		return statusDemande;
+	}
+
+	public void setStatusDemande(EStatusDemande statusDemande) {
+		this.statusDemande = statusDemande;
+	}
+	
+    // public String getTranche() {
+	// 	return tranche;
+	// }
+
+	// public void setTranche(String tranche) {
+	// 	this.tranche = tranche;
+	// }
+
+	// public String getStatut() {
+	// 	return statut;
+	// }
+
+	// public void setStatut(String statut) {
+	// 	this.statut = statut;
+	// }
+
+	public EPositionDemande getPositionDemande() {
+		return positionDemande;
+	}
+
+	public void setPositionDemande(EPositionDemande positionDemande) {
+		this.positionDemande = positionDemande;
+	}
+
+	public ETrancheDemande getTrancheDemande() {
+		return trancheDemande;
+	}
+
+	public void setTrancheDemande(ETrancheDemande trancheDemande) {
+		this.trancheDemande = trancheDemande;
+	}
+	
+	public String getMotifRejet() {
+		return motifRejet;
+	}
+
+	public void setMotifRejet(String motifRejet) {
+		this.motifRejet = motifRejet;
+	}
+
+	public Acte getActe() {
+		return acte;
+	}
+
+	public void setActe(Acte acte) {
+		this.acte = acte;
+	}
+
+	@Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Demande demande = (Demande) o;
         return id.equals(demande.id);
     }
@@ -174,21 +292,18 @@ public class Demande extends CommonEntity {
         return Objects.hash(id);
     }
 
-    @Override
-    public String toString() {
-        return "Demande{" +
-                "id=" + id +
-                ", numeroDemande='" + numeroDemande + '\'' +
-                ", lieuJouissanceBF='" + lieuJouissanceBF + '\'' +
-                ", lieuJouissanceEtrang='" + lieuJouissanceEtrang + '\'' +
-                ", refLastDecision='" + refLastDecision + '\'' +
-                ", situationSND='" + situationSND + '\'' +
-                ", dureeAbsence=" + dureeAbsence +
-                ", periodeDebut=" + periodeDebut +
-                ", periodeFin=" + periodeFin +
-                ", motifAbsence=" + motifAbsence +
-                ", typeDemande=" + typeDemande +
-                ", utilisateur=" + utilisateur +
-                '}';
-    }
+ 
+	@Override
+	public String toString() {
+		return "Demande { id=" + id + ", numeroDemande=" + numeroDemande + ", lieuJouissanceBF=" + lieuJouissanceBF
+				+ ", lieuJouissanceEtrang=" + lieuJouissanceEtrang + ", refLastDecision=" + refLastDecision
+				+ ", situationSND=" + situationSND + ", dureeAbsence=" + dureeAbsence + ", periodeDebut=" + periodeDebut
+				+ ", periodeFin=" + periodeFin + ", motifAbsence="
+				+ motifAbsence + ", typeDemande=" + typeDemande + ", agent=" + agent + ", documents="
+				+ documents + ", statusDemande=" + statusDemande + ", positionDemande=" + positionDemande
+				+ ", trancheDemande=" + trancheDemande + ", motifRejet=" + motifRejet + ", acte=" + acte  + "}";
+	}
+    
+    
+    
 }

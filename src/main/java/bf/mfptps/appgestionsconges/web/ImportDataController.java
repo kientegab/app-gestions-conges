@@ -44,7 +44,9 @@ public class ImportDataController {
     @PostMapping(path = "/corps")
     @PreAuthorize("hasAnyAuthority(\"" + AppUtil.ADMIN + "\")")
     public ResponseEntity<ResponseMessage> importerCorps(@RequestPart("file") MultipartFile file) {
-        log.info("________________Import de fichier CORPS : {} ", file.getOriginalFilename());
+        log.info("IMPORT DE DONNEES CORPS : {} ", file.getOriginalFilename() + "\nProcessus en cours...");
+        //evaluer la duree de traitement
+        Long start = System.currentTimeMillis(), duration = 0L;
 
         if (!AppUtil.TYPE_EXCEL.equals(file.getContentType()) && !AppUtil.TYPE_CSV.equals(file.getContentType())) {
             throw new CustomException("Veuillez importer un fichier excel ou .csv SVP.");
@@ -54,10 +56,12 @@ public class ImportDataController {
         try {
             importDataService.importerCorps(file);
             message = "Import et synchronisation de données effectués avec succès ! (DataSource : " + file.getOriginalFilename() + ")";
+            System.out.println("\n===============================\nOPERATION D'IMPORT TERMINEE ! :\nTraitement effectué en " + (duration = (System.currentTimeMillis() - start)) + " mses, soit " + (duration / 1000) + " sec.\n");
+
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(HttpStatus.OK.value(), message, "Aucun détail"));
         } catch (Exception e) {
             message = "Impossible de traiter le fichier : " + file.getOriginalFilename();
-            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage(HttpStatus.EXPECTATION_FAILED.value(), message, "Aucun détail"));
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage(HttpStatus.EXPECTATION_FAILED.value(), message, e.getMessage()));
         }
 
     }
@@ -72,7 +76,9 @@ public class ImportDataController {
     @PostMapping(path = "/agents")
     @PreAuthorize("hasAnyAuthority(\"" + AppUtil.ADMIN + "\")")
     public ResponseEntity<ResponseMessage> importerAgents(@RequestPart("file") MultipartFile file) {
-        log.info("________________Import de fichier AGENTS : {} ", file.getOriginalFilename());
+        log.info("IMPORT DE DONNEES AGENTS : {} ", file.getOriginalFilename() + "\nProcessus en cours...");
+        //evaluer la duree de traitement
+        Long start = System.currentTimeMillis(), duration = 0L;
 
         if (!AppUtil.TYPE_EXCEL.equals(file.getContentType()) && !AppUtil.TYPE_CSV.equals(file.getContentType())) {
             throw new CustomException("Veuillez importer un fichier excel ou .csv SVP.");
@@ -82,10 +88,11 @@ public class ImportDataController {
         try {
             importDataService.importerAgents(file);
             message = "Import et synchronisation de données effectués avec succès ! (DataSource : " + file.getOriginalFilename() + ")";
+            System.out.println("\n===============================\nOPERATION D'IMPORT TERMINEE ! :\nTraitement effectué en " + (duration = (System.currentTimeMillis() - start)) + " mses, soit " + (duration / 1000) + "sec.\n");
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(HttpStatus.OK.value(), message, "Aucun détail"));
         } catch (Exception e) {
             message = "Impossible de traiter le fichier : " + file.getOriginalFilename();
-            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage(HttpStatus.EXPECTATION_FAILED.value(), message, "Aucun détail"));
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage(HttpStatus.EXPECTATION_FAILED.value(), message, e.getMessage()));
         }
 
     }

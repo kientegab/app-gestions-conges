@@ -1,13 +1,14 @@
 package bf.mfptps.appgestionsconges.service.dto;
 
-import bf.mfptps.appgestionsconges.config.Constants;
-import bf.mfptps.appgestionsconges.entities.Agent;
-import bf.mfptps.appgestionsconges.entities.Privilege;
 import java.time.Instant;
-import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
-import javax.validation.constraints.*;
+
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+
+import bf.mfptps.appgestionsconges.config.Constants;
 
 /**
  * A DTO representing a agent, with his profiles.
@@ -20,6 +21,10 @@ public class AgentDTO {
     @Pattern(regexp = Constants.LOGIN_REGEX)
     @Size(min = 1, max = 50)
     private String matricule;
+
+    @Pattern(regexp = Constants.LOGIN_REGEX)
+    @Size(min = 1, max = 50)
+    private String matriculeResp;
 
     @Size(max = 50)
     private String nom;
@@ -45,16 +50,17 @@ public class AgentDTO {
 
     private Instant lastModifiedDate;
 
-    private Set<String> privileges;
+    private Set<PrivilegeDTO> privileges;
 
-    private Set<String> profiles;
+    private Set<ProfileDTO> profiles;
 
     public AgentDTO() {
     }
 
-    public AgentDTO(Agent agent) {
+  /*  public AgentDTO(Agent agent) {
         this.id = agent.getId();
         this.matricule = agent.getMatricule();
+        this.matriculeResp = agent.getMatriculeResp();
         this.nom = agent.getNom();
         this.prenom = agent.getPrenom();
         this.telephone = agent.getTelephone();
@@ -78,7 +84,7 @@ public class AgentDTO {
 //        if(null != agent.getStructure() && null != agent.getStructure().getId()) {
 //            this.structureId = agent.getStructure().getId();
 //        }
-    }
+    }*/
 
     public Long getId() {
         return id;
@@ -160,19 +166,19 @@ public class AgentDTO {
         this.telephone = telephone;
     }
 
-    public Set<String> getPrivileges() {
+    public Set<PrivilegeDTO> getPrivileges() {
         return privileges;
     }
 
-    public void setPrivileges(Set<String> privileges) {
+    public void setPrivileges(Set<PrivilegeDTO> privileges) {
         this.privileges = privileges;
     }
 
-    public Set<String> getProfiles() {
+    public Set<ProfileDTO> getProfiles() {
         return profiles;
     }
 
-    public void setProfiles(Set<String> profiles) {
+    public void setProfiles(Set<ProfileDTO> profiles) {
         this.profiles = profiles;
     }
 
@@ -192,10 +198,19 @@ public class AgentDTO {
         this.structureId = structureId;
     }
 
+    public String getMatriculeResp() {
+        return matriculeResp;
+    }
+
+    public void setMatriculeResp(String matriculeResp) {
+        this.matriculeResp = matriculeResp;
+    }
+
     @Override
     public String toString() {
         return "AgentDTO{"
                 + "matricule='" + matricule + '\''
+                + "matriculeResp='" + matriculeResp + '\''
                 + ", nom='" + nom + '\''
                 + ", prenom='" + prenom + '\''
                 + ", email='" + email + '\''

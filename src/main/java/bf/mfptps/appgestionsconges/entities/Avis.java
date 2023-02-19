@@ -1,15 +1,33 @@
 package bf.mfptps.appgestionsconges.entities;
 
-import org.hibernate.annotations.*;
-import org.hibernate.annotations.Cache;
+import java.util.Date;
+import java.util.Objects;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.Objects;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.FilterDef;
+import org.hibernate.annotations.ParamDef;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
+
+/**
+ *
+ * @author TEGUERA
+ */
 @Entity
 @Table(name = "avis")
 @SQLDelete(sql = "UPDATE avis SET deleted = true WHERE id=?")
@@ -30,21 +48,34 @@ public class Avis extends CommonEntity {
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
-    @NotNull
+   // @NotNull
     @Size(min = 1, max = 50)
     @Column(name = "avis_drh", length = 254)
     private String avisDRH;
+    
+    @Column(name = "date_avis_drh")
+    private Date dateAvisDRH;
 
     @Size(min = 5, max = 254)
     @Column(name = "avis_sg", length = 254)
     private String avisSG;
+    
+    @Column(name = "date_avis_sg")
+    private Date dateAvisSG;
 
     @Column(name = "avis_sh", length = 254)
     private String avisSH;
+    
+    @Column(name = "date_avis_sh")
+    private Date dateAvisSH;
 
     @Column(name = "avis_dg", length = 254)
     private String avisDG;
-    
+
+    @Column(name = "date_avis_dg")
+    private Date dateAvisDG;
+
+//    @ManyToOne(cascade = CascadeType.ALL)
     @ManyToOne
     @JoinColumn(name = "demande_id")
     private Demande demande;
@@ -97,7 +128,41 @@ public class Avis extends CommonEntity {
         this.demande = demande;
     }
 
-    @Override
+    
+    
+    public Date getDateAvisDRH() {
+		return dateAvisDRH;
+	}
+
+	public void setDateAvisDRH(Date dateAvisDRH) {
+		this.dateAvisDRH = dateAvisDRH;
+	}
+
+	public Date getDateAvisSG() {
+		return dateAvisSG;
+	}
+
+	public void setDateAvisSG(Date dateAvisSG) {
+		this.dateAvisSG = dateAvisSG;
+	}
+
+	public Date getDateAvisSH() {
+		return dateAvisSH;
+	}
+
+	public void setDateAvisSH(Date dateAvisSH) {
+		this.dateAvisSH = dateAvisSH;
+	}
+
+	public Date getDateAvisDG() {
+		return dateAvisDG;
+	}
+
+	public void setDateAvisDG(Date dateAvisDG) {
+		this.dateAvisDG = dateAvisDG;
+	}
+
+	@Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

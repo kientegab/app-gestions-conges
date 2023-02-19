@@ -7,13 +7,10 @@ import bf.mfptps.appgestionsconges.service.ProfileService;
 import bf.mfptps.appgestionsconges.service.dto.ProfileDTO;
 import bf.mfptps.appgestionsconges.service.mapper.ProfileMapper;
 import bf.mfptps.appgestionsconges.utils.AppUtil;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,14 +48,15 @@ public class ProfileServiceImpl implements ProfileService {
         if (SecurityUtils.isCurrentUserInRole(AppUtil.ADMIN)) {
             profiles = profileRepository.findAll(pageable).map(ProfileDTO::new);
         } else {//Retourne le profile du user qui tente la creation de compte
-            String matricule = SecurityUtils.getCurrentUserMatricule().get();
-            List<Profile> mesProfiles = profileRepository.findUserProfiles(matricule);
+            //  String matricule = SecurityUtils.getCurrentUserMatricule().get();
+            // List<Profile> mesProfiles = profileRepository.findUserProfiles(matricule);
 //A revoir
-            List<ProfileDTO> list = new ArrayList<>();
-            for (Profile profile : mesProfiles) {
-                list.add(profileMapper.toDTO(profile));
-            }
-            profiles = new PageImpl<ProfileDTO>(list, pageable, mesProfiles.size());;
+            //   List<ProfileDTO> list = new ArrayList<>();
+            //  for (Profile profile : mesProfiles) {
+            //      list.add(profileMapper.toDTO(profile));
+            //  }
+            //   profiles = new PageImpl<ProfileDTO>(list, pageable, mesProfiles.size());
+            profiles = profileRepository.findAll(pageable).map(ProfileDTO::new);
         }
         return profiles;
     }
