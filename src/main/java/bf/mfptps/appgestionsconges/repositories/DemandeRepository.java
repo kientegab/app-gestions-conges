@@ -1,10 +1,14 @@
 package bf.mfptps.appgestionsconges.repositories;
 
+import bf.mfptps.appgestionsconges.entities.Agent;
+import bf.mfptps.appgestionsconges.entities.AgentStructure;
 import bf.mfptps.appgestionsconges.entities.Demande;
 import bf.mfptps.appgestionsconges.entities.Ministere;
 
+import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -25,7 +29,12 @@ public interface DemandeRepository extends JpaRepository<Demande, Long>, JpaSpec
             + "AND d.deleted = false")
     Page<Demande> findAll(String numeroDemande, Pageable pageable);
 
-   // Page<Demande> findAllByAgentMatriculeAndAgentStructureId(String matricule, Long structureId, Pageable pageable);
+    Page<Demande> findAllByAgentMatriculeAndTypeDemandeCode(String matricule, String codeTypeDmd, Pageable pageable);
+
+    List<Demande> findAllByAgentAndTypeDemandeCode(Agent agent, String codeTypeDmd);
+
+
+    Page<Demande> findAllByTypeDemandeCode(String codeTypeDmd, Pageable pageable);
 
   /*  @Query("SELECT COUNT(d) FROM Demande d JOIN d.agent a Join a.structure s"
     		+ " WHERE s.sigle =:SIGLE")

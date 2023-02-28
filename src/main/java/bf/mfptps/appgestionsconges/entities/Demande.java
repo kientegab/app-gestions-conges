@@ -111,7 +111,6 @@ public class Demande extends CommonEntity {
     
     @Column(name="motif_rejet")
     private String motifRejet;
-    
     @ManyToOne
     @JoinColumn(name = "acte_id")
     private Acte acte;

@@ -1,6 +1,9 @@
 package bf.mfptps.appgestionsconges.web;
 
 import bf.mfptps.appgestionsconges.entities.Demande;
+import bf.mfptps.appgestionsconges.entities.Structure;
+import bf.mfptps.appgestionsconges.enums.EPositionDemande;
+import bf.mfptps.appgestionsconges.enums.EStatusDemande;
 import bf.mfptps.appgestionsconges.service.DemandeService;
 import bf.mfptps.appgestionsconges.service.ModalitePaieService;
 import bf.mfptps.appgestionsconges.service.dto.DemandeDTO;
@@ -139,9 +142,54 @@ public class DemandeController {
         return ResponseEntity.ok(value);
     }
 
-    @GetMapping(path = "/demandes/{matricule}/{structure}")
-    public ResponseEntity<List<DemandeDTO>> getAllByMatriculeStructure(@PathVariable String matricule, @PathVariable String structure) {
-        return null;
+    @GetMapping(path = "/demandes/absence-agent/{matricule}")
+    public ResponseEntity<List<DemandeDTO>> absencesParAgent(@PathVariable String matricule, Pageable pageable) {
+        Page<DemandeDTO> absences = demandeService.getAbsenceByMatricule(matricule, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), absences);
+        return ResponseEntity.ok().headers(headers).body(absences.getContent());
+    }
+
+    @GetMapping(path = "/demandes/absence-structure/{structureId}")
+    public ResponseEntity<List<DemandeDTO>> absencesParStructure(@PathVariable Long structureId, Pageable pageable) {
+        Page<DemandeDTO> absences = demandeService.getAbsenceByStructure(structureId, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), absences);
+        return ResponseEntity.ok().headers(headers).body(absences.getContent());
+    }
+
+    @GetMapping(path = "/demandes/conge-agent/{matricule}")
+    public ResponseEntity<List<DemandeDTO>> congesParAgent(@PathVariable String matricule, Pageable pageable) {
+        Page<DemandeDTO> conges = demandeService.getCongeByMatricule(matricule, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), conges);
+        return ResponseEntity.ok().headers(headers).body(conges.getContent());
+    }
+
+    @GetMapping(path = "/demandes/conge-structure/{structureId}")
+    public ResponseEntity<List<DemandeDTO>> congesParStructure(@PathVariable Long structureId, Pageable pageable) {
+        Page<DemandeDTO> conges = demandeService.getCongeByStructure(structureId, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), conges);
+        return ResponseEntity.ok().headers(headers).body(conges.getContent());
+    }
+
+    @GetMapping(path = "/demandes/joiss-annuel-structure/{structureId}")
+    public ResponseEntity<List<DemandeDTO>> jouissAnParStructure(
+            @PathVariable Long structureId,
+            @RequestParam EPositionDemande positionDemande,
+            @RequestParam EStatusDemande statusDemande,
+            Pageable pageable) {
+        Page<DemandeDTO> jouissances = demandeService.getJouissanceByStructure(structureId, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), jouissances);
+        return ResponseEntity.ok().headers(headers).body(jouissances.getContent());
+    }
+
+    @GetMapping(path = "/demandes/valides/{code}")
+    public ResponseEntity<List<DemandeDTO>> demandesValide(
+            @PathVariable String code,
+            @RequestParam EPositionDemande positionDemande,
+            @RequestParam EStatusDemande statusDemande, Pageable pageable)
+    {
+        Page<DemandeDTO> demandes_valides = demandeService.getDemandesValid(code, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), demandes_valides);
+        return ResponseEntity.ok().headers(headers).body(demandes_valides.getContent());
     }
     
     @PostMapping(path = "/demandes/validation_sh/{isLastNode}")

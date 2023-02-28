@@ -1,7 +1,11 @@
 package bf.mfptps.appgestionsconges.repositories;
 
 import bf.mfptps.appgestionsconges.entities.AgentStructure;
+
+import java.util.List;
 import java.util.Optional;
+
+import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -26,6 +30,8 @@ public interface AgentStructureRepository extends JpaRepository<AgentStructure, 
             + "WHERE ast.agent.id = a.id AND ast.actif = true "
             + "AND (a.matricule = :matricule OR a.email = :email)")
     AgentStructure findOneByAgentMatriculeOrAgentEmail(String matricule, String email);
+
+    List<AgentStructure> findAllByStructureIdAndActifTrue(Long id);
     
    /* @Query("SELECT COUNT(as) FROM AgentStructure as JOIN ad.agent a Join a.structure s"
     		+ " WHERE s.sigle =:SIGLE ")

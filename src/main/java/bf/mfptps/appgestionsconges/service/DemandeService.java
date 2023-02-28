@@ -2,6 +2,7 @@ package bf.mfptps.appgestionsconges.service;
 
 import java.util.Optional;
 
+import bf.mfptps.appgestionsconges.entities.Structure;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
@@ -31,4 +32,12 @@ public interface DemandeService {
     DemandeDTO validation_sg(ValidationDTO validationDTO, boolean islastValidationNode);
     DemandeDTO validation_dg(ValidationDTO validationDTO, boolean islastValidationNode);
     DemandeDTO validation_drh(ValidationDTO validationDTO, boolean islastValidationNode);
+
+    Page<DemandeDTO> getAbsenceByMatricule(String matricule, Pageable pageable);
+    Page<DemandeDTO> getAbsenceByStructure(Long structureId, Pageable pageable);
+    Page<DemandeDTO> getCongeByMatricule(String matricule, Pageable pageable);
+    Page<DemandeDTO> getCongeByStructure(Long structureId, Pageable pageable);
+
+    Page<DemandeDTO> getJouissanceByStructure(Long structureId, Pageable pageable);
+    Page<DemandeDTO> getDemandesValid(String codeTypeDmd, Pageable pageable);
 }
