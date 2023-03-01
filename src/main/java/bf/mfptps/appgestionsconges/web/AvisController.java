@@ -37,7 +37,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
  *
  * @author TEGUERA
  */
-//@Slf4j
 @RestController
 @RequestMapping("/api")
 public class AvisController {

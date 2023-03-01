@@ -170,7 +170,7 @@ public class DemandeController {
         return ResponseEntity.ok().headers(headers).body(conges.getContent());
     }
 
-    @GetMapping(path = "/demandes/joiss-annuel-structure/{structureId}")
+    @GetMapping(path = "/demandes/jouiss-annuel-structure/{structureId}")
     public ResponseEntity<List<DemandeDTO>> jouissAnParStructure(
             @PathVariable Long structureId,
             @RequestParam EPositionDemande positionDemande,

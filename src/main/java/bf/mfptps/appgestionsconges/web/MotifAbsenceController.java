@@ -35,9 +35,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 /**
  *
- * @author TEGUERA
+ * @author TEGUERA <teguera.zakaria@gmail.com>
  */
-//@Slf4j
 @RestController
 @RequestMapping("/api")
 public class MotifAbsenceController {
