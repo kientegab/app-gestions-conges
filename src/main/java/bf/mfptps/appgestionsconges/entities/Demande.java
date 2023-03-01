@@ -9,6 +9,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -87,13 +88,14 @@ public class Demande extends CommonEntity {
 
     @ManyToOne
     @JoinColumn(name = "type_demande_id")
+    @JsonIgnoreProperties(value = {"demandes"}, allowSetters = true)
     private TypeDemande typeDemande ;
 
     @ManyToOne
     @JoinColumn(name = "agent_id")
     private Agent agent;
     
-    @OneToMany(mappedBy = "demande", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "demande", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIgnoreProperties(value = {"demande"}, allowSetters = true)
     private Set<Document> documents = new HashSet<>();
     
@@ -113,6 +115,8 @@ public class Demande extends CommonEntity {
     private String motifRejet;
     @ManyToOne
     @JoinColumn(name = "acte_id")
+    @JsonIgnoreProperties(value = {"demandes"}, allowSetters = true)
+
     private Acte acte;
     
     public Long getId() {

@@ -29,7 +29,7 @@ import java.util.*;
         name = "deletedFilter",
         condition = "deleted = :isDeleted"
 )
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+//@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class Visa extends CommonEntity {
 
     @Id
@@ -37,19 +37,20 @@ public class Visa extends CommonEntity {
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
-    @NotNull
-    @Size(min = 1, max = 50)
+
+   // @NotNull
+   // @Size(min = 1, max = 50)
     @Column(name = "code", length = 254)
     private String code;
 
-    @Size(min = 5, max = 254)
+    //@Size(min = 5, max = 254)
     @Column(name = "libelle", length = 254)
     private String libelle;
-
+/*
     @OneToMany(mappedBy = "visa", cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<TypeVisa> typeVisas = new HashSet<>();
-
+*/
     public Long getId() {
         return id;
     }
@@ -73,7 +74,7 @@ public class Visa extends CommonEntity {
     public void setLibelle(String libelle) {
         this.libelle = libelle;
     }
-
+/*
     public Set<TypeVisa> getTypeVisas() {
         return typeVisas;
     }
@@ -85,7 +86,7 @@ public class Visa extends CommonEntity {
     public void addTypeVisa(TypeVisa typeVisa) {
         this.typeVisas.add(typeVisa);
     }
-
+*/
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -98,7 +99,7 @@ public class Visa extends CommonEntity {
     public int hashCode() {
         return Objects.hash(id);
     }
-
+/*
     @Override
     public String toString() {
         return "Visa{" +
@@ -108,4 +109,5 @@ public class Visa extends CommonEntity {
                 ", typeVisas=" + typeVisas +
                 '}';
     }
+    */
 }

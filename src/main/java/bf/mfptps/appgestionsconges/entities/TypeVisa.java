@@ -3,6 +3,8 @@ package bf.mfptps.appgestionsconges.entities;
 import org.hibernate.annotations.*;
 import org.hibernate.annotations.Cache;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -36,14 +38,15 @@ public class TypeVisa extends CommonEntity {
     private Long id;
 
     @ManyToOne
-    @MapsId("visaId")
-    @JoinColumn(name = "visa_id")
+   // @MapsId("visaId")
+  //  @JoinColumn(name = "visa_id")
     private Visa visa;
 
 
     @ManyToOne
-    @MapsId("typeDemandeId")
-    @JoinColumn(name = "type_demande_id")
+   // @MapsId("typeDemandeId")
+   // @JoinColumn(name = "type_demande_id")
+   // @JsonIgnoreProperties(value = {"typeVisas"}, allowSetters = true)
     private TypeDemande typeDemande;
 
     @NotNull

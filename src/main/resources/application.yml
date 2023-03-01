@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 8089
   servlet:
     context-path: /conges
 application:
@@ -86,7 +86,7 @@ spring:
 logging:
   level:
     ROOT: INFO
-    bf.mfptps.appsggcm: DEBUG
+    bf.mfptps.appgestionsconges: DEBUG
 
 spring:
   jpa:
@@ -106,7 +106,7 @@ spring:
     type: com.zaxxer.hikari.HikariDataSource
     url: jdbc:postgresql://localhost:5432/dbconges
     username: postgres
-    password: admin #admin #rootPostgresql
+    password: rootPostgresql #admin #rootPostgresql
     hikari:
       poolName: Hikari
       auto-commit: false
@@ -119,7 +119,7 @@ spring:
 logging:
   level:
     ROOT: INFO
-    com.mfptps.appdgessddi: INFO
+    com.mfptps.appgestionsconges: INFO
   
 spring:
   config:
@@ -137,6 +137,6 @@ spring:
     platform: postgres
     url: jdbc:postgresql:localhost:5432/dbconges
     username: postgres
-    password: 1222
+    password: admin
     hikari:
       auto-commit: false
