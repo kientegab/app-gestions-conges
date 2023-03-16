@@ -393,7 +393,7 @@ public class ActeServiceImpl implements ActeService {
 	}
 
 	@Override
-	public ResponseDto ListOfReferenceByAgentMatriculeService(String matricule, String motif_absence) {
+	public ResponseDto ListOfReferenceByAgentMatriculeService(String matricule, String type_demande) {
 		try {
 			ResponseMessage responseMessage=new ResponseMessage();
 			responseMessage.setCode(200);
@@ -403,7 +403,7 @@ public class ActeServiceImpl implements ActeService {
 			
 			reponse.setRepMessage(responseMessage);
 			
-			reponse.setData(acteRepository.ListOfReferenceByAgentMatricule(matricule, motif_absence).orElse(null));
+			reponse.setData(acteRepository.ListOfReferenceByAgentMatricule(matricule, type_demande).orElse(null));
 			
 			return reponse;
 			
@@ -423,7 +423,7 @@ public class ActeServiceImpl implements ActeService {
 	}
 
 	@Override
-	public ResponseDto totalOfAbsenceInYearByMAtricule(String year, String matricule, String motif_absence) {
+	public ResponseDto totalOfAbsenceInYearByMAtricule(String year, String matricule, String type_demande) {
 		try {
 			ResponseMessage responseMessage=new ResponseMessage();
 			responseMessage.setCode(200);
@@ -433,7 +433,7 @@ public class ActeServiceImpl implements ActeService {
 			
 			reponse.setRepMessage(responseMessage);
 			
-			reponse.setData(acteRepository.totalOfAbsenceInYear(year,matricule, motif_absence).orElse(null));
+			reponse.setData(acteRepository.totalOfAbsenceInYear(year,matricule, type_demande).orElse(null));
 			
 			return reponse;
 			
@@ -479,7 +479,7 @@ public class ActeServiceImpl implements ActeService {
 
 	
 	@Override
-	public ResponseDto totalOfAbsenceByYeayeAndMAtriculeAndYear(String matricule, String motif) {
+	public ResponseDto totalOfAbsenceByYeayeAndMAtriculeAndYear(String matricule, String type_demande) {
 		// TODO Auto-generated method stub
 		
 		try {
@@ -489,7 +489,7 @@ public class ActeServiceImpl implements ActeService {
 			responseMessage.setMessage("Recuperation de la liste avec success");
 			ResponseDto reponse=new ResponseDto();
 			reponse.setRepMessage(responseMessage);			
-			reponse.setData(acteRepository.totalOfAbsenceByYeayeAndMAtriculeAndYear(matricule,motif).orElse(null));
+			reponse.setData(acteRepository.totalOfAbsenceByYeayeAndMAtriculeAndYear(matricule,type_demande).orElse(null));
 			
 			return reponse;
 			

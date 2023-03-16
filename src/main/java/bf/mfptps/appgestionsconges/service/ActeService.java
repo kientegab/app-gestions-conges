@@ -40,7 +40,7 @@ public interface ActeService {
      * @param motif_absence
      * @return ResponseDto
      */
-    ResponseDto  ListOfReferenceByAgentMatriculeService(String matricule, String motif_absence);
+    ResponseDto  ListOfReferenceByAgentMatriculeService(String matricule, String type_demande);
     
     /**
      * Nombre de jour d’autorisation contracté qui prend en paramètre un matricule et une année.
@@ -49,7 +49,7 @@ public interface ActeService {
      * @param motif_absence
      * @return ResponseDto
      */
-    ResponseDto totalOfAbsenceInYearByMAtricule(String year,String matricule,String motif_absence);
+    ResponseDto totalOfAbsenceInYearByMAtricule(String year,String matricule,String type_demande);
     
     /**
      * Nombre de jour de congé par type qui prend en paramètre un matricule et une année
