@@ -33,10 +33,10 @@ public class StatistiqueController {
 	 */
 	@GetMapping("/liste-of-ref-by-matricule")
 	@ResponseBody
-	public ResponseEntity<ResponseDto> listeOfReferenceByMatriculeAndAbsenceMotif(@RequestParam String matricule,@RequestParam String absenceMotif)
+	public ResponseEntity<ResponseDto> listeOfReferenceByMatriculeAndAbsenceMotif(@RequestParam String matricule,@RequestParam String type_demande)
 	{
 
-		return ResponseEntity.ok().body(acteService.ListOfReferenceByAgentMatriculeService(matricule, absenceMotif)); 
+		return ResponseEntity.ok().body(acteService.ListOfReferenceByAgentMatriculeService(matricule, type_demande)); 
 	}
 	
 	/**
@@ -48,9 +48,9 @@ public class StatistiqueController {
 	 */
 	@GetMapping("/total-of-absence-by-matriculeandyear")
 	@ResponseBody
-	public ResponseEntity<ResponseDto>totalOfAbsenceByMatriculeAndYear(@RequestParam String year,@RequestParam String matricule,@RequestParam String motif)
+	public ResponseEntity<ResponseDto>totalOfAbsenceByMatriculeAndYear(@RequestParam String year,@RequestParam String matricule,@RequestParam String type_demane)
 	{
-			return ResponseEntity.ok().body(acteService.totalOfAbsenceInYearByMAtricule(year, matricule, motif));
+			return ResponseEntity.ok().body(acteService.totalOfAbsenceInYearByMAtricule(year, matricule, type_demane));
 	}
 	
 	
@@ -76,9 +76,9 @@ public class StatistiqueController {
 	
 	@GetMapping("/total-of-absence-by-year-matriculeandmotif")
 	@ResponseBody
-	public ResponseEntity<ResponseDto>totalOfAbsenceByYearMatriculeAndYear(@RequestParam String matricule,@RequestParam String motif)
+	public ResponseEntity<ResponseDto>totalOfAbsenceByYearMatriculeAndYear(@RequestParam String matricule,@RequestParam String type_demande)
 	{
-			return ResponseEntity.ok().body(acteService.totalOfAbsenceByTypeAndMAtriculeAndYear(matricule,motif));
+			return ResponseEntity.ok().body(acteService.totalOfAbsenceByTypeAndMAtriculeAndYear(matricule,type_demande));
 	}
 	
 	
