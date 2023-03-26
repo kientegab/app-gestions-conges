@@ -422,34 +422,7 @@ public class ActeServiceImpl implements ActeService {
 		
 	}
 
-	@Override
-	public ResponseDto totalOfAbsenceInYearByMAtricule(String matricule) {
-		try {
-			ResponseMessage responseMessage=new ResponseMessage();
-			responseMessage.setCode(200);
-			responseMessage.setDetails("Nombre de jour d’autorisation contracté par un matricule et par une année");
-			responseMessage.setMessage("Recuperation de la liste avec success");
-			ResponseDto reponse=new ResponseDto();
-			
-			reponse.setRepMessage(responseMessage);
-			
-			reponse.setData(acteRepository.totalOfAbsenceInYear(matricule).orElse(null));
-			
-			return reponse;
-			
-		} catch (Exception e) {
-			ResponseMessage responseMessage=new ResponseMessage();
-			responseMessage.setCode(200);
-			responseMessage.setDetails(e.getCause().toString());
-			responseMessage.setMessage(e.getMessage());
-			ResponseDto reponse=new ResponseDto();
-			reponse.setRepMessage(responseMessage);
-			reponse.setData(null);
-			return reponse;
-			
-		}
-	}
-
+	
 	@Override
 	public ResponseDto totalOfAbsenceByTypeAndMAtriculeAndYear(String year,String type_demande) {
 		try {
@@ -460,7 +433,7 @@ public class ActeServiceImpl implements ActeService {
 			ResponseDto reponse=new ResponseDto();
 			reponse.setRepMessage(responseMessage);
 			
-			reponse.setData(acteRepository.totalOfAbsenceByTypeAndMAtriculeAndYear(year,type_demande).orElse(null));
+			//reponse.setData(acteRepository.totalOfAbsenceByTypeAndMAtriculeAndYear(year,type_demande).orElse(null));
 			
 			return reponse;
 			
@@ -490,6 +463,32 @@ public class ActeServiceImpl implements ActeService {
 			ResponseDto reponse=new ResponseDto();
 			reponse.setRepMessage(responseMessage);			
 			reponse.setData(acteRepository.totalOfAbsenceByYeayeAndMAtriculeAndYear(matricule).orElse(null));
+			
+			return reponse;
+			
+		} catch (Exception e) {
+			ResponseMessage responseMessage=new ResponseMessage();
+			responseMessage.setCode(200);
+			responseMessage.setDetails(e.getCause().toString());
+			responseMessage.setMessage(e.getMessage());
+			ResponseDto reponse=new ResponseDto();
+			reponse.setRepMessage(responseMessage);
+			reponse.setData(null);
+			return reponse;
+			
+		}
+	}
+
+	@Override
+	public ResponseDto totalOfTypeDemandeByYearAndStructure(String year, String structure) {
+		try {
+			ResponseMessage responseMessage=new ResponseMessage();
+			responseMessage.setCode(200);
+			responseMessage.setDetails("Nombre de demande d’autorisation d’absence par type qui prend en paramètre le nom d’une structure et une année");
+			responseMessage.setMessage("Recuperation de la liste avec success");
+			ResponseDto reponse=new ResponseDto();
+			reponse.setRepMessage(responseMessage);			
+			reponse.setData(acteRepository.totalOfTypedDemandeInYearByStructure(year,structure).orElse(null));
 			
 			return reponse;
 			
