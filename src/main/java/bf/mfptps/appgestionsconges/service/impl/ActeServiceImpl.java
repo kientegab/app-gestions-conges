@@ -452,7 +452,7 @@ public class ActeServiceImpl implements ActeService {
 
 	
 	@Override
-	public ResponseDto totalOfAbsenceByYeayeAndMAtriculeAndYear(String matricule) {
+	public ResponseDto totalOfAbsenceByYeayeAndMAtricule(String matricule,String type_demande) {
 		// TODO Auto-generated method stub
 		
 		try {
@@ -462,7 +462,7 @@ public class ActeServiceImpl implements ActeService {
 			responseMessage.setMessage("Recuperation de la liste avec success");
 			ResponseDto reponse=new ResponseDto();
 			reponse.setRepMessage(responseMessage);			
-			reponse.setData(acteRepository.totalOfAbsenceByYeayeAndMAtriculeAndYear(matricule).orElse(null));
+			reponse.setData(acteRepository.totalOfAbsenceByTypeAndMAtricule(matricule,type_demande).orElse(null));
 			
 			return reponse;
 			

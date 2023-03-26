@@ -77,11 +77,11 @@ public class StatistiqueController {
 	 * ok
 	 */ 
 	
-	@GetMapping("/total-of-absence-by-year-matricule")
+	@GetMapping("/total-of-acte-by-matricule-typedemande")
 	@ResponseBody
-	public ResponseEntity<ResponseDto>totalOfAbsenceByYearMatriculeAndYear(@RequestParam String year,@RequestParam String matricule)
+	public ResponseEntity<ResponseDto>totalOfAbsenceByMatriculeTypeDemande(@RequestParam String matricule,@RequestParam String code_typedemande)
 	{
-			return ResponseEntity.ok().body(acteService.totalOfAbsenceByTypeAndMAtriculeAndYear(year,matricule));
+			return ResponseEntity.ok().body(acteService.totalOfAbsenceByYeayeAndMAtricule(matricule,code_typedemande));
 	}
 	
 	
