@@ -49,7 +49,7 @@ public interface ActeService {
      * @param motif_absence
      * @return ResponseDto
      */
-    ResponseDto totalOfAbsenceInYearByMAtricule(String matricule);
+    ResponseDto totalOfTypeDemandeByYearAndStructure(String year,String structure);
     
     /**
      * Nombre de jour de congé par type qui prend en paramètre un matricule et une année

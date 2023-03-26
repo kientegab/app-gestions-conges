@@ -1,5 +1,6 @@
 package bf.mfptps.appgestionsconges.repositories;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,17 +17,19 @@ public interface ActeRepository extends JpaRepository<Acte, Long>, JpaSpecificat
 			value="select a.reference from acte a join demande d on a.id = d.acte_id  join type_demande typed  on d.type_demande_id = typed.id join agent g on d.agent_id=g.id where g.matricule=? and typed.code=? and a.annee BETWEEN (select CAST(EXTRACT('year'FRom CURRENT_DATE)-3 as text)) and (select CAST(EXTRACT('year'FRom CURRENT_DATE) as text))",
 			nativeQuery = true
 			)
-	Optional<String> ListOfReferenceByAgentMatricule(String matricule,String type_demande);
+	Optional<List<String>> ListOfReferenceByAgentMatricule(String matricule,String type_demande);
 	
 	
 	@Query(
-			value = "select sum(d.duree_absence) from demande d join acte a on d.acte_id=a.id join agent g on d.agent_id = g.id join type_demande typed on d.type_demande_id = typed.id where a.annee=? and g.matricule=? and typed.libelle=?",
+			value = "select sum(d.duree_absence),typed.libelle from demande d join acte a on d.acte_id=a.id join agent g on d.agent_id = g.id join type_demande typed on d.type_demande_id = typed.id join agent_structure agsctru  on agsctru.agent_id = d.agent_id join structure struct ON struct.id = agsctru.structure_id where a.annee=? and struct.libelle=? GROUP BY typed.libelle",
 			nativeQuery = true
 			)
-	Optional<Integer> totalOfAbsenceInYear(String matricule);
+	Optional<List<Object>> totalOfTypedDemandeInYearByStructure(String year,String structure);
+	
+	
 	
 	@Query(value = "select typed.libelle as typedemande,sum(d.duree_absence) as valeur  from demande d join acte a on d.acte_id=a.id join agent g on d.agent_id = g.id join type_demande typed on d.type_demande_id = typed.id where a.annee=? and g.matricule=?  GROUP BY typed.libelle",nativeQuery = true)
-	Optional<Object> totalOfAbsenceByTypeAndMAtriculeAndYear(String year,String matricule);
+	Optional<Object> totalOfAbsenceByTypeAndMAtriculeAndYear(String year,String matricule,String type_demande);
 	
 	@Query(
 			value = "select a.annee,sum(d.duree_absence,typed.libelle  from demande d join acte a on d.acte_id=a.id join agent g on d.agent_id = g.id join type_demande typed on d.type_demande_id = typed.id where   g.matricule=?  GROUP BY a.annee,typed.libelle",
