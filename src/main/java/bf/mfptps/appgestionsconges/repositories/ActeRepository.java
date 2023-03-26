@@ -1,5 +1,6 @@
 package bf.mfptps.appgestionsconges.repositories;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,7 +17,7 @@ public interface ActeRepository extends JpaRepository<Acte, Long>, JpaSpecificat
 			value="select a.reference from acte a join demande d on a.id = d.acte_id  join type_demande typed  on d.type_demande_id = typed.id join agent g on d.agent_id=g.id where g.matricule=? and typed.code=? and a.annee BETWEEN (select CAST(EXTRACT('year'FRom CURRENT_DATE)-3 as text)) and (select CAST(EXTRACT('year'FRom CURRENT_DATE) as text))",
 			nativeQuery = true
 			)
-	Optional<String> ListOfReferenceByAgentMatricule(String matricule,String type_demande);
+	Optional<List<String>> ListOfReferenceByAgentMatricule(String matricule,String type_demande);
 	
 	
 	@Query(
