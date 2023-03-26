@@ -59,7 +59,7 @@ public interface ActeService {
      */
     ResponseDto totalOfAbsenceByTypeAndMAtriculeAndYear(String year, String matricule);
      
-    ResponseDto totalOfAbsenceByYeayeAndMAtriculeAndYear(String matricule);
+    ResponseDto totalOfAbsenceByYeayeAndMAtricule(String matricule,String type_demande);
      
     
 }
