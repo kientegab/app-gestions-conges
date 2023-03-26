@@ -30,13 +30,14 @@ public class StatistiqueController {
 	 * @param matricule
 	 * @param absenceMotif
 	 * @return ResponseDto
+	 * ok
 	 */
 	@GetMapping("/liste-of-ref-by-matricule")
 	@ResponseBody
-	public ResponseEntity<ResponseDto> listeOfReferenceByMatriculeAndAbsenceMotif(@RequestParam String matricule,@RequestParam String type_demande)
+	public ResponseEntity<ResponseDto> listeOfReferenceByMatriculeAndAbsenceMotif(@RequestParam String matricule,@RequestParam String code_demande)
 	{
 
-		return ResponseEntity.ok().body(acteService.ListOfReferenceByAgentMatriculeService(matricule, type_demande)); 
+		return ResponseEntity.ok().body(acteService.ListOfReferenceByAgentMatriculeService(matricule, code_demande)); 
 	}
 	
 	/**
@@ -50,7 +51,7 @@ public class StatistiqueController {
 	@ResponseBody
 	public ResponseEntity<ResponseDto>totalOfAbsenceByMatriculeAndYear(@RequestParam String year,@RequestParam String matricule,@RequestParam String type_demane)
 	{
-			return ResponseEntity.ok().body(acteService.totalOfAbsenceInYearByMAtricule(year, matricule, type_demane));
+			return ResponseEntity.ok().body(acteService.totalOfAbsenceInYearByMAtricule(matricule));
 	}
 	
 	
@@ -59,6 +60,7 @@ public class StatistiqueController {
 	 * @param year
 	 * @param matricule
 	 * @return ResponseDto
+	 * ok
 	 */
 	@GetMapping("/total-of-absence-by-type-matriculeandyear")
 	@ResponseBody
@@ -72,13 +74,14 @@ public class StatistiqueController {
 	 * @param matricule
 	 * @param motif
 	 * @return ResponseDto
+	 * ok
 	 */ 
 	
-	@GetMapping("/total-of-absence-by-year-matriculeandmotif")
+	@GetMapping("/total-of-absence-by-year-matricule")
 	@ResponseBody
-	public ResponseEntity<ResponseDto>totalOfAbsenceByYearMatriculeAndYear(@RequestParam String matricule,@RequestParam String type_demande)
+	public ResponseEntity<ResponseDto>totalOfAbsenceByYearMatriculeAndYear(@RequestParam String year,@RequestParam String matricule)
 	{
-			return ResponseEntity.ok().body(acteService.totalOfAbsenceByTypeAndMAtriculeAndYear(matricule,type_demande));
+			return ResponseEntity.ok().body(acteService.totalOfAbsenceByTypeAndMAtriculeAndYear(year,matricule));
 	}
 	
 	
