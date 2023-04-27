@@ -101,6 +101,13 @@ public class Agent extends CommonEntity {
     private String grade;
 
     private String affectation;//dernier poste où est affecté l'agent a l'instant T
+    
+    @ManyToMany
+    @JoinTable(
+    		  name = "agent_structure", 
+    		  joinColumns = @JoinColumn(name = "agent_id"), 
+    		  inverseJoinColumns = @JoinColumn(name = "structure_id"))
+    private Set<Structure> structure;
 
     @NotNull
     @Column(nullable = false)
@@ -414,8 +421,18 @@ public class Agent extends CommonEntity {
         }
         return true;
     }
+    
+    
 
-    @Override
+    public Set<Structure> getStructure() {
+		return structure;
+	}
+
+	public void setStructure(Set<Structure> structure) {
+		this.structure = structure;
+	}
+
+	@Override
     public String toString() {
         return "Agent{" + "id=" + id + ", matricule=" + matricule + ", cleMatricule=" + cleMatricule + ", email=" + email + ", password=" + password + ", nom=" + nom + ", prenom=" + prenom + ", nomJeuneFille=" + nomJeuneFille + ", sexe=" + sexe + ", dateNaissance=" + dateNaissance + ", lieuNaissance=" + lieuNaissance + ", noCNIB=" + noCNIB + ", dateRecrutement=" + dateRecrutement + ", qualite=" + qualite + ", dateQualite=" + dateQualite + ", categorie=" + categorie + ", echelle=" + echelle + ", echellon=" + echellon + ", position=" + position + ", grade=" + grade + ", affectation=" + affectation + ", actif=" + actif + ", activationKey=" + activationKey + ", resetKey=" + resetKey + ", resetDate=" + resetDate + ", telephone=" + telephone + ", profiles=" + profiles + ", corps=" + corps + '}';
     }
