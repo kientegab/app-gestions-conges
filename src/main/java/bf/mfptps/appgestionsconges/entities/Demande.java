@@ -1,10 +1,13 @@
 package bf.mfptps.appgestionsconges.entities;
 
+import bf.mfptps.appgestionsconges.enums.EPositionDemande;
+import bf.mfptps.appgestionsconges.enums.EStatusDemande;
+import bf.mfptps.appgestionsconges.enums.ETrancheDemande;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.EnumType;
@@ -17,9 +20,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Filter;
@@ -27,10 +27,6 @@ import org.hibernate.annotations.FilterDef;
 import org.hibernate.annotations.ParamDef;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
-
-import bf.mfptps.appgestionsconges.enums.EPositionDemande;
-import bf.mfptps.appgestionsconges.enums.EStatusDemande;
-import bf.mfptps.appgestionsconges.enums.ETrancheDemande;
 
 @javax.persistence.Entity
 @javax.persistence.Table(name = "demande")
@@ -76,12 +72,22 @@ public class Demande extends CommonEntity {
     @Column(name = "periode_fin", length = 254)
     private Date periodeFin;
 
+    @Column(name = "debut_periode_ouvrant")
+    private Date debutPeriodeOuvrant; //prevu pour etre renseigné par l'élaborateur de decision de congé annuel
+
+    @Column(name = "fin_periode_ouvrant")
+    private Date finPeriodeOuvrant; //prevu pour etre renseigné par l'élaborateur de decision de congé annuel
+
+    @Column(name = "debut_periode_jouissance")
+    private Date debutPeriodeJouissance; //prevu pour etre calculé automatiquement pour decision de congé annuel
+
+    @Column(name = "fin_periode_jouissance")
+    private Date finPeriodeJouissance; //prevu pour etre calculé automatiquement pour decision de congé annuel
+
     // @Column(name = "tranche", length = 254)
     // private String tranche;
-
     // @Column(name = "statut", length = 254)
     // private String statut;
-
     @ManyToOne
     @JoinColumn(name = "motif_absence_id")
     private MotifAbsence motifAbsence;
@@ -89,37 +95,37 @@ public class Demande extends CommonEntity {
     @ManyToOne
     @JoinColumn(name = "type_demande_id")
     @JsonIgnoreProperties(value = {"demandes"}, allowSetters = true)
-    private TypeDemande typeDemande ;
+    private TypeDemande typeDemande;
 
     @ManyToOne
     @JoinColumn(name = "agent_id")
     private Agent agent;
-    
+
     @OneToMany(mappedBy = "demande", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIgnoreProperties(value = {"demande"}, allowSetters = true)
     private Set<Document> documents = new HashSet<>();
-    
+
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
     private EStatusDemande statusDemande;
-    
+
     @Column(name = "position_demande")
     @Enumerated(EnumType.STRING)
     private EPositionDemande positionDemande;
-    
+
     @Column
     @Enumerated(EnumType.STRING)
     private ETrancheDemande trancheDemande;
-    
-    @Column(name="motif_rejet")
+
+    @Column(name = "motif_rejet")
     private String motifRejet;
-    
+
     @ManyToOne
     @JoinColumn(name = "acte_id")
     @JsonIgnoreProperties(value = {"demandes"}, allowSetters = true)
 
     private Acte acte;
-    
+
     public Long getId() {
         return id;
     }
@@ -192,6 +198,38 @@ public class Demande extends CommonEntity {
         this.periodeFin = periodeFin;
     }
 
+    public Date getDebutPeriodeOuvrant() {
+        return debutPeriodeOuvrant;
+    }
+
+    public void setDebutPeriodeOuvrant(Date debutPeriodeOuvrant) {
+        this.debutPeriodeOuvrant = debutPeriodeOuvrant;
+    }
+
+    public Date getFinPeriodeOuvrant() {
+        return finPeriodeOuvrant;
+    }
+
+    public void setFinPeriodeOuvrant(Date finPeriodeOuvrant) {
+        this.finPeriodeOuvrant = finPeriodeOuvrant;
+    }
+
+    public Date getDebutPeriodeJouissance() {
+        return debutPeriodeJouissance;
+    }
+
+    public void setDebutPeriodeJouissance(Date debutPeriodeJouissance) {
+        this.debutPeriodeJouissance = debutPeriodeJouissance;
+    }
+
+    public Date getFinPeriodeJouissance() {
+        return finPeriodeJouissance;
+    }
+
+    public void setFinPeriodeJouissance(Date finPeriodeJouissance) {
+        this.finPeriodeJouissance = finPeriodeJouissance;
+    }
+
     public MotifAbsence getMotifAbsence() {
         return motifAbsence;
     }
@@ -207,79 +245,76 @@ public class Demande extends CommonEntity {
     public void setTypeDemande(TypeDemande typeDemande) {
         this.typeDemande = typeDemande;
     }
+
     public Agent getAgent() {
-		return agent;
-	}
+        return agent;
+    }
 
-	public void setAgent(Agent agent) {
-		this.agent = agent;
-	}
+    public void setAgent(Agent agent) {
+        this.agent = agent;
+    }
 
-	public Set<Document> getDocuments() {
+    public Set<Document> getDocuments() {
         return documents;
     }
 
-	public void setDocuments(Set<Document> documents) {
-		this.documents = documents;
-	}
+    public void setDocuments(Set<Document> documents) {
+        this.documents = documents;
+    }
 
-	public EStatusDemande getStatusDemande() {
-		return statusDemande;
-	}
+    public EStatusDemande getStatusDemande() {
+        return statusDemande;
+    }
 
-	public void setStatusDemande(EStatusDemande statusDemande) {
-		this.statusDemande = statusDemande;
-	}
-	
+    public void setStatusDemande(EStatusDemande statusDemande) {
+        this.statusDemande = statusDemande;
+    }
+
     // public String getTranche() {
-	// 	return tranche;
-	// }
+    // 	return tranche;
+    // }
+    // public void setTranche(String tranche) {
+    // 	this.tranche = tranche;
+    // }
+    // public String getStatut() {
+    // 	return statut;
+    // }
+    // public void setStatut(String statut) {
+    // 	this.statut = statut;
+    // }
+    public EPositionDemande getPositionDemande() {
+        return positionDemande;
+    }
 
-	// public void setTranche(String tranche) {
-	// 	this.tranche = tranche;
-	// }
+    public void setPositionDemande(EPositionDemande positionDemande) {
+        this.positionDemande = positionDemande;
+    }
 
-	// public String getStatut() {
-	// 	return statut;
-	// }
+    public ETrancheDemande getTrancheDemande() {
+        return trancheDemande;
+    }
 
-	// public void setStatut(String statut) {
-	// 	this.statut = statut;
-	// }
+    public void setTrancheDemande(ETrancheDemande trancheDemande) {
+        this.trancheDemande = trancheDemande;
+    }
 
-	public EPositionDemande getPositionDemande() {
-		return positionDemande;
-	}
+    public String getMotifRejet() {
+        return motifRejet;
+    }
 
-	public void setPositionDemande(EPositionDemande positionDemande) {
-		this.positionDemande = positionDemande;
-	}
+    public void setMotifRejet(String motifRejet) {
+        this.motifRejet = motifRejet;
+    }
 
-	public ETrancheDemande getTrancheDemande() {
-		return trancheDemande;
-	}
+    public Acte getActe() {
+        return acte;
+    }
 
-	public void setTrancheDemande(ETrancheDemande trancheDemande) {
-		this.trancheDemande = trancheDemande;
-	}
-	
-	public String getMotifRejet() {
-		return motifRejet;
-	}
+    public void setActe(Acte acte) {
+        this.acte = acte;
+    }
 
-	public void setMotifRejet(String motifRejet) {
-		this.motifRejet = motifRejet;
-	}
-
-	public Acte getActe() {
-		return acte;
-	}
-
-	public void setActe(Acte acte) {
-		this.acte = acte;
-	}
-
-	@Override
+    @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
@@ -296,18 +331,15 @@ public class Demande extends CommonEntity {
         return Objects.hash(id);
     }
 
- 
-	@Override
-	public String toString() {
-		return "Demande { id=" + id + ", numeroDemande=" + numeroDemande + ", lieuJouissanceBF=" + lieuJouissanceBF
-				+ ", lieuJouissanceEtrang=" + lieuJouissanceEtrang + ", refLastDecision=" + refLastDecision
-				+ ", situationSND=" + situationSND + ", dureeAbsence=" + dureeAbsence + ", periodeDebut=" + periodeDebut
-				+ ", periodeFin=" + periodeFin + ", motifAbsence="
-				+ motifAbsence + ", typeDemande=" + typeDemande + ", agent=" + agent + ", documents="
-				+ documents + ", statusDemande=" + statusDemande + ", positionDemande=" + positionDemande
-				+ ", trancheDemande=" + trancheDemande + ", motifRejet=" + motifRejet + ", acte=" + acte  + "}";
-	}
-    
-    
-    
+    @Override
+    public String toString() {
+        return "Demande { id=" + id + ", numeroDemande=" + numeroDemande + ", lieuJouissanceBF=" + lieuJouissanceBF
+                + ", lieuJouissanceEtrang=" + lieuJouissanceEtrang + ", refLastDecision=" + refLastDecision
+                + ", situationSND=" + situationSND + ", dureeAbsence=" + dureeAbsence + ", periodeDebut=" + periodeDebut
+                + ", periodeFin=" + periodeFin + ", motifAbsence="
+                + motifAbsence + ", typeDemande=" + typeDemande + ", agent=" + agent + ", documents="
+                + documents + ", statusDemande=" + statusDemande + ", positionDemande=" + positionDemande
+                + ", trancheDemande=" + trancheDemande + ", motifRejet=" + motifRejet + ", acte=" + acte + "}";
+    }
+
 }
