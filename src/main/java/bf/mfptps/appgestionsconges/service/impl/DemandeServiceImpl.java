@@ -1,14 +1,7 @@
 package bf.mfptps.appgestionsconges.service.impl;
 
 import bf.mfptps.appgestionsconges.config.ApplicationProperties;
-import bf.mfptps.appgestionsconges.entities.Acte;
-import bf.mfptps.appgestionsconges.entities.Agent;
-import bf.mfptps.appgestionsconges.entities.AgentSolde;
-import bf.mfptps.appgestionsconges.entities.AgentStructure;
-import bf.mfptps.appgestionsconges.entities.Avis;
-import bf.mfptps.appgestionsconges.entities.Demande;
-import bf.mfptps.appgestionsconges.entities.Document;
-import bf.mfptps.appgestionsconges.entities.TypeDemande;
+import bf.mfptps.appgestionsconges.entities.*;
 import bf.mfptps.appgestionsconges.enums.EPositionDemande;
 import bf.mfptps.appgestionsconges.enums.EStatusActe;
 import bf.mfptps.appgestionsconges.enums.EStatusDemande;
@@ -20,23 +13,19 @@ import bf.mfptps.appgestionsconges.repositories.AgentStructureRepository;
 import bf.mfptps.appgestionsconges.repositories.AvisRepository;
 import bf.mfptps.appgestionsconges.repositories.DemandeRepository;
 import bf.mfptps.appgestionsconges.repositories.TypeDemandeRepository;
+import bf.mfptps.appgestionsconges.service.AgentService;
 import bf.mfptps.appgestionsconges.service.DemandeService;
 import bf.mfptps.appgestionsconges.service.dto.DemandeDTO;
 import bf.mfptps.appgestionsconges.service.dto.ValidationDTO;
 import bf.mfptps.appgestionsconges.service.mapper.DemandeMapper;
 import bf.mfptps.appgestionsconges.utils.AppUtil;
 import bf.mfptps.appgestionsconges.web.exceptions.CustomException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,6 +39,10 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 @Transactional
 public class DemandeServiceImpl implements DemandeService {
+
+    String CONGE = "CONGE_ANNUEL";
+    String JOUISSANCE_ANNUEL = "JOUISS_ANNUEL";
+    String AUTORISATION_ABSENCE = "AUTRE_ABSENCE";
 
     private static final String DEMANDE_N_A_PAS_ENCORE_RECU_AVIS_DU_SUPERIEUR = "La demande n'a pas encore recu l'avis du superieur !!!";
 
@@ -66,6 +59,9 @@ public class DemandeServiceImpl implements DemandeService {
     private final AgentStructureRepository agentStructureRepository;
     private final DemandeMapper demandeMapper;
     private final ApplicationProperties applicationProperties;
+
+    @Autowired
+    private AgentService agentService;
 
     public DemandeServiceImpl(DemandeRepository demandeRepository, ActeRepository acteRepository, DemandeMapper demandeMapper,
             AgentRepository agentRepository, TypeDemandeRepository typeDemandeRepository, ApplicationProperties applicationProperties, AgentSoldeRepository agentSoldeRepository, AgentStructureRepository agentStructureRepository, AvisRepository avisRepository) {
@@ -356,6 +352,73 @@ public class DemandeServiceImpl implements DemandeService {
         avisRepository.save(avis);
 
         return demandeMapper.toDto(avis.getDemande());
+    }
+
+    @Override
+    public Page<DemandeDTO> getAbsenceByMatricule(String matricule, Pageable pageable) {
+        return demandeRepository.findAllByAgentMatriculeAndTypeDemandeCode(matricule, AUTORISATION_ABSENCE, pageable).map(demandeMapper::toDto);
+    }
+
+    @Override
+    public Page<DemandeDTO> getAbsenceByStructure(Long structureId, Pageable pageable) {
+        List<AgentStructure> agentStructureList = agentStructureRepository.findAllByStructureIdAndActifTrue(structureId);
+        List<Agent> agents = agentService.listAgentParStructure(agentStructureList);
+        Page<DemandeDTO> demandes;
+        List<DemandeDTO> demandes1 = new ArrayList<>();
+        for (Agent agent : agents) {
+            List<Demande> demandeList = new ArrayList<>();
+            demandeList = demandeRepository.findAllByAgentAndTypeDemandeCode(agent, AUTORISATION_ABSENCE);
+            for (Demande demande : demandeList) {
+                demandes1.add(demandeMapper.toDto(demande));
+            }
+        }
+        demandes = new PageImpl<>(demandes1);
+        return demandes;
+    }
+
+    @Override
+    public Page<DemandeDTO> getCongeByMatricule(String matricule, Pageable pageable) {
+        return demandeRepository.findAllByAgentMatriculeAndTypeDemandeCode(matricule, CONGE, pageable).map(demandeMapper::toDto);
+
+    }
+
+    @Override
+    public Page<DemandeDTO> getCongeByStructure(Long structureId, Pageable pageable) {
+        List<AgentStructure> agentStructureList = agentStructureRepository.findAllByStructureIdAndActifTrue(structureId);
+        List<Agent> agents = agentService.listAgentParStructure(agentStructureList);
+        Page<DemandeDTO> demandes;
+        List<DemandeDTO> demandes1 = new ArrayList<>();
+        for (Agent agent : agents) {
+            List<Demande> demandeList = new ArrayList<>();
+            demandeList = demandeRepository.findAllByAgentAndTypeDemandeCode(agent, CONGE);
+            for (Demande demande : demandeList) {
+                demandes1.add(demandeMapper.toDto(demande));
+            }
+        }
+        demandes = new PageImpl<>(demandes1);
+        return demandes;
+    }
+
+    @Override
+    public Page<DemandeDTO> getJouissanceByStructure(Long structureId, Pageable pageable) {
+        List<AgentStructure> agentStructureList = agentStructureRepository.findAllByStructureIdAndActifTrue(structureId);
+        List<Agent> agents = agentService.listAgentParStructure(agentStructureList);
+        Page<DemandeDTO> demandes;
+        List<DemandeDTO> demandes1 = new ArrayList<>();
+        for (Agent agent : agents) {
+            List<Demande> demandeList = new ArrayList<>();
+            demandeList = demandeRepository.findAllByAgentAndTypeDemandeCode(agent, JOUISSANCE_ANNUEL);
+            for (Demande demande : demandeList) {
+                demandes1.add(demandeMapper.toDto(demande));
+            }
+        }
+        demandes = new PageImpl<>(demandes1);
+        return demandes;
+    }
+
+    @Override
+    public Page<DemandeDTO> getDemandesValid(String codeTypeDmd, Pageable pageable) {
+        return demandeRepository.findAllByTypeDemandeCode(codeTypeDmd, pageable).map(demandeMapper::toDto);
     }
 
     private void updateUserSolde(Avis avis) {

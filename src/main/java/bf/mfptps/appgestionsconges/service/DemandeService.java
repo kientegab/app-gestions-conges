@@ -37,4 +37,16 @@ public interface DemandeService {
     DemandeDTO validation_drh(ValidationDTO validationDTO, boolean islastValidationNode);
 
     String elaborerDecisionCA(List<Demande> demandes);
+
+    Page<DemandeDTO> getAbsenceByMatricule(String matricule, Pageable pageable);
+
+    Page<DemandeDTO> getAbsenceByStructure(Long structureId, Pageable pageable);
+
+    Page<DemandeDTO> getCongeByMatricule(String matricule, Pageable pageable);
+
+    Page<DemandeDTO> getCongeByStructure(Long structureId, Pageable pageable);
+
+    Page<DemandeDTO> getJouissanceByStructure(Long structureId, Pageable pageable);
+
+    Page<DemandeDTO> getDemandesValid(String codeTypeDmd, Pageable pageable);
 }
