@@ -1,6 +1,7 @@
 package bf.mfptps.appgestionsconges.entities;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import javax.persistence.*;
@@ -55,6 +56,9 @@ public class TypeDemande extends CommonEntity {
     @OneToMany(mappedBy = "typeDemande", cascade = javax.persistence.CascadeType.ALL)
     @JsonIgnore
     private Set<ArticleTypeDemande> articleTypeDemandes;
+    
+    @ManyToMany(mappedBy = "typeDemande", cascade = javax.persistence.CascadeType.ALL)
+    private List<Ampliation>ampliation;
 
     @Column(name = "solde_annuel")
     private Long soldeAnnuel;
@@ -137,8 +141,18 @@ public class TypeDemande extends CommonEntity {
     public void setRemoteValue(Long remoteValue) {
         this.remoteValue = remoteValue;
     }
+    
+    
 
-    @Override
+    public List<Ampliation> getAmpliation() {
+		return ampliation;
+	}
+
+	public void setAmpliation(List<Ampliation> ampliation) {
+		this.ampliation = ampliation;
+	}
+
+	@Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
