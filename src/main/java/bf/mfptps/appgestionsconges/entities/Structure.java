@@ -1,5 +1,6 @@
 package bf.mfptps.appgestionsconges.entities;
 
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -72,7 +73,9 @@ public class Structure extends CommonEntity {
     @ManyToMany(mappedBy = "structure")
     private Set<Agent> agent;
     
-
+    @ManyToMany(mappedBy = "structure")
+    private List<Ministere>ministere;
+    
     public Structure() {
 
     }
@@ -156,8 +159,26 @@ public class Structure extends CommonEntity {
     public void setEmailStruct(String emailStruct) {
         this.emailStruct = emailStruct;
     }
+    
+    
 
-    public String getAdresse() {
+    public Set<Agent> getAgent() {
+		return agent;
+	}
+
+	public void setAgent(Set<Agent> agent) {
+		this.agent = agent;
+	}
+
+	public List<Ministere> getMinistere() {
+		return ministere;
+	}
+
+	public void setMinistere(List<Ministere> ministere) {
+		this.ministere = ministere;
+	}
+
+	public String getAdresse() {
         return adresse;
     }
 

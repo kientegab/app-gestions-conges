@@ -54,7 +54,7 @@ public class ReportServiceImpl implements ReportService{
 	public FileInputStream generateCongeMaladie(String refActe) throws IOException, XDocReportException {
 		// TODO Auto-generated method stub
 		
-		Acte acte=dao.findByReference("2022_0004").orElse(null);
+		Acte acte=dao.findByReference(refActe).orElse(null);
 		
 		Demande demande=acte.getDemandes().stream().findFirst().orElse(null);
 				
@@ -69,6 +69,9 @@ public class ReportServiceImpl implements ReportService{
 			java.util.List<String>visas=new ArrayList<>();
 			List<String>ampliation=new ArrayList<>();
 			String verbiliage="";
+			
+			String ministere=acte.getEnteteMinistere();
+			
 			System.out.println(demande.getTypeDemande().getCode());
 			
 			if (demande.getTypeDemande().getCode().equalsIgnoreCase("CONGE_MATERNITE")) {
@@ -95,7 +98,6 @@ public class ReportServiceImpl implements ReportService{
 			});
 			
 			
-			
 			IContext context=congeReport.createContext();
 			context.put("typeconge", demande.getTypeDemande().getLibelle());
 			context.put("visas", visas);
@@ -104,6 +106,7 @@ public class ReportServiceImpl implements ReportService{
 			context.put("nom", demande.getAgent().getNom());
 			context.put("prenom", demande.getAgent().getPrenom());
 			context.put("verbiliage", verbiliage);
+			context.put("ministere", ministere);
 			context.put("matricule", demande.getAgent().getMatricule());
 			context.put("datedebut",new SimpleDateFormat("dd/MM/yyyy").format(demande.getPeriodeDebut()));
 			context.put("datefin",new SimpleDateFormat("dd/MM/yyyy").format(demande.getPeriodeFin()));
