@@ -148,15 +148,6 @@ public class ExportDecisionsServiceImpl implements ExportDecisionsService {
 
             JasperExportManager.exportReportToPdfStream(jaspertPrint, outputStream);
 
-//            //modele de rapport a utiliser
-//            InputStream inputStream = this.getClass().getResourceAsStream("/conge_administratif.jasper");
-//            // construction des Datasources a travers le jrbeans
-//            JRDataSource jRDataSource = new JRBeanCollectionDataSource(Arrays.asList(congeAdminDataRE));
-//            // Mappage et chargement des objets Reports
-//            Map<String, Object> map = new HashMap<>();
-//            JasperReport japerReport = (JasperReport) JRLoader.loadObject(inputStream);
-//            JasperPrint jaspertPrint = JasperFillManager.fillReport(japerReport, map, jRDataSource);
-//            JasperExportManager.exportReportToPdfStream(jaspertPrint, outputStream);
         } catch (JRException e) {
             log.error("Erreur survenue lors de la génération de l'acte : {}", e);
             throw new CustomException("Document indisponible, pour cause d'erreur inconnue ! Veuillez réessayer SVP.");

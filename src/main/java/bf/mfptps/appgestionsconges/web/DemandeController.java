@@ -1,6 +1,9 @@
 package bf.mfptps.appgestionsconges.web;
 
 import bf.mfptps.appgestionsconges.entities.Demande;
+import bf.mfptps.appgestionsconges.entities.Structure;
+import bf.mfptps.appgestionsconges.enums.EPositionDemande;
+import bf.mfptps.appgestionsconges.enums.EStatusDemande;
 import bf.mfptps.appgestionsconges.service.DemandeService;
 import bf.mfptps.appgestionsconges.service.ModalitePaieService;
 import bf.mfptps.appgestionsconges.service.dto.DemandeDTO;
@@ -78,9 +81,9 @@ public class DemandeController {
         try {
             demande = mapper.readValue(demandeJson, DemandeDTO.class);
         } catch (Exception e) {
-                log.error("Failed to parse string to Demande DTO", e);
+            log.error("Failed to parse string to Demande DTO", e);
 
-                e.printStackTrace( );
+            e.printStackTrace();
             throw new CustomException("Echec lors du formatage des donnees du formulaire");
         }
         DemandeDTO dem = demandeService.create(demande, fichiersJoint);
@@ -139,41 +142,117 @@ public class DemandeController {
         return ResponseEntity.ok(value);
     }
 
-    @GetMapping(path = "/demandes/{matricule}/{structure}")
-    public ResponseEntity<List<DemandeDTO>> getAllByMatriculeStructure(@PathVariable String matricule, @PathVariable String structure) {
-        return null;
+    @GetMapping(path = "/demandes/absence-agent/{matricule}")
+    public ResponseEntity<List<DemandeDTO>> absencesParAgent(@PathVariable String matricule, Pageable pageable) {
+        Page<DemandeDTO> absences = demandeService.getAbsenceByMatricule(matricule, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), absences);
+        return ResponseEntity.ok().headers(headers).body(absences.getContent());
     }
-    
+
+    @GetMapping(path = "/demandes/absence-structure/{structureId}")
+    public ResponseEntity<List<DemandeDTO>> absencesParStructure(@PathVariable Long structureId, Pageable pageable) {
+        Page<DemandeDTO> absences = demandeService.getAbsenceByStructure(structureId, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), absences);
+        return ResponseEntity.ok().headers(headers).body(absences.getContent());
+    }
+
+    @GetMapping(path = "/demandes/conge-agent/{matricule}")
+    public ResponseEntity<List<DemandeDTO>> congesParAgent(@PathVariable String matricule, Pageable pageable) {
+        Page<DemandeDTO> conges = demandeService.getCongeByMatricule(matricule, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), conges);
+        return ResponseEntity.ok().headers(headers).body(conges.getContent());
+    }
+
+    @GetMapping(path = "/demandes/conge-structure/{structureId}")
+    public ResponseEntity<List<DemandeDTO>> congesParStructure(@PathVariable Long structureId, Pageable pageable) {
+        Page<DemandeDTO> conges = demandeService.getCongeByStructure(structureId, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), conges);
+        return ResponseEntity.ok().headers(headers).body(conges.getContent());
+    }
+
+    @GetMapping(path = "/demandes/jouiss-annuel-structure/{structureId}")
+    public ResponseEntity<List<DemandeDTO>> jouissAnParStructure(
+            @PathVariable Long structureId,
+            @RequestParam EPositionDemande positionDemande,
+            @RequestParam EStatusDemande statusDemande,
+            Pageable pageable) {
+        Page<DemandeDTO> jouissances = demandeService.getJouissanceByStructure(structureId, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), jouissances);
+        return ResponseEntity.ok().headers(headers).body(jouissances.getContent());
+    }
+
+    @GetMapping(path = "/demandes/valides/{code}")
+    public ResponseEntity<List<DemandeDTO>> demandesValide(
+            @PathVariable String code,
+            @RequestParam EPositionDemande positionDemande,
+            @RequestParam EStatusDemande statusDemande, Pageable pageable)
+    {
+        Page<DemandeDTO> demandes_valides = demandeService.getDemandesValid(code, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), demandes_valides);
+        return ResponseEntity.ok().headers(headers).body(demandes_valides.getContent());
+    }
+
+    /**
+     *
+     * @param annee
+     * @param idTypedemande
+     * @param pageable
+     * @return
+     */
+    @GetMapping(path = "/demandes/decision-ca/{annee}/{idTypedemande}")
+    public ResponseEntity<List<Demande>> findCAByAnneeTypeAndSGValidated(@PathVariable Integer annee, @PathVariable Long idTypedemande, Pageable pageable) {
+        log.info("Liste des demandes de décision de congé annuel (pour elaboration), année : {}", annee);
+        Page<Demande> response = demandeService.findCAByAnneeAndSGValidated(annee, idTypedemande, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), response);
+        return ResponseEntity.ok().headers(headers).body(response.getContent());
+    }
+
     @PostMapping(path = "/demandes/validation_sh/{isLastNode}")
     public ResponseEntity<DemandeDTO> validationSh(@RequestBody ValidationDTO validationDTO, @PathVariable("isLastNode") boolean isValidationLastNode) throws URISyntaxException {
-         DemandeDTO dem = demandeService.validation_sh(validationDTO, isValidationLastNode);
-         return ResponseEntity.created(new URI("/api/demandes/" + dem.getId()))
-                 .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, dem.getId().toString()))
-                 .body(dem);
+        DemandeDTO dem = demandeService.validation_sh(validationDTO, isValidationLastNode);
+        return ResponseEntity.created(new URI("/api/demandes/" + dem.getId()))
+                .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, dem.getId().toString()))
+                .body(dem);
     }
-    
+
     @PostMapping(path = "/demandes/validation_sg/{isLastNode}")
     public ResponseEntity<DemandeDTO> validationSG(@RequestBody ValidationDTO validationDTO, @PathVariable("isLastNode") boolean isValidationLastNode) throws URISyntaxException {
-         DemandeDTO dem = demandeService.validation_sg(validationDTO, isValidationLastNode);
-         return ResponseEntity.created(new URI("/api/demandes/" + dem.getId()))
-                 .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, dem.getId().toString()))
-                 .body(dem);
+        DemandeDTO dem = demandeService.validation_sg(validationDTO, isValidationLastNode);
+        return ResponseEntity.created(new URI("/api/demandes/" + dem.getId()))
+                .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, dem.getId().toString()))
+                .body(dem);
     }
-    
+
     @PostMapping(path = "/demandes/validation_dg/{isLastNode}")
     public ResponseEntity<DemandeDTO> validationDG(@RequestBody ValidationDTO validationDTO, @PathVariable("isLastNode") boolean isValidationLastNode) throws URISyntaxException {
-         DemandeDTO dem = demandeService.validation_dg(validationDTO, isValidationLastNode);
-         return ResponseEntity.created(new URI("/api/demandes/" + dem.getId()))
-                 .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, dem.getId().toString()))
-                 .body(dem);
+        DemandeDTO dem = demandeService.validation_dg(validationDTO, isValidationLastNode);
+        return ResponseEntity.created(new URI("/api/demandes/" + dem.getId()))
+                .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, dem.getId().toString()))
+                .body(dem);
     }
-    
+
     @PostMapping(path = "/demandes/validation_drh/{isLastNode}")
     public ResponseEntity<DemandeDTO> validationDRH(@RequestBody ValidationDTO validationDTO, @PathVariable("isLastNode") boolean isValidationLastNode) throws URISyntaxException {
-         DemandeDTO dem = demandeService.validation_drh(validationDTO, isValidationLastNode);
-         return ResponseEntity.created(new URI("/api/demandes/" + dem.getId()))
-                 .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, dem.getId().toString()))
-                 .body(dem);
+        DemandeDTO dem = demandeService.validation_drh(validationDTO, isValidationLastNode);
+        return ResponseEntity.created(new URI("/api/demandes/" + dem.getId()))
+                .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, dem.getId().toString()))
+                .body(dem);
+    }
+
+    /**
+     * !!!!!!!!!!!!!!!!!!! Inachevé !!!!!!!!!!!!!!!!!!!!
+     *
+     * @param demandes
+     * @return
+     * @throws URISyntaxException
+     */
+    @PostMapping(path = "/demandes/decision-ca/elaboration")
+    public ResponseEntity<String> elaborationDecisionCA(@RequestBody List<Demande> demandes) throws URISyntaxException {
+        log.info("Elaboration de décision de congé annuel");
+        String response = demandeService.elaborerDecisionCA(demandes);
+        return ResponseEntity.created(new URI("/api/demandes/decision-ca/elaboration/"))
+                .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, toString()))
+                .body(response);
     }
 
 }

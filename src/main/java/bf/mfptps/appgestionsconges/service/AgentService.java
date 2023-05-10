@@ -484,4 +484,13 @@ public class AgentService {
         return agent;
     }
 
+
+    public List<Agent> listAgentParStructure(List<AgentStructure> agentStructures){
+        List<Agent> agents = new ArrayList<>();
+        for (AgentStructure agentStructure: agentStructures){
+            agents.add(agentStructure.getAgent());
+        }
+        return agents;
+    }
+
 }
