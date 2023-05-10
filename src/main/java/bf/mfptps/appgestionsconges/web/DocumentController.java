@@ -1,4 +1,4 @@
-package bf.mfptps.appgestionsconges.web;
+ package bf.mfptps.appgestionsconges.web;
 
 import bf.mfptps.appgestionsconges.entities.Document;
 import bf.mfptps.appgestionsconges.service.DocumentService;

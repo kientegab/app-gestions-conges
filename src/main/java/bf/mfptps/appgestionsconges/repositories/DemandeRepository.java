@@ -30,4 +30,7 @@ public interface DemandeRepository extends JpaRepository<Demande, Long>, JpaSpec
   /*  @Query("SELECT COUNT(d) FROM Demande d JOIN d.agent a Join a.structure s"
     		+ " WHERE s.sigle =:SIGLE")
 	Long countStructureDemande(@Param("SIGLE") String sigle);*/
+    
+   
+    
 }

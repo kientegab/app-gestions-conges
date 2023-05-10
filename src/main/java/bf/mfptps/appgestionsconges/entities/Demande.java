@@ -13,11 +13,15 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import antlr.collections.List;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -104,6 +108,8 @@ public class Demande extends CommonEntity {
     @Column(name = "position_demande")
     @Enumerated(EnumType.STRING)
     private EPositionDemande positionDemande;
+    
+    
     
     @Column
     @Enumerated(EnumType.STRING)
@@ -270,6 +276,8 @@ public class Demande extends CommonEntity {
 	public Acte getActe() {
 		return acte;
 	}
+	
+	
 
 	public void setActe(Acte acte) {
 		this.acte = acte;
