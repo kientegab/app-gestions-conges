@@ -6,11 +6,12 @@
 package bf.mfptps.appgestionsconges.service.impl;
 
 import bf.mfptps.appgestionsconges.entities.ArticleTypeDemande;
+import bf.mfptps.appgestionsconges.entities.Demande;
 import bf.mfptps.appgestionsconges.entities.MinistereStructure;
-import bf.mfptps.appgestionsconges.entities.Structure;
 import bf.mfptps.appgestionsconges.entities.TypeDemande;
 import bf.mfptps.appgestionsconges.entities.TypeVisa;
 import bf.mfptps.appgestionsconges.repositories.ArticleTypeDemandeRepository;
+import bf.mfptps.appgestionsconges.repositories.DemandeRepository;
 import bf.mfptps.appgestionsconges.repositories.MinistereStructureRepository;
 import bf.mfptps.appgestionsconges.repositories.StructureRepository;
 import bf.mfptps.appgestionsconges.repositories.TypeDemandeRepository;
@@ -30,7 +31,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRException;
@@ -53,30 +53,34 @@ import org.springframework.util.CollectionUtils;
 public class ExportDecisionsServiceImpl implements ExportDecisionsService {
 
     private final MinistereStructureRepository ministereStructureRepository;
-    private final StructureRepository structureRepository;
     private final TypeDemandeRepository typeDemandeRepository;
+    private final DemandeRepository demandeRepository;
     private final ArticleTypeDemandeRepository articleTypeDemandeRepository;
     private final TypeVisaRepository typeVisaRepository;
 
     public ExportDecisionsServiceImpl(MinistereStructureRepository ministereStructureRepository,
             StructureRepository structureRepository,
             TypeDemandeRepository typeDemandeRepository,
+            DemandeRepository demandeRepository,
             ArticleTypeDemandeRepository articleTypeDemandeRepository,
             TypeVisaRepository typeVisaRepository) {
         this.ministereStructureRepository = ministereStructureRepository;
-        this.structureRepository = structureRepository;
         this.typeDemandeRepository = typeDemandeRepository;
+        this.demandeRepository = demandeRepository;
         this.articleTypeDemandeRepository = articleTypeDemandeRepository;
         this.typeVisaRepository = typeVisaRepository;
     }
 
     @Override
-    public void printCongeAdministratif(Long structureId, long concerneStructureId, OutputStream outputStream) {
+    public void printCongeAdministratif(Long structureId, long concerneStructureId, Integer annee, OutputStream outputStream) {
         try {
             //ministere et structure de tutelle
             MinistereStructure ms = this.ministereStructureRepository.findByStructureIdAndStatutIsTrue(structureId).orElseThrow(() -> new CustomException("Votre structure [" + structureId + "] n'est rattachée à aucun ministère. Veuillez contacter l'admin pour le paramétrage SVP."));
             //recherche du type CONGE ANNUEL
             TypeDemande typeDemande = typeDemandeRepository.findByCodeAndDeletedIsFalse(AppUtil.CONGE_ANNUEL).orElseThrow(() -> new CustomException("Type d'acte inexistant. Veuillez contacter l'admin pour le paramétrage SVP."));
+            //recherche les demandes de reponse favorable
+            //Revoir la requete pour prendre en compte celles qui ne doivent plus etre modifiable(par elaboration)
+            List<Demande> demandes = demandeRepository.findToPrintCA(typeDemande.getId(), concerneStructureId, annee);
             //recherche des visas
             List<TypeVisa> typeVisas = typeVisaRepository.findByTypeDemandeIdOrderByNumeroOrdreAsc(typeDemande.getId());
             if (typeVisas == null || CollectionUtils.isEmpty(typeVisas)) {
@@ -87,15 +91,9 @@ public class ExportDecisionsServiceImpl implements ExportDecisionsService {
             if (articleTypeDemandes == null || CollectionUtils.isEmpty(articleTypeDemandes)) {
                 throw new CustomException("Articles spécifiques inexistants. Veuillez contacter l'admin pour le paramétrage SVP.");
             }
-            //structure des agents concernes
-            Optional<Structure> structureConcernee = Optional.ofNullable(structureRepository.getById(concerneStructureId));
             // chargement du logo
             InputStream logoStream = AppUtil.getAppDefaultLogo();
-            // le titre de l'acte
-            String titre = "DECISION N° _________________ /" + ms.getMinistere().getSigle().toUpperCase()
-                    + ((ms.getStructure().getParent() == null)
-                       ? "/" + ms.getStructure().getSigle().toUpperCase()
-                       : "/" + ms.getStructure().getParent().getSigle().toUpperCase() + "/" + ms.getStructure().getSigle().toUpperCase());
+
             //liste des visas concernes
             List<VisaRE> visaREs = new ArrayList<>();
             for (TypeVisa typeVisa : typeVisas) {
@@ -113,9 +111,23 @@ public class ExportDecisionsServiceImpl implements ExportDecisionsService {
             }
             //liste des demandeurs concernes
             List<AgentRE> agentREs = new ArrayList<>();
-            for (int i = 0; i < 5; i++) {
-                agentREs.add(new AgentRE("" + i, "00000" + i, "Nom et premon " + i, "Emploi inconnue " + i, "01/01/2023 au 26/12/2023", "01/01/2023 au 26/12/2023", "Burkina Faso et à l'étranger"));
+            int ordre = 0;
+            for (Demande d : demandes) {
+
+                agentREs.add(new AgentRE("" + (++ordre),
+                        d.getAgent().getMatricule(),
+                        d.getAgent().getNom() + " " + d.getAgent().getPrenom(),
+                        d.getAgent().getCorps().getLibelleCorps(),
+                        d.getDebutPeriodeOuvrant() + " au " + d.getFinPeriodeOuvrant(),
+                        d.getDebutPeriodeJouissance() + " au " + d.getFinPeriodeJouissance(),
+                        d.getLieuJouissanceBF() + " " + d.getLieuJouissanceEtrang()));
             }
+
+            // le titre de l'acte
+            String titre = "DECISION N° " + demandes.get(0).getActe().getReference() + "/" + ms.getMinistere().getSigle().toUpperCase()
+                    + ((ms.getStructure().getParent() == null)
+                       ? "/" + ms.getStructure().getSigle().toUpperCase()
+                       : "/" + ms.getStructure().getParent().getSigle().toUpperCase() + "/" + ms.getStructure().getSigle().toUpperCase());
 
             // conteneur de données de base à imprimer
             CongeAdminDataRE congeAdminDataRE = new CongeAdminDataRE(ms.getMinistere().getLibelle().toUpperCase(),

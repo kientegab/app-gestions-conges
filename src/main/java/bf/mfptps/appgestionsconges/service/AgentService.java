@@ -53,7 +53,7 @@ public class AgentService {
     private final AgentStructureRepository agentStructureRepository;
 
     private final CacheManager cacheManager;
-    private final AgentMapper  agentMapper;
+    private final AgentMapper agentMapper;
 
     public AgentService(AgentRepository agentRepository, PasswordEncoder passwordEncoder,
             ProfileRepository profileRepository, CacheManager cacheManager, StructureRepository structureRepository, AgentStructureRepository agentStructureRepository, AgentMapper agentMapper) {
@@ -63,7 +63,7 @@ public class AgentService {
         this.cacheManager = cacheManager;
         this.structureRepository = structureRepository;
         this.agentStructureRepository = agentStructureRepository;
-		this.agentMapper = agentMapper;
+        this.agentMapper = agentMapper;
     }
 
     public Optional<Agent> activateRegistration(String key, String password) {
@@ -137,10 +137,10 @@ public class AgentService {
         newAgent.setActivationKey(RandomUtil.generateActivationKey());
         Set<Profile> profiles = new HashSet<>();
         if (agentDTO.getProfiles() != null) {
-        	
-        	profiles = agentDTO.getProfiles().stream()
-        			.map((prof) ->  profileRepository.findByName(prof.getName()))
-        			.filter(Optional::isPresent)
+
+            profiles = agentDTO.getProfiles().stream()
+                    .map((prof) -> profileRepository.findByName(prof.getName()))
+                    .filter(Optional::isPresent)
                     .map(Optional::get)
                     .collect(Collectors.toSet());
 //        	
@@ -456,7 +456,9 @@ public class AgentService {
 
     @Transactional
     public Agent create(CreateCompteRequest request) {
-
+        if (request.getStructure() == null || request.getStructure().getId() == null) {
+            throw new bf.mfptps.appgestionsconges.service.CustomException("Veuillez renseigner la structure de l'agent SVP.");
+        }
         Agent agent = getAgent(request.getMatricule().toLowerCase());
         agent.activate();
         agent.setEmail(request.getEmail());
@@ -475,19 +477,17 @@ public class AgentService {
             AgentStructure agentStructure = new AgentStructure();
             agentStructure.setAgent(agent);
             agentStructure.setStructure(structure);
-            agentStructureRepository.save(agentStructure);//dd
+            agentStructureRepository.save(agentStructure);
         }
         this.clearAgentCaches(agent);
 
-        log.debug(
-                "Created Information for Agent: {}", agent);
+        //log.debug("Created Information for Agent: {}", agent);
         return agent;
     }
 
-
-    public List<Agent> listAgentParStructure(List<AgentStructure> agentStructures){
+    public List<Agent> listAgentParStructure(List<AgentStructure> agentStructures) {
         List<Agent> agents = new ArrayList<>();
-        for (AgentStructure agentStructure: agentStructures){
+        for (AgentStructure agentStructure : agentStructures) {
             agents.add(agentStructure.getAgent());
         }
         return agents;

@@ -84,6 +84,11 @@ public class Demande extends CommonEntity {
     @Column(name = "fin_periode_jouissance")
     private Date finPeriodeJouissance; //prevu pour etre calculé automatiquement pour decision de congé annuel
 
+    @Column(name = "idstructure", nullable = false)
+    private Long numStructure; //Ne pas en faire une relation. Ajouter pour faciliter les requete
+
+    private Boolean elabore = false; // Oui si demande elaboré et acte validé
+
     // @Column(name = "tranche", length = 254)
     // private String tranche;
     // @Column(name = "statut", length = 254)
@@ -132,6 +137,14 @@ public class Demande extends CommonEntity {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getNumStructure() {
+        return numStructure;
+    }
+
+    public void setNumStructure(Long numStructure) {
+        this.numStructure = numStructure;
     }
 
     public String getNumeroDemande() {
@@ -312,6 +325,14 @@ public class Demande extends CommonEntity {
 
     public void setActe(Acte acte) {
         this.acte = acte;
+    }
+
+    public Boolean isElabore() {
+        return elabore;
+    }
+
+    public void setElabore(Boolean elabore) {
+        this.elabore = elabore;
     }
 
     @Override

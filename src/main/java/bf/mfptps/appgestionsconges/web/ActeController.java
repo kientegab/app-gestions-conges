@@ -5,6 +5,13 @@
  */
 package bf.mfptps.appgestionsconges.web;
 
+import bf.mfptps.appgestionsconges.entities.Acte;
+import bf.mfptps.appgestionsconges.service.ActeService;
+import bf.mfptps.appgestionsconges.service.dto.ActeDTO;
+import bf.mfptps.appgestionsconges.utils.HeaderUtil;
+import bf.mfptps.appgestionsconges.utils.PaginationUtil;
+import bf.mfptps.appgestionsconges.utils.ResponseUtil;
+import bf.mfptps.appgestionsconges.web.exceptions.BadRequestAlertException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -12,7 +19,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
-
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
@@ -30,15 +37,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
-import bf.mfptps.appgestionsconges.entities.Acte;
-import bf.mfptps.appgestionsconges.service.ActeService;
-import bf.mfptps.appgestionsconges.service.dto.ActeDTO;
-import bf.mfptps.appgestionsconges.utils.HeaderUtil;
-import bf.mfptps.appgestionsconges.utils.PaginationUtil;
-import bf.mfptps.appgestionsconges.utils.ResponseUtil;
-import bf.mfptps.appgestionsconges.web.exceptions.BadRequestAlertException;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  *
@@ -118,17 +116,32 @@ public class ActeController {
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), result);
         return ResponseEntity.ok().headers(headers).body(result.getContent());
     }
-    
+
     @GetMapping(path = "/generate_acte")
     public ResponseEntity<Resource> generateActe(@RequestParam("referenceActe") String reference) throws FileNotFoundException {
         File result = acteService.generateActe(reference);
-        
+
         InputStreamResource resource = new InputStreamResource(new FileInputStream(result));
         return ResponseEntity.ok()
-        		.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + result.getName() + "\"")
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + result.getName() + "\"")
                 .contentLength(result.length())
                 .contentType(MediaType.APPLICATION_OCTET_STREAM)
                 .body(resource);
-      ///  return ResponseEntity.ok().body(result);
+        ///  return ResponseEntity.ok().body(result);
+    }
+
+    /**
+     *
+     * @param id : id de l'acte a valider
+     * @return
+     */
+    @GetMapping(path = "/validate-acte/{id}")
+    public ResponseEntity<Acte> validerActeCA(@PathVariable Long id) {
+        log.debug("Validation acte empechant d'éventuel élaboration demandes : {}", id);
+        Acte result = acteService.validerActeCA(id);
+
+        return ResponseEntity.ok()
+                .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
+                .body(result);
     }
 }

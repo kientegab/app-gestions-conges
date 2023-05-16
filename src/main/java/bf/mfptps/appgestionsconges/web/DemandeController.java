@@ -1,7 +1,6 @@
 package bf.mfptps.appgestionsconges.web;
 
 import bf.mfptps.appgestionsconges.entities.Demande;
-import bf.mfptps.appgestionsconges.entities.Structure;
 import bf.mfptps.appgestionsconges.enums.EPositionDemande;
 import bf.mfptps.appgestionsconges.enums.EStatusDemande;
 import bf.mfptps.appgestionsconges.service.DemandeService;
@@ -185,24 +184,25 @@ public class DemandeController {
     public ResponseEntity<List<DemandeDTO>> demandesValide(
             @PathVariable String code,
             @RequestParam EPositionDemande positionDemande,
-            @RequestParam EStatusDemande statusDemande, Pageable pageable)
-    {
+            @RequestParam EStatusDemande statusDemande, Pageable pageable) {
         Page<DemandeDTO> demandes_valides = demandeService.getDemandesValid(code, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), demandes_valides);
         return ResponseEntity.ok().headers(headers).body(demandes_valides.getContent());
     }
 
     /**
+     * liste les demandes de decision de congé pour l'elaboration
      *
+     * @param idStructure
      * @param annee
      * @param idTypedemande
      * @param pageable
      * @return
      */
-    @GetMapping(path = "/demandes/decision-ca/{annee}/{idTypedemande}")
-    public ResponseEntity<List<Demande>> findCAByAnneeTypeAndSGValidated(@PathVariable Integer annee, @PathVariable Long idTypedemande, Pageable pageable) {
+    @GetMapping(path = "/demandes/decision-ca/{idStructure}/{annee}/{idTypedemande}")
+    public ResponseEntity<List<Demande>> findCAByAnneeTypeAndSGValidated(@PathVariable Long idStructure, @PathVariable Integer annee, @PathVariable Long idTypedemande, Pageable pageable) {
         log.info("Liste des demandes de décision de congé annuel (pour elaboration), année : {}", annee);
-        Page<Demande> response = demandeService.findCAByAnneeAndSGValidated(annee, idTypedemande, pageable);
+        Page<Demande> response = demandeService.findCAByAnneeAndSGValidated(idStructure, annee, idTypedemande, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), response);
         return ResponseEntity.ok().headers(headers).body(response.getContent());
     }
@@ -240,7 +240,6 @@ public class DemandeController {
     }
 
     /**
-     * !!!!!!!!!!!!!!!!!!! Inachevé !!!!!!!!!!!!!!!!!!!!
      *
      * @param demandes
      * @return
