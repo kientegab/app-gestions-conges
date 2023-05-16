@@ -14,12 +14,12 @@ import bf.mfptps.appgestionsconges.repositories.AvisRepository;
 import bf.mfptps.appgestionsconges.repositories.DemandeRepository;
 import bf.mfptps.appgestionsconges.repositories.TypeDemandeRepository;
 import bf.mfptps.appgestionsconges.service.AgentService;
+import bf.mfptps.appgestionsconges.service.CustomException;
 import bf.mfptps.appgestionsconges.service.DemandeService;
 import bf.mfptps.appgestionsconges.service.dto.DemandeDTO;
 import bf.mfptps.appgestionsconges.service.dto.ValidationDTO;
 import bf.mfptps.appgestionsconges.service.mapper.DemandeMapper;
 import bf.mfptps.appgestionsconges.utils.AppUtil;
-import bf.mfptps.appgestionsconges.web.exceptions.CustomException;
 import java.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -454,12 +454,11 @@ public class DemandeServiceImpl implements DemandeService {
      * d'une élaboration).
      */
     @Override
-    public Page<Demande> findCAByAnneeAndSGValidated(Integer annee, Long idTypedemande, Pageable pageable) {
-        return demandeRepository.findCAByAnneeAndSGValidated(annee, idTypedemande, EStatusDemande.VALIDE, EPositionDemande.SG, pageable);
+    public Page<Demande> findCAByAnneeAndSGValidated(Long idStructure, Integer annee, Long idTypedemande, Pageable pageable) {
+        return demandeRepository.findCAByAnneeAndSGValidated(idStructure, annee, idTypedemande, EStatusDemande.VALIDE, EPositionDemande.SG, pageable);
     }
 
     /**
-     * !!!!!!!!!!!!!!!!!!! Inachevé !!!!!!!!!!!!!!!!!!!!
      *
      * debutPeriodeJouissance = finPeriodeOuvrant + 1
      *
@@ -468,13 +467,33 @@ public class DemandeServiceImpl implements DemandeService {
      * @param demandes
      * @return
      */
+    @Transactional(rollbackFor = CustomException.class)
     @Override
     public String elaborerDecisionCA(List<Demande> demandes) {
-        //tenir compte de la structure des agents demandeurs
+        //verifications et levees d'exceptions
+        for (Demande d : demandes) {
+            if (d.getNumStructure() != demandes.get(0).getNumStructure()) { //traiter les lots de demandes par strucutre
+                throw new CustomException("Les auteurs de ces demandes ne relèvent pas tous de la même structure. Veuillez traiter par structure SVP.");
+            }
+            if (d.getPositionDemande() != EPositionDemande.SG || d.getStatusDemande() != EStatusDemande.VALIDE) {
+                throw new CustomException("La demande [" + d.getNumeroDemande() + "] n'a pas suivi toutes les procédures nécéssaires pour l'élaboration.");
+            }
+            if (d.getDebutPeriodeOuvrant() == null || d.getFinPeriodeOuvrant() == null) {
+                throw new CustomException("Veuillez reprendre l'élaboration en renseignant toutes les dates requises SVP.");
+            }
+            if (d.isElabore()) {
+                throw new CustomException("Impossible d'élaborer un acte déjà validé.");
+            }
+        }
+
+        Long count = acteRepository.count();
+
         Acte acte = new Acte();
-        acte.setAnnee("" + demandes.get(0).getDebutPeriodeOuvrant().getYear());//a corriger
+        Calendar calendarToYear = Calendar.getInstance();
+        calendarToYear.setTime(demandes.get(0).getDebutPeriodeOuvrant());
+        acte.setAnnee("" + calendarToYear.get(Calendar.YEAR));
         acte.setStatus(EStatusActe.INITIATION);
-        acte.setReference("" + new Random().longs());//a corriger
+        acte.setReference(acte.getAnnee() + "-" + String.format("%05d", ++count));//formule : année + codeMinistere + numeroOrdreActe
         acte = acteRepository.save(acte);
 
         Calendar calendar = Calendar.getInstance();
@@ -495,6 +514,6 @@ public class DemandeServiceImpl implements DemandeService {
         }
         demandeRepository.saveAll(demandesToSave);
 
-        return null;
+        return "Elaboration effectuée avec succès";
     }
 }

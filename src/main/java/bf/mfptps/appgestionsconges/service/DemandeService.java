@@ -22,7 +22,7 @@ public interface DemandeService {
     Page<DemandeDTO> findAll(Pageable pageable);
 
     //ci-dessous : permettre de filtrer par structure egalement
-    Page<Demande> findCAByAnneeAndSGValidated(Integer annee, Long idTypedemande, Pageable pageable); //liste les demandes de conge annuel validées et en position SG
+    Page<Demande> findCAByAnneeAndSGValidated(Long idStructure, Integer annee, Long idTypedemande, Pageable pageable); //liste les demandes de conge annuel validées et en position SG
 
     //TODO: filtrer les demandes en fonction de critere de selection
     void delete(Long code);

@@ -21,4 +21,6 @@ public class DecisionCAVM {
     private Long structureId;
 
     private Long concerneStructureId;
+
+    private Integer annee;
 }

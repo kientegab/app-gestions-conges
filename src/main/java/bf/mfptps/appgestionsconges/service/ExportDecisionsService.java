@@ -20,6 +20,6 @@ public interface ExportDecisionsService {
      * @param concerneStructureId : id de la structure faisant le traitement
      * @param outputStream
      */
-    void printCongeAdministratif(Long structureId, long concerneStructureId, OutputStream outputStream);
+    void printCongeAdministratif(Long structureId, long concerneStructureId, Integer annee, OutputStream outputStream);
 
 }

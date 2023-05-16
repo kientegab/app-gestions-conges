@@ -3,7 +3,9 @@ package bf.mfptps.appgestionsconges.web;
 import bf.mfptps.appgestionsconges.entities.MinistereStructure;
 import bf.mfptps.appgestionsconges.service.MinistereStructureService;
 import bf.mfptps.appgestionsconges.utils.PaginationUtil;
+import bf.mfptps.appgestionsconges.utils.ResponseUtil;
 import java.util.List;
+import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -38,5 +40,17 @@ public class MinistereStructureController {
         Page<MinistereStructure> minsiteresStructure = ministereStructureService.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), minsiteresStructure);
         return ResponseEntity.ok().headers(headers).body(minsiteresStructure.getContent());
+    }
+
+    /**
+     *
+     * @param id : id de la structure
+     * @return
+     */
+    @GetMapping(path = "/ministere-structures/{id}")
+    public ResponseEntity<MinistereStructure> findMinisteresStructureByStructureID(@PathVariable Long id) {
+        log.debug("Consultation d'un ministere-structure : {}", id);
+        Optional<MinistereStructure> structureFound = ministereStructureService.getByStructure(id);
+        return ResponseUtil.wrapOrNotFound(structureFound);
     }
 }

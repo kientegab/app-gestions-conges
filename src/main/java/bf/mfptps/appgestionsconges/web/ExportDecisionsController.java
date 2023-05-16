@@ -50,8 +50,11 @@ public class ExportDecisionsController {
         if (dcavm.getConcerneStructureId() == null) {
             throw new BadRequestAlertException("Structure des demandeurs non renseignée.", ENTITY_NAME, "idnull");
         }
+        if (dcavm.getAnnee() == null) {
+            throw new BadRequestAlertException("Année non renseignée.", ENTITY_NAME, "idnull");
+        }
         response.setHeader("Content-Disposition", String.format("attachment; filename=\"DECISION_CONGE_ANNUEL_" + dcavm.getConcerneStructureId() + ".pdf" + "\""));
         OutputStream outStream = response.getOutputStream();
-        exportDecisionsService.printCongeAdministratif(dcavm.getStructureId(), dcavm.getConcerneStructureId(), outStream);
+        exportDecisionsService.printCongeAdministratif(dcavm.getStructureId(), dcavm.getConcerneStructureId(), dcavm.getAnnee(), outStream);
     }
 }

@@ -28,9 +28,14 @@ public interface DemandeRepository extends JpaRepository<Demande, Long>, JpaSpec
     Page<Demande> findAll(String numeroDemande, Pageable pageable);
 
     @Query("SELECT d FROM Demande d, TypeDemande t "
-            + "WHERE t.id = :idTypedemande AND d.typeDemande.id = t.id "
-            + "AND YEAR(d.periodeDebut) = :annee AND d.statusDemande = :status AND d.positionDemande = :position ")
-    Page<Demande> findCAByAnneeAndSGValidated(Integer annee, Long idTypedemande, EStatusDemande status, EPositionDemande position, Pageable pageable);
+            + "WHERE t.id = :idTypedemande AND d.typeDemande.id = t.id AND d.numStructure = :idStructure "
+            + "AND YEAR(d.periodeDebut) = :annee AND d.statusDemande = :status AND d.positionDemande = :position AND d.elabore = false ")
+    Page<Demande> findCAByAnneeAndSGValidated(Long idStructure, Integer annee, Long idTypedemande, EStatusDemande status, EPositionDemande position, Pageable pageable);
+
+    @Query("SELECT d FROM Demande d, TypeDemande t "
+            + "WHERE t.id = :idTypedemande AND d.typeDemande.id = t.id AND d.numStructure = :idStructure "
+            + "AND YEAR(d.periodeDebut) = :annee AND d.elabore = true")
+    List<Demande> findToPrintCA(Long idTypedemande, Long idStructure, Integer annee);
     // Page<Demande> findAllByAgentMatriculeAndAgentStructureId(String matricule, Long structureId, Pageable pageable);
 
     Page<Demande> findAllByAgentMatriculeAndTypeDemandeCode(String matricule, String codeTypeDmd, Pageable pageable);
@@ -42,4 +47,5 @@ public interface DemandeRepository extends JpaRepository<Demande, Long>, JpaSpec
     /*  @Query("SELECT COUNT(d) FROM Demande d JOIN d.agent a Join a.structure s"
     		+ " WHERE s.sigle =:SIGLE")
 	Long countStructureDemande(@Param("SIGLE") String sigle);*/
+    List<Demande> findByActeId(Long id);
 }

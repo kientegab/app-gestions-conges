@@ -1,12 +1,14 @@
 package bf.mfptps.appgestionsconges.service.dto;
 
-import java.util.Date;
-
 import bf.mfptps.appgestionsconges.enums.EPositionDemande;
 import bf.mfptps.appgestionsconges.enums.EStatusDemande;
 import bf.mfptps.appgestionsconges.enums.ETrancheDemande;
+import java.util.Date;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 public class DemandeDTO {
+
     private Long id;
     private String numeroDemande;
     private String lieuJouissanceBF;
@@ -22,13 +24,18 @@ public class DemandeDTO {
 
     private TypeDemandeDTO typeDemande;
 
-    private AgentDTO agent ;
-    
+    private AgentDTO agent;
+
     private EStatusDemande statusDemande;
-    
+
     private String motifRejet;
     private EPositionDemande positionDemande;
     private ETrancheDemande trancheDemande;
+
+    @NotBlank
+    @NotNull
+    private Long numStructure; //id de la structure du demandeur
+
     public String getMotifRejet() {
         return motifRejet;
     }
@@ -133,13 +140,13 @@ public class DemandeDTO {
         this.agent = agent;
     }
 
-	public EStatusDemande getStatusDemande() {
-		return statusDemande;
-	}
+    public EStatusDemande getStatusDemande() {
+        return statusDemande;
+    }
 
-	public void setStatusDemande(EStatusDemande statusDemande) {
-		this.statusDemande = statusDemande;
-	}
+    public void setStatusDemande(EStatusDemande statusDemande) {
+        this.statusDemande = statusDemande;
+    }
 
     public void setPositionDemande(EPositionDemande positionDemande) {
         this.positionDemande = positionDemande;
@@ -157,6 +164,12 @@ public class DemandeDTO {
         return trancheDemande;
     }
 
-    
-    
+    public Long getNumStructure() {
+        return numStructure;
+    }
+
+    public void setNumStructure(Long numStructure) {
+        this.numStructure = numStructure;
+    }
+
 }

@@ -54,6 +54,13 @@ public class MinistereStructureImpl implements MinistereStructureService {
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public Optional<MinistereStructure> getByStructure(Long id) {
+        return ministereStructureRepository.findByStructureIdAndStatutIsTrue(id);
+
+    }
+
+    @Override
     public Page<MinistereStructure> findAll(Pageable pageable) {
         if (SecurityUtils.isCurrentUserInRole(AppUtil.ADMIN)) {
             return ministereStructureRepository.findAllByStatutIsTrue(pageable);

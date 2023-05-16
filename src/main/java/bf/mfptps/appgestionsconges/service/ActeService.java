@@ -30,4 +30,6 @@ public interface ActeService {
 
     File generateActe(String referenceActe);
 
+    Acte validerActeCA(Long id);
+
 }

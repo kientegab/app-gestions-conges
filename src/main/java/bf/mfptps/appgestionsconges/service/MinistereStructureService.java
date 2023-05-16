@@ -15,6 +15,8 @@ public interface MinistereStructureService {
 
     Optional<MinistereStructure> get(Long id);
 
+    Optional<MinistereStructure> getByStructure(Long id);
+
     Page<MinistereStructure> findAll(Pageable pageable);
 
     void delete(Long code);
