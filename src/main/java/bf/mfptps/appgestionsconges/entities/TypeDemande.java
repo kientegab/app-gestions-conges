@@ -9,6 +9,8 @@ import javax.validation.constraints.NotNull;
 import net.minidev.json.annotate.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.FilterDef;
 import org.hibernate.annotations.ParamDef;
@@ -50,14 +52,18 @@ public class TypeDemande extends CommonEntity {
     private Long remoteValue;
 
     @OneToMany(mappedBy = "typeDemande", cascade = javax.persistence.CascadeType.ALL)
+    @Fetch(FetchMode.JOIN)
     @JsonIgnore
     private Set<TypeVisa> typeVisas = new HashSet<>();
 
     @OneToMany(mappedBy = "typeDemande", cascade = javax.persistence.CascadeType.ALL)
+    @Fetch(FetchMode.JOIN)
     @JsonIgnore
     private Set<ArticleTypeDemande> articleTypeDemandes;
     
     @ManyToMany(mappedBy = "typeDemande", cascade = javax.persistence.CascadeType.ALL)
+    @Fetch(FetchMode.JOIN)
+    @JsonIgnore
     private List<Ampliation>ampliation;
 
     @Column(name = "solde_annuel")

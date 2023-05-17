@@ -47,6 +47,7 @@ public class Visa extends CommonEntity {
     private String libelle;
 
     @OneToMany(mappedBy = "visa", cascade = CascadeType.ALL)
+    @Fetch(FetchMode.JOIN)
     @JsonIgnore
     private Set<TypeVisa> typeVisas = new HashSet<>();
 

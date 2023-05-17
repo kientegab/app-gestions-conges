@@ -10,7 +10,7 @@
         <createSequence sequenceName="sequence_generator_1" startValue="56" incrementBy="50"/>
     </changeSet>
 
-    <changeSet id="00000000000002" author="STGVAP-DEV-TEAM"> 
+    <!-- <changeSet id="00000000000002" author="STGVAP-DEV-TEAM"> 
         <loadData
             file="config/liquibase/data/privilege_1.csv"
             separator=";"
@@ -19,7 +19,7 @@
             <column name="name" type="string"/>
         </loadData>
      
-    </changeSet>
+    </changeSet> -->
 
         
 </databaseChangeLog>

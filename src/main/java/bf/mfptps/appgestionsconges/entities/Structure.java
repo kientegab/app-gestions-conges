@@ -73,8 +73,8 @@ public class Structure extends CommonEntity {
     @ManyToMany(mappedBy = "structure")
     private Set<Agent> agent;
     
-    @ManyToMany(mappedBy = "structure")
-    private List<Ministere>ministere;
+    // @ManyToMany
+    // private List<Ministere>ministere;
     
     public Structure() {
 
@@ -170,13 +170,13 @@ public class Structure extends CommonEntity {
 		this.agent = agent;
 	}
 
-	public List<Ministere> getMinistere() {
-		return ministere;
-	}
+	// public List<Ministere> getMinistere() {
+	// 	return ministere;
+	// }
 
-	public void setMinistere(List<Ministere> ministere) {
-		this.ministere = ministere;
-	}
+	// public void setMinistere(List<Ministere> ministere) {
+	// 	this.ministere = ministere;
+	// }
 
 	public String getAdresse() {
         return adresse;
