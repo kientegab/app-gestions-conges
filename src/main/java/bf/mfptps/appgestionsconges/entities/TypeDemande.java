@@ -50,17 +50,17 @@ public class TypeDemande extends CommonEntity {
     @Column(name = "remote_value")
     private Long remoteValue;
 
-    @OneToMany(mappedBy = "typeDemande", cascade = javax.persistence.CascadeType.ALL,fetch = FetchType.EAGER)
-    @JsonIgnore
-    private Set<TypeVisa> typeVisas = new HashSet<>();
+    // @OneToMany(mappedBy = "typeDemande", cascade = javax.persistence.CascadeType.ALL,fetch = FetchType.EAGER)
+    // @JsonIgnore
+    // private Set<TypeVisa> typeVisas = new HashSet<>();
 
-    @OneToMany(mappedBy = "typeDemande", cascade = javax.persistence.CascadeType.ALL,fetch = FetchType.EAGER)
-    @JsonIgnore
-    private Set<ArticleTypeDemande> articleTypeDemandes;
+    // @OneToMany(mappedBy = "typeDemande", cascade = javax.persistence.CascadeType.ALL,fetch = FetchType.EAGER)
+    // @JsonIgnore
+    // private Set<ArticleTypeDemande> articleTypeDemandes;
     
-    @ManyToMany(mappedBy = "typeDemande", cascade = javax.persistence.CascadeType.ALL,fetch = FetchType.EAGER)
-    @JsonIgnore
-    private List<Ampliation>ampliation;
+    // @ManyToMany(mappedBy = "typeDemande", cascade = javax.persistence.CascadeType.ALL,fetch = FetchType.EAGER)
+    // @JsonIgnore
+    // private List<Ampliation>ampliation;
 
     @Column(name = "solde_annuel")
     private Long soldeAnnuel;
@@ -100,25 +100,25 @@ public class TypeDemande extends CommonEntity {
         this.description = description;
     }
 
-    public Set<TypeVisa> getTypeVisas() {
-        return typeVisas;
-    }
+    // public Set<TypeVisa> getTypeVisas() {
+    //     return typeVisas;
+    // }
 
-    public void setTypeVisas(Set<TypeVisa> typeVisas) {
-        this.typeVisas = typeVisas;
-    }
+    // public void setTypeVisas(Set<TypeVisa> typeVisas) {
+    //     this.typeVisas = typeVisas;
+    // }
 
-    public void addTypeVisa(TypeVisa typeVisa) {
-        this.typeVisas.add(typeVisa);
-    }
+    // public void addTypeVisa(TypeVisa typeVisa) {
+    //     this.typeVisas.add(typeVisa);
+    // }
 
-    public Set<ArticleTypeDemande> getArticleTypeDemandes() {
-        return articleTypeDemandes;
-    }
+    // public Set<ArticleTypeDemande> getArticleTypeDemandes() {
+    //     return articleTypeDemandes;
+    // }
 
-    public void setArticleTypeDemandes(Set<ArticleTypeDemande> articleTypeDemandes) {
-        this.articleTypeDemandes = articleTypeDemandes;
-    }
+    // public void setArticleTypeDemandes(Set<ArticleTypeDemande> articleTypeDemandes) {
+    //     this.articleTypeDemandes = articleTypeDemandes;
+    // }
 
     public Long getSoldeAnnuel() {
         return soldeAnnuel;
@@ -146,13 +146,13 @@ public class TypeDemande extends CommonEntity {
     
     
 
-    public List<Ampliation> getAmpliation() {
-		return ampliation;
-	}
+    // public List<Ampliation> getAmpliation() {
+	// 	return ampliation;
+	// }
 
-	public void setAmpliation(List<Ampliation> ampliation) {
-		this.ampliation = ampliation;
-	}
+	// public void setAmpliation(List<Ampliation> ampliation) {
+	// 	this.ampliation = ampliation;
+	//}
 
 	@Override
     public boolean equals(Object o) {
@@ -171,9 +171,9 @@ public class TypeDemande extends CommonEntity {
         return Objects.hash(id);
     }
 
-    @Override
-    public String toString() {
-        return "TypeDemande{" + "id=" + id + ", libelle=" + libelle + ", modePaie=" + modePaie + ", description=" + description + ", remoteValue=" + remoteValue + ", typeVisas=" + typeVisas + ", articleTypeDemandes=" + articleTypeDemandes + ", soldeAnnuel=" + soldeAnnuel + ", code=" + code + '}';
-    }
+    //@Override
+    // public String toString() {
+    //     return "TypeDemande{" + "id=" + id + ", libelle=" + libelle + ", modePaie=" + modePaie + ", description=" + description + ", remoteValue=" + remoteValue + ", typeVisas=" + typeVisas + ", articleTypeDemandes=" + articleTypeDemandes + ", soldeAnnuel=" + soldeAnnuel + ", code=" + code + '}';
+    // }
 
 }

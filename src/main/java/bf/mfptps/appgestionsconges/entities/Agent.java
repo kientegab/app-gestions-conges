@@ -102,7 +102,7 @@ public class Agent extends CommonEntity {
 
     private String affectation;//dernier poste où est affecté l'agent a l'instant T
     
-    @ManyToMany
+    @ManyToMany( fetch = FetchType.EAGER)
     @JoinTable(
     		  name = "agent_structure", 
     		  joinColumns = @JoinColumn(name = "agent_id"), 

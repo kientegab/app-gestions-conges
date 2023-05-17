@@ -70,7 +70,7 @@ public class Structure extends CommonEntity {
 
     private String description;
     
-    @ManyToMany(mappedBy = "structure")
+    @ManyToMany(mappedBy = "structure",fetch = FetchType.EAGER)
     private Set<Agent> agent;
     
     // @ManyToMany
