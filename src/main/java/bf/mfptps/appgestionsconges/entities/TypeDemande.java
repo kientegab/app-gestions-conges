@@ -10,7 +10,6 @@ import net.minidev.json.annotate.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.FilterDef;
 import org.hibernate.annotations.ParamDef;
@@ -51,18 +50,15 @@ public class TypeDemande extends CommonEntity {
     @Column(name = "remote_value")
     private Long remoteValue;
 
-    @OneToMany(mappedBy = "typeDemande", cascade = javax.persistence.CascadeType.ALL)
-    @Fetch(FetchMode.JOIN)
+    @OneToMany(mappedBy = "typeDemande", cascade = javax.persistence.CascadeType.ALL,fetch = FetchType.EAGER)
     @JsonIgnore
     private Set<TypeVisa> typeVisas = new HashSet<>();
 
-    @OneToMany(mappedBy = "typeDemande", cascade = javax.persistence.CascadeType.ALL)
-    @Fetch(FetchMode.JOIN)
+    @OneToMany(mappedBy = "typeDemande", cascade = javax.persistence.CascadeType.ALL,fetch = FetchType.EAGER)
     @JsonIgnore
     private Set<ArticleTypeDemande> articleTypeDemandes;
     
-    @ManyToMany(mappedBy = "typeDemande", cascade = javax.persistence.CascadeType.ALL)
-    @Fetch(FetchMode.JOIN)
+    @ManyToMany(mappedBy = "typeDemande", cascade = javax.persistence.CascadeType.ALL,fetch = FetchType.EAGER)
     @JsonIgnore
     private List<Ampliation>ampliation;
 
