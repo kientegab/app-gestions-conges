@@ -172,9 +172,6 @@ public class TypeDemande extends CommonEntity {
         return Objects.hash(id);
     }
 
-    // public List<Ampliation> getAmpliation() {
-    //     return ampliation;
-    // }
 
     @Override
     public String toString() {
