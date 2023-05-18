@@ -489,11 +489,16 @@ public class DemandeServiceImpl implements DemandeService {
         Long count = acteRepository.count();
 
         Acte acte = new Acte();
-        Calendar calendarToYear = Calendar.getInstance();
-        calendarToYear.setTime(demandes.get(0).getDebutPeriodeOuvrant());
-        acte.setAnnee("" + calendarToYear.get(Calendar.YEAR));
-        acte.setStatus(EStatusActe.INITIATION);
-        acte.setReference(acte.getAnnee() + "-" + String.format("%05d", ++count));//formule : année + codeMinistere + numeroOrdreActe
+        if (demandes.get(0).getActe() != null) {//update
+            acte = demandes.get(0).getActe();
+        } else {//nouvel enregistrement acte
+            Calendar calendarToYear = Calendar.getInstance();
+            calendarToYear.setTime(demandes.get(0).getDebutPeriodeOuvrant());
+            acte.setAnnee("" + calendarToYear.get(Calendar.YEAR));
+            acte.setStatus(EStatusActe.INITIATION);
+            acte.setReference(acte.getAnnee() + "-" + String.format("%05d", ++count));//formule : année + codeMinistere + numeroOrdreActe
+
+        }
         acte = acteRepository.save(acte);
 
         Calendar calendar = Calendar.getInstance();
