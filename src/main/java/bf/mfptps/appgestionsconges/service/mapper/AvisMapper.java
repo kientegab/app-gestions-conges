@@ -1,8 +1,18 @@
 package bf.mfptps.appgestionsconges.service.mapper;
 
+
+
+import org.mapstruct.Mapper;
+
+
+import bf.mfptps.appgestionsconges.entities.Avis;
+import bf.mfptps.appgestionsconges.service.dto.AvisDTO;
+
+
 import bf.mfptps.appgestionsconges.entities.Avis;
 import bf.mfptps.appgestionsconges.service.dto.AvisDTO;
 import org.mapstruct.Mapper;
+
 
 /**
  *
@@ -12,6 +22,7 @@ import org.mapstruct.Mapper;
 public interface AvisMapper extends EntityMapper<AvisDTO, Avis> {
 
     AvisDTO toDto(Avis avis);
+
 
     Avis toEntity(AvisDTO avisDTO);
 

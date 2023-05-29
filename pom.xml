@@ -57,6 +57,40 @@
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/fr.opensagres.xdocreport/fr.opensagres.xdocreport.document -->
+        <dependency>
+            <groupId>fr.opensagres.xdocreport</groupId>
+            <artifactId>fr.opensagres.xdocreport.document</artifactId>
+            <version>2.0.3</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/fr.opensagres.xdocreport/fr.opensagres.xdocreport.document.docx -->
+        <dependency>
+            <groupId>fr.opensagres.xdocreport</groupId>
+            <artifactId>fr.opensagres.xdocreport.document.docx</artifactId>
+            <version>2.0.3</version>
+        </dependency>
+		
+        <dependency>
+            <groupId>fr.opensagres.xdocreport</groupId>
+            <artifactId>fr.opensagres.xdocreport.converter.docx.xwpf</artifactId>
+            <version>2.0.3</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/fr.opensagres.xdocreport/fr.opensagres.xdocreport.template -->
+        <dependency>
+            <groupId>fr.opensagres.xdocreport</groupId>
+            <artifactId>fr.opensagres.xdocreport.template</artifactId>
+            <version>2.0.3</version>
+        </dependency>
+		
+        <!-- https://mvnrepository.com/artifact/fr.opensagres.xdocreport/fr.opensagres.xdocreport.template.velocity -->
+        <dependency>
+            <groupId>fr.opensagres.xdocreport</groupId>
+            <artifactId>fr.opensagres.xdocreport.template.velocity</artifactId>
+            <version>2.0.3</version>
+        </dependency>
+
+
+
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
@@ -180,11 +214,11 @@
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/com.lowagie/itext 2.1.7 -->
-        <dependency>
+        <!--dependency>
             <groupId>com.lowagie</groupId>
             <artifactId>itext</artifactId>
             <version>2.1.7</version>
-        </dependency>
+        </dependency-->
 
         <dependency>
             <groupId>org.springframework.security</groupId>
@@ -261,7 +295,11 @@
             <type>jar</type>
         </dependency>
 
-        <!-- jasper report dependancies -->
+
+
+        <!-- <dependency> <groupId>net.sf.saxon</groupId> <artifactId>Saxon-HE</artifactId> 
+        <version>9.7.0-3</version> </dependency> -->
+        <!-- jasper report 3 dependancies below 6.16.0 -->
         <dependency>
             <groupId>net.sf.jasperreports</groupId>
             <artifactId>jasperreports</artifactId>
@@ -271,7 +309,7 @@
                     <groupId>com.lowagie</groupId>
                     <artifactId>itext</artifactId>
                 </exclusion>
-            </exclusions>   
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>net.sf.jasperreports</groupId>
@@ -282,7 +320,14 @@
                     <groupId>com.lowagie</groupId>
                     <artifactId>itext</artifactId>
                 </exclusion>
-            </exclusions>   
+            </exclusions>
+        </dependency>
+        <dependency> <!--https://mvnrepository.com/artifact/com.lowagie/itext 2.1.7 -->
+            <groupId>com.lowagie</groupId>
+            <artifactId>itext</artifactId>
+            <!--version>2.1.7</version-->
+            <version>[1.02b, 2.1.7]</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 

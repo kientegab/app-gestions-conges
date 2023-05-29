@@ -108,7 +108,7 @@ public class Demande extends CommonEntity {
 
     @OneToMany(mappedBy = "demande", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIgnoreProperties(value = {"demande"}, allowSetters = true)
-    private Set<Document> documents = new HashSet<>();
+    private Set<Document> documents = new HashSet<Document>();
 
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
@@ -335,6 +335,18 @@ public class Demande extends CommonEntity {
         this.elabore = elabore;
     }
 
+    //@Override
+    // 	return tranche;
+    // }
+    // public void setTranche(String tranche) {
+    // 	this.tranche = tranche;
+    // }
+    // public String getStatut() {
+    // 	return statut;
+    // }
+    // public void setStatut(String statut) {
+    // 	this.statut = statut;
+    // }
     @Override
     public boolean equals(Object o) {
         if (this == o) {

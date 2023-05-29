@@ -1,11 +1,15 @@
 package bf.mfptps.appgestionsconges.entities;
 
+import java.util.List;
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import org.hibernate.annotations.Filter;
@@ -65,7 +69,13 @@ public class Structure extends CommonEntity {
     private Structure parent;
 
     private String description;
-
+    
+    @ManyToMany(mappedBy = "structure",fetch = FetchType.EAGER)
+    private Set<Agent> agent;
+    
+    // @ManyToMany
+    // private List<Ministere>ministere;
+    
     public Structure() {
 
     }
@@ -149,8 +159,26 @@ public class Structure extends CommonEntity {
     public void setEmailStruct(String emailStruct) {
         this.emailStruct = emailStruct;
     }
+    
+    
 
-    public String getAdresse() {
+    public Set<Agent> getAgent() {
+		return agent;
+	}
+
+	public void setAgent(Set<Agent> agent) {
+		this.agent = agent;
+	}
+
+	// public List<Ministere> getMinistere() {
+	// 	return ministere;
+	// }
+
+	// public void setMinistere(List<Ministere> ministere) {
+	// 	this.ministere = ministere;
+	// }
+
+	public String getAdresse() {
         return adresse;
     }
 

@@ -11,6 +11,7 @@
     </changeSet>
 
     <changeSet id="00000000000001" author="STGVAP-DEV-TEAM">
+    <validCheckSum>8:8ecda23b17bb6d1fac8d6109c004a54e</validCheckSum>
         <createTable tableName="agent">
             <column name="id" type="bigint" >
                 <constraints primaryKey="true" nullable="false"/>

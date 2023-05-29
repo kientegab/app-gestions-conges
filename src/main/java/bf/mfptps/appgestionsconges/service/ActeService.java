@@ -7,6 +7,7 @@ package bf.mfptps.appgestionsconges.service;
 
 import bf.mfptps.appgestionsconges.entities.Acte;
 import bf.mfptps.appgestionsconges.service.dto.ActeDTO;
+import bf.mfptps.appgestionsconges.service.dto.ResponseDto;
 import java.io.File;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
@@ -31,5 +32,38 @@ public interface ActeService {
     File generateActe(String referenceActe);
 
     Acte validerActeCA(Long id);
+
+    /**
+     * Liste des références des décisions de congé des trois dernières
+     * années qui prend en paramètre un matricule
+     *
+     * @param matricule
+     * @param motif_absence
+     * @return ResponseDto
+     */
+    ResponseDto ListOfReferenceByAgentMatriculeService(String matricule, String type_demande);
+
+    /**
+     * Nombre de jour d’autorisation contracté qui prend en paramètre un
+     * matricule et une année.
+     *
+     * @param year
+     * @param matricule
+     * @param motif_absence
+     * @return ResponseDto
+     */
+    ResponseDto totalOfTypeDemandeByYearAndStructure(String year, String structure);
+
+    /**
+     * Nombre de jour de congé par type qui prend en paramètre un matricule et
+     * une année
+     *
+     * @param year
+     * @param matricule
+     * @return ResponseDto
+     */
+    ResponseDto totalOfAbsenceByTypeAndMAtriculeAndYear(String year, String matricule);
+
+    ResponseDto totalOfAbsenceByYeayeAndMAtricule(String matricule, String type_demande);
 
 }

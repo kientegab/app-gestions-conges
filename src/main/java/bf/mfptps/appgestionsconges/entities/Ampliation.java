@@ -6,6 +6,8 @@
 package bf.mfptps.appgestionsconges.entities;
 
 import bf.mfptps.appgestionsconges.config.Constants;
+
+import java.util.List;
 import java.util.Objects;
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -46,6 +48,12 @@ public class Ampliation extends CommonEntity {
     @Size(min = 1, max = 10)
     //@Column(length = 10)
     private String code;
+    
+    @ManyToMany
+    @JoinTable( name = "ampliation_type_demande",
+    joinColumns = @JoinColumn( name = "ampliation_id" ),
+    inverseJoinColumns = @JoinColumn( name = "type_demande_id" ) )
+    private List<TypeDemande>typeDemande;
 
     @Column(nullable = false)
     private String libelle;
@@ -73,8 +81,18 @@ public class Ampliation extends CommonEntity {
     public void setLibelle(String libelle) {
         this.libelle = libelle;
     }
+    
+    
 
-    @Override
+    public List<TypeDemande> getTypeDemande() {
+		return typeDemande;
+	}
+
+	public void setTypeDemande(List<TypeDemande> typeDemande) {
+		this.typeDemande = typeDemande;
+	}
+
+	@Override
     public int hashCode() {
         int hash = 3;
         hash = 37 * hash + Objects.hashCode(this.id);

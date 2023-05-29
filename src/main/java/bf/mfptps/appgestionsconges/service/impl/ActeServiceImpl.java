@@ -17,8 +17,10 @@ import bf.mfptps.appgestionsconges.repositories.TypeActeRepository;
 import bf.mfptps.appgestionsconges.service.ActeService;
 import bf.mfptps.appgestionsconges.service.CustomException;
 import bf.mfptps.appgestionsconges.service.dto.ActeDTO;
+import bf.mfptps.appgestionsconges.service.dto.ResponseDto;
 import bf.mfptps.appgestionsconges.service.mapper.ActeMapper;
 import bf.mfptps.appgestionsconges.utils.AppUtil;
+import bf.mfptps.appgestionsconges.utils.ResponseMessage;
 import bf.mfptps.appgestionsconges.utils.WordReplacer;
 import java.io.File;
 import java.io.FileInputStream;
@@ -261,6 +263,116 @@ public class ActeServiceImpl implements ActeService {
             return acte;
         } catch (Exception e) {
             throw new CustomException("Erreur inconnue ! Veuillez réessayer SVP.");
+        }
+    }
+
+    @Override
+    public ResponseDto ListOfReferenceByAgentMatriculeService(String matricule, String type_demande) {
+        try {
+            ResponseMessage responseMessage = new ResponseMessage();
+            responseMessage.setCode(200);
+            responseMessage.setDetails("Recupération de la liste des reference acte en fonction du matricule et du motif absence");
+            responseMessage.setMessage("Recuperation de la liste avec success");
+            ResponseDto reponse = new ResponseDto();
+
+            reponse.setRepMessage(responseMessage);
+
+            reponse.setData(acteRepository.ListOfReferenceByAgentMatricule(matricule, type_demande).orElse(null));
+
+            return reponse;
+
+        } catch (Exception e) {
+            ResponseMessage responseMessage = new ResponseMessage();
+            responseMessage.setCode(200);
+            responseMessage.setDetails(e.getCause().toString());
+            responseMessage.setMessage(e.getMessage());
+            ResponseDto reponse = new ResponseDto();
+            reponse.setRepMessage(responseMessage);
+            reponse.setData(null);
+
+            return reponse;
+
+        }
+
+    }
+
+    @Override
+    public ResponseDto totalOfAbsenceByTypeAndMAtriculeAndYear(String year, String type_demande) {
+        try {
+            ResponseMessage responseMessage = new ResponseMessage();
+            responseMessage.setCode(200);
+            responseMessage.setDetails("Nombre de jour de congé par type qui prend en paramètre un matricule et une année");
+            responseMessage.setMessage("Recuperation de la liste avec success");
+            ResponseDto reponse = new ResponseDto();
+            reponse.setRepMessage(responseMessage);
+
+            //reponse.setData(acteRepository.totalOfAbsenceByTypeAndMAtriculeAndYear(year,type_demande).orElse(null));
+            return reponse;
+
+        } catch (Exception e) {
+            ResponseMessage responseMessage = new ResponseMessage();
+            responseMessage.setCode(200);
+            responseMessage.setDetails(e.getCause().toString());
+            responseMessage.setMessage(e.getMessage());
+            ResponseDto reponse = new ResponseDto();
+            reponse.setRepMessage(responseMessage);
+            reponse.setData(null);
+            return reponse;
+
+        }
+    }
+
+    @Override
+    public ResponseDto totalOfAbsenceByYeayeAndMAtricule(String matricule, String type_demande) {
+        // TODO Auto-generated method stub
+
+        try {
+            ResponseMessage responseMessage = new ResponseMessage();
+            responseMessage.setCode(200);
+            responseMessage.setDetails("Nombre de jour de congé annuelle qui prend en paramètre un matricule");
+            responseMessage.setMessage("Recuperation de la liste avec success");
+            ResponseDto reponse = new ResponseDto();
+            reponse.setRepMessage(responseMessage);
+            reponse.setData(acteRepository.totalOfAbsenceByTypeAndMAtricule(matricule, type_demande).orElse(null));
+
+            return reponse;
+
+        } catch (Exception e) {
+            ResponseMessage responseMessage = new ResponseMessage();
+            responseMessage.setCode(200);
+            responseMessage.setDetails(e.getCause().toString());
+            responseMessage.setMessage(e.getMessage());
+            ResponseDto reponse = new ResponseDto();
+            reponse.setRepMessage(responseMessage);
+            reponse.setData(null);
+            return reponse;
+
+        }
+    }
+
+    @Override
+    public ResponseDto totalOfTypeDemandeByYearAndStructure(String year, String structure) {
+        try {
+            ResponseMessage responseMessage = new ResponseMessage();
+            responseMessage.setCode(200);
+            responseMessage.setDetails("Nombre de demande d’autorisation d’absence par type qui prend en paramètre le nom d’une structure et une année");
+            responseMessage.setMessage("Recuperation de la liste avec success");
+            ResponseDto reponse = new ResponseDto();
+            reponse.setRepMessage(responseMessage);
+            reponse.setData(acteRepository.totalOfTypedDemandeInYearByStructure(year, structure).orElse(null));
+
+            return reponse;
+
+        } catch (Exception e) {
+            ResponseMessage responseMessage = new ResponseMessage();
+            responseMessage.setCode(200);
+            responseMessage.setDetails(e.getCause().toString());
+            responseMessage.setMessage(e.getMessage());
+            ResponseDto reponse = new ResponseDto();
+            reponse.setRepMessage(responseMessage);
+            reponse.setData(null);
+            return reponse;
+
         }
     }
 

@@ -1,20 +1,17 @@
 package bf.mfptps.appgestionsconges.entities;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import net.minidev.json.annotate.JsonIgnore;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.FilterDef;
 import org.hibernate.annotations.ParamDef;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @javax.persistence.Entity
 @javax.persistence.Table(name = "type_demande")
@@ -49,7 +46,7 @@ public class TypeDemande extends CommonEntity {
 
     @Column(name = "remote_value")
     private Long remoteValue;
-/*
+    /*
     @OneToMany(mappedBy = "typeDemande", cascade = javax.persistence.CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIgnoreProperties(value = {"typeDemande"}, allowSetters = true)
     private Set<TypeVisa> typeVisas = new HashSet<>();
@@ -57,7 +54,20 @@ public class TypeDemande extends CommonEntity {
     @OneToMany(mappedBy = "typeDemande", cascade = javax.persistence.CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIgnore
     private Set<ArticleTypeDemande> articleTypeDemandes;
-*/
+     */
+
+    @OneToMany(mappedBy = "typeDemande", cascade = javax.persistence.CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonIgnore
+    private Set<TypeVisa> typeVisas = new HashSet<>();
+
+    @OneToMany(mappedBy = "typeDemande", cascade = javax.persistence.CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonIgnore
+    private Set<ArticleTypeDemande> articleTypeDemandes;
+
+    @ManyToMany(mappedBy = "typeDemande", cascade = javax.persistence.CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonIgnore
+    private List<Ampliation> ampliation;
+
     @Column(name = "solde_annuel")
     private Long soldeAnnuel;
 
@@ -95,7 +105,8 @@ public class TypeDemande extends CommonEntity {
     public void setDescription(String description) {
         this.description = description;
     }
-/*
+
+    /*
     public Set<TypeVisa> getTypeVisas() {
         return typeVisas;
     }
@@ -107,6 +118,7 @@ public class TypeDemande extends CommonEntity {
     public void addTypeVisa(TypeVisa typeVisa) {
         this.typeVisas.add(typeVisa);
     }
+    
 
     public Set<ArticleTypeDemande> getArticleTypeDemandes() {
         return articleTypeDemandes;
@@ -115,7 +127,7 @@ public class TypeDemande extends CommonEntity {
     public void setArticleTypeDemandes(Set<ArticleTypeDemande> articleTypeDemandes) {
         this.articleTypeDemandes = articleTypeDemandes;
     }
-*/
+     */
     public Long getSoldeAnnuel() {
         return soldeAnnuel;
     }
@@ -140,6 +152,30 @@ public class TypeDemande extends CommonEntity {
         this.remoteValue = remoteValue;
     }
 
+    public List<Ampliation> getAmpliation() {
+        return ampliation;
+    }
+
+    public void setAmpliation(List<Ampliation> ampliation) {
+        this.ampliation = ampliation;
+    }
+
+    public Set<TypeVisa> getTypeVisas() {
+        return typeVisas;
+    }
+
+    public void setTypeVisas(Set<TypeVisa> typeVisas) {
+        this.typeVisas = typeVisas;
+    }
+
+    public Set<ArticleTypeDemande> getArticleTypeDemandes() {
+        return articleTypeDemandes;
+    }
+
+    public void setArticleTypeDemandes(Set<ArticleTypeDemande> articleTypeDemandes) {
+        this.articleTypeDemandes = articleTypeDemandes;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -156,10 +192,14 @@ public class TypeDemande extends CommonEntity {
     public int hashCode() {
         return Objects.hash(id);
     }
-/*
+    /*
+=======
+
+
+>>>>>>> 5cc0eebf86aed74e83f4899c9faebfb52d619e41
     @Override
     public String toString() {
         return "TypeDemande{" + "id=" + id + ", libelle=" + libelle + ", modePaie=" + modePaie + ", description=" + description + ", remoteValue=" + remoteValue + ", typeVisas=" + typeVisas + ", articleTypeDemandes=" + articleTypeDemandes + ", soldeAnnuel=" + soldeAnnuel + ", code=" + code + '}';
     }
-*/
+     */
 }

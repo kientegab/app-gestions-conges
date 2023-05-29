@@ -48,4 +48,5 @@ public interface DemandeRepository extends JpaRepository<Demande, Long>, JpaSpec
     		+ " WHERE s.sigle =:SIGLE")
 	Long countStructureDemande(@Param("SIGLE") String sigle);*/
     List<Demande> findByActeId(Long id);
+
 }

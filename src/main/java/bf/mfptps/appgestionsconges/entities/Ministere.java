@@ -1,5 +1,7 @@
 package bf.mfptps.appgestionsconges.entities;
 
+import java.util.List;
+
 import javax.persistence.*;
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -33,6 +35,12 @@ public class Ministere extends CommonEntity {
     private String sigle;
 
     private String description;
+    
+    @ManyToMany
+    @JoinTable( name = "ministere_structure",
+    	    joinColumns = @JoinColumn( name = "structure_id" ),
+    	    inverseJoinColumns = @JoinColumn( name = "ministere_id" ) )
+    private List<Structure>structure;
 
     public Ministere() {
     }
@@ -44,8 +52,18 @@ public class Ministere extends CommonEntity {
     public void setId(Long id) {
         this.id = id;
     }
+    
+    
 
-    public String getCode() {
+    public List<Structure> getStructure() {
+		return structure;
+	}
+
+	public void setStructure(List<Structure> structure) {
+		this.structure = structure;
+	}
+
+	public String getCode() {
         return code;
     }
 
