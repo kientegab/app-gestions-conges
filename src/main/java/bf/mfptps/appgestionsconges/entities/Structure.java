@@ -12,6 +12,11 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.FilterDef;
 import org.hibernate.annotations.ParamDef;
@@ -65,12 +70,13 @@ public class Structure extends CommonEntity {
     @ManyToOne
     private TypeStructure type;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     private Structure parent;
 
     private String description;
     
     @ManyToMany(mappedBy = "structure",fetch = FetchType.EAGER)
+    @JsonIgnore
     private Set<Agent> agent;
     
     // @ManyToMany

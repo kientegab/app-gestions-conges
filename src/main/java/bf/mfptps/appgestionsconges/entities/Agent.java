@@ -107,6 +107,7 @@ public class Agent extends CommonEntity {
     		  name = "agent_structure", 
     		  joinColumns = @JoinColumn(name = "agent_id"), 
     		  inverseJoinColumns = @JoinColumn(name = "structure_id"))
+    @JsonIgnore
     private Set<Structure> structure;
 
     @NotNull
