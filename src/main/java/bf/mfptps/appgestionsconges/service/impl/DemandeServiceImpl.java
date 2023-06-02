@@ -17,7 +17,9 @@ import bf.mfptps.appgestionsconges.service.AgentService;
 import bf.mfptps.appgestionsconges.service.CustomException;
 import bf.mfptps.appgestionsconges.service.DemandeService;
 import bf.mfptps.appgestionsconges.service.dto.DemandeDTO;
+import bf.mfptps.appgestionsconges.service.dto.DemandeElaborationDTO;
 import bf.mfptps.appgestionsconges.service.dto.ValidationDTO;
+import bf.mfptps.appgestionsconges.service.mapper.DemandeElaborationMapper;
 import bf.mfptps.appgestionsconges.service.mapper.DemandeMapper;
 import bf.mfptps.appgestionsconges.utils.AppUtil;
 import java.util.*;
@@ -58,12 +60,14 @@ public class DemandeServiceImpl implements DemandeService {
     private final AvisRepository avisRepository;
     private final AgentStructureRepository agentStructureRepository;
     private final DemandeMapper demandeMapper;
+    private final DemandeElaborationMapper demandeElaborationMapper;
     private final ApplicationProperties applicationProperties;
 
     @Autowired
     private AgentService agentService;
 
     public DemandeServiceImpl(DemandeRepository demandeRepository, ActeRepository acteRepository, DemandeMapper demandeMapper,
+            DemandeElaborationMapper demandeElaborationMapper,
             AgentRepository agentRepository, TypeDemandeRepository typeDemandeRepository, ApplicationProperties applicationProperties, AgentSoldeRepository agentSoldeRepository, AgentStructureRepository agentStructureRepository, AvisRepository avisRepository) {
         this.demandeRepository = demandeRepository;
         this.acteRepository = acteRepository;
@@ -73,6 +77,7 @@ public class DemandeServiceImpl implements DemandeService {
         this.avisRepository = avisRepository;
         this.agentStructureRepository = agentStructureRepository;
         this.demandeMapper = demandeMapper;
+        this.demandeElaborationMapper = demandeElaborationMapper;
         this.applicationProperties = applicationProperties;
     }
 
@@ -454,8 +459,8 @@ public class DemandeServiceImpl implements DemandeService {
      * d'une élaboration).
      */
     @Override
-    public Page<Demande> findCAByAnneeAndSGValidated(Long idStructure, Integer annee, Long idTypedemande, Pageable pageable) {
-        return demandeRepository.findCAByAnneeAndSGValidated(idStructure, annee, idTypedemande, EStatusDemande.VALIDE, EPositionDemande.SG, pageable);
+    public Page<DemandeElaborationDTO> findCAByAnneeAndSGValidated(Long idStructure, Integer annee, Long idTypedemande, Pageable pageable) {
+        return demandeRepository.findCAByAnneeAndSGValidated(idStructure, annee, idTypedemande, EStatusDemande.VALIDE, EPositionDemande.SG, pageable).map(demandeElaborationMapper::toDTO);
     }
 
     /**

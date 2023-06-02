@@ -6,6 +6,7 @@ import bf.mfptps.appgestionsconges.enums.EStatusDemande;
 import bf.mfptps.appgestionsconges.service.DemandeService;
 import bf.mfptps.appgestionsconges.service.ModalitePaieService;
 import bf.mfptps.appgestionsconges.service.dto.DemandeDTO;
+import bf.mfptps.appgestionsconges.service.dto.DemandeElaborationDTO;
 import bf.mfptps.appgestionsconges.service.dto.PayInitData;
 import bf.mfptps.appgestionsconges.service.dto.PayReturnData;
 import bf.mfptps.appgestionsconges.service.dto.ValidationDTO;
@@ -200,9 +201,9 @@ public class DemandeController {
      * @return
      */
     @GetMapping(path = "/demandes/decision-ca/{idStructure}/{annee}/{idTypedemande}")
-    public ResponseEntity<List<Demande>> findCAByAnneeTypeAndSGValidated(@PathVariable Long idStructure, @PathVariable Integer annee, @PathVariable Long idTypedemande, Pageable pageable) {
+    public ResponseEntity<List<DemandeElaborationDTO>> findCAByAnneeTypeAndSGValidated(@PathVariable Long idStructure, @PathVariable Integer annee, @PathVariable Long idTypedemande, Pageable pageable) {
         log.info("Liste des demandes de décision de congé annuel (pour elaboration), année : {}", annee);
-        Page<Demande> response = demandeService.findCAByAnneeAndSGValidated(idStructure, annee, idTypedemande, pageable);
+        Page<DemandeElaborationDTO> response = demandeService.findCAByAnneeAndSGValidated(idStructure, annee, idTypedemande, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), response);
         return ResponseEntity.ok().headers(headers).body(response.getContent());
     }

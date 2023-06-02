@@ -99,14 +99,14 @@ public class Demande extends CommonEntity {
 
     @ManyToOne
     @JoinColumn(name = "type_demande_id")
-    @JsonIgnoreProperties(value = {"demandes"}, allowSetters = true)
+    @JsonIgnoreProperties(value = {"demandes"/*, "typeVisas", "articleTypeDemandes", "ampliation"*/}, allowSetters = true)
     private TypeDemande typeDemande;
 
     @ManyToOne
     @JoinColumn(name = "agent_id")
     private Agent agent;
 
-    @OneToMany(mappedBy = "demande", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "demande", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnoreProperties(value = {"demande"}, allowSetters = true)
     private Set<Document> documents = new HashSet<Document>();
 
@@ -128,7 +128,6 @@ public class Demande extends CommonEntity {
     @ManyToOne
     @JoinColumn(name = "acte_id")
     @JsonIgnoreProperties(value = {"demandes"}, allowSetters = true)
-
     private Acte acte;
 
     public Long getId() {
