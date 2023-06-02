@@ -6,6 +6,10 @@ import javax.persistence.*;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.annotations.*;
 
 /**
@@ -40,7 +44,8 @@ public class Ministere extends CommonEntity {
     @JoinTable( name = "ministere_structure",
     	    joinColumns = @JoinColumn( name = "structure_id" ),
     	    inverseJoinColumns = @JoinColumn( name = "ministere_id" ) )
-    private List<Structure>structure;
+    @JsonIgnore
+    private List<Structure> structure;
 
     public Ministere() {
     }
