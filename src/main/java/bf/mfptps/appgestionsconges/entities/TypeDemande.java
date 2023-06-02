@@ -1,6 +1,5 @@
 package bf.mfptps.appgestionsconges.entities;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -58,7 +57,7 @@ public class TypeDemande extends CommonEntity {
 
     @OneToMany(mappedBy = "typeDemande", cascade = javax.persistence.CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIgnore
-    private Set<TypeVisa> typeVisas = new HashSet<>();
+    private Set<TypeVisa> typeVisas;
 
     @OneToMany(mappedBy = "typeDemande", cascade = javax.persistence.CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIgnore

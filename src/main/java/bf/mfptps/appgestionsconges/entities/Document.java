@@ -1,7 +1,7 @@
 package bf.mfptps.appgestionsconges.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import java.util.Objects;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,7 +11,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Filter;
@@ -33,7 +32,7 @@ import org.hibernate.annotations.Where;
         condition = "deleted = :isDeleted"
 )
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class Document extends CommonEntity{
+public class Document extends CommonEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
@@ -46,11 +45,12 @@ public class Document extends CommonEntity{
     @Column(name = "url", length = 254)
     private String url;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "demande_id")
     private Demande demande;
-    
-    @Column(name="nom_document")
+
+    @Column(name = "nom_document")
     private String nomDocument;
 
     public Long getId() {
@@ -86,17 +86,21 @@ public class Document extends CommonEntity{
     }
 
     public String getNomDocument() {
-		return nomDocument;
-	}
+        return nomDocument;
+    }
 
-	public void setNomDocument(String nomDocument) {
-		this.nomDocument = nomDocument;
-	}
+    public void setNomDocument(String nomDocument) {
+        this.nomDocument = nomDocument;
+    }
 
-	@Override
+    @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Document document = (Document) o;
         return id.equals(document.id);
     }
@@ -108,11 +112,11 @@ public class Document extends CommonEntity{
 
     @Override
     public String toString() {
-        return "Document{" +
-                "id=" + id +
-                ", reference='" + reference + '\'' +
-                ", url='" + url + '\'' +
-                ", demande=" + demande +
-                '}';
+        return "Document{"
+                + "id=" + id
+                + ", reference='" + reference + '\''
+                + ", url='" + url + '\''
+                + ", demande=" + demande
+                + '}';
     }
 }

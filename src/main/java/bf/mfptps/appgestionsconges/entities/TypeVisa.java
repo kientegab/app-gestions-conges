@@ -3,8 +3,6 @@ package bf.mfptps.appgestionsconges.entities;
 import org.hibernate.annotations.*;
 import org.hibernate.annotations.Cache;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import javax.persistence.*;
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -38,15 +36,14 @@ public class TypeVisa extends CommonEntity {
     private Long id;
 
     @ManyToOne
-   // @MapsId("visaId")
-  //  @JoinColumn(name = "visa_id")
+    // @MapsId("visaId")
+    //  @JoinColumn(name = "visa_id")
     private Visa visa;
 
-
     @ManyToOne
-   // @MapsId("typeDemandeId")
-   // @JoinColumn(name = "type_demande_id")
-   // @JsonIgnoreProperties(value = {"typeVisas"}, allowSetters = true)
+    // @MapsId("typeDemandeId")
+    // @JoinColumn(name = "type_demande_id")
+    // @JsonIgnoreProperties(value = {"typeVisas"}, allowSetters = true)
     private TypeDemande typeDemande;
 
     @NotNull
@@ -68,7 +65,6 @@ public class TypeVisa extends CommonEntity {
 //        this.typeDemande = typeDemande;
 //        this.numeroOrdre = numeroOrdre;
 //    }
-
 //    public TypeVisaKey getId() {
 //        return id;
 //    }
@@ -76,8 +72,6 @@ public class TypeVisa extends CommonEntity {
 //    public void setId(TypeVisaKey id) {
 //        this.id = id;
 //    }
-
-
     public Long getId() {
         return id;
     }
@@ -132,12 +126,14 @@ public class TypeVisa extends CommonEntity {
 //                ", numeroOrdre=" + numeroOrdre +
 //                '}';
 //    }
-
-
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         TypeVisa typeVisa = (TypeVisa) o;
         return id.equals(typeVisa.id);
     }
@@ -149,11 +145,11 @@ public class TypeVisa extends CommonEntity {
 
     @Override
     public String toString() {
-        return "TypeVisa{" +
-                "id=" + id +
-                ", visa=" + visa +
-                ", typeDemande=" + typeDemande +
-                ", numeroOrdre=" + numeroOrdre +
-                '}';
+        return "TypeVisa{"
+                + "id=" + id
+                + ", visa=" + visa
+                + ", typeDemande=" + typeDemande
+                + ", numeroOrdre=" + numeroOrdre
+                + '}';
     }
 }

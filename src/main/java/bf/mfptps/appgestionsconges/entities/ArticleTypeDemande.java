@@ -1,13 +1,21 @@
 package bf.mfptps.appgestionsconges.entities;
 
-import org.hibernate.annotations.*;
-import org.hibernate.annotations.Cache;
-
-import javax.persistence.*;
+import java.util.Objects;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-import java.util.Objects;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.FilterDef;
+import org.hibernate.annotations.ParamDef;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 /**
  *
@@ -26,25 +34,23 @@ import java.util.Objects;
         condition = "deleted = :isDeleted"
 )
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class ArticleTypeDemande extends  CommonEntity{
+public class ArticleTypeDemande extends CommonEntity {
 
 //    @EmbeddedId
 //    ArticleTypeDemandeKey id;
-
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
     @ManyToOne
-   // @MapsId("articleId")
-   // @JoinColumn(name = "article_id")
+    // @MapsId("articleId")
+    // @JoinColumn(name = "article_id")
     Article article;
-
 
     @ManyToOne
     //@MapsId("typeDemandeId")
-   // @JoinColumn(name = "type_demande_id")
+    // @JoinColumn(name = "type_demande_id")
     TypeDemande typeDemande;
 
     @NotNull
@@ -59,8 +65,6 @@ public class ArticleTypeDemande extends  CommonEntity{
 //        this.typeDemande = typeDemande;
 //        this.numeroOrdre = numeroOrdre;
 //    }
-
-
     public ArticleTypeDemande(Long id, Article article, TypeDemande typeDemande, Long numeroOrdre) {
         this.id = id;
         this.article = article;
@@ -75,8 +79,6 @@ public class ArticleTypeDemande extends  CommonEntity{
 //    public void setId(ArticleTypeDemandeKey id) {
 //        this.id = id;
 //    }
-
-
     public Long getId() {
         return id;
     }
@@ -131,12 +133,14 @@ public class ArticleTypeDemande extends  CommonEntity{
 //                ", numeroOrdre=" + numeroOrdre +
 //                '}';
 //    }
-
-
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         ArticleTypeDemande that = (ArticleTypeDemande) o;
         return id.equals(that.id);
     }
@@ -148,11 +152,11 @@ public class ArticleTypeDemande extends  CommonEntity{
 
     @Override
     public String toString() {
-        return "ArticleTypeDemande{" +
-                "id=" + id +
-                ", article=" + article +
-                ", typeDemande=" + typeDemande +
-                ", numeroOrdre=" + numeroOrdre +
-                '}';
+        return "ArticleTypeDemande{"
+                + "id=" + id
+                + ", article=" + article
+                + ", typeDemande=" + typeDemande
+                + ", numeroOrdre=" + numeroOrdre
+                + '}';
     }
 }

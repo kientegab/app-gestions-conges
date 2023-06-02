@@ -11,8 +11,6 @@ import java.util.List;
 import java.util.Objects;
 import javax.persistence.*;
 import javax.validation.constraints.*;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.FilterDef;
 import org.hibernate.annotations.ParamDef;
@@ -48,12 +46,12 @@ public class Ampliation extends CommonEntity {
     @Size(min = 1, max = 10)
     //@Column(length = 10)
     private String code;
-    
+
     @ManyToMany
-    @JoinTable( name = "ampliation_type_demande",
-    joinColumns = @JoinColumn( name = "ampliation_id" ),
-    inverseJoinColumns = @JoinColumn( name = "type_demande_id" ) )
-    private List<TypeDemande>typeDemande;
+    @JoinTable(name = "ampliation_type_demande",
+            joinColumns = @JoinColumn(name = "ampliation_id"),
+            inverseJoinColumns = @JoinColumn(name = "type_demande_id"))
+    private List<TypeDemande> typeDemande;
 
     @Column(nullable = false)
     private String libelle;
@@ -81,18 +79,16 @@ public class Ampliation extends CommonEntity {
     public void setLibelle(String libelle) {
         this.libelle = libelle;
     }
-    
-    
 
     public List<TypeDemande> getTypeDemande() {
-		return typeDemande;
-	}
+        return typeDemande;
+    }
 
-	public void setTypeDemande(List<TypeDemande> typeDemande) {
-		this.typeDemande = typeDemande;
-	}
+    public void setTypeDemande(List<TypeDemande> typeDemande) {
+        this.typeDemande = typeDemande;
+    }
 
-	@Override
+    @Override
     public int hashCode() {
         int hash = 3;
         hash = 37 * hash + Objects.hashCode(this.id);

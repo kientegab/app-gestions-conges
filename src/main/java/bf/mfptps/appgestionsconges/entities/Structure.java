@@ -1,6 +1,5 @@
 package bf.mfptps.appgestionsconges.entities;
 
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -13,10 +12,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.FilterDef;
 import org.hibernate.annotations.ParamDef;
@@ -74,14 +70,13 @@ public class Structure extends CommonEntity {
     private Structure parent;
 
     private String description;
-    
-    @ManyToMany(mappedBy = "structure",fetch = FetchType.EAGER)
+
+    @ManyToMany(mappedBy = "structure", fetch = FetchType.EAGER)
     @JsonIgnore
     private Set<Agent> agent;
-    
+
     // @ManyToMany
     // private List<Ministere>ministere;
-    
     public Structure() {
 
     }
@@ -165,26 +160,22 @@ public class Structure extends CommonEntity {
     public void setEmailStruct(String emailStruct) {
         this.emailStruct = emailStruct;
     }
-    
-    
 
     public Set<Agent> getAgent() {
-		return agent;
-	}
+        return agent;
+    }
 
-	public void setAgent(Set<Agent> agent) {
-		this.agent = agent;
-	}
+    public void setAgent(Set<Agent> agent) {
+        this.agent = agent;
+    }
 
-	// public List<Ministere> getMinistere() {
-	// 	return ministere;
-	// }
-
-	// public void setMinistere(List<Ministere> ministere) {
-	// 	this.ministere = ministere;
-	// }
-
-	public String getAdresse() {
+    // public List<Ministere> getMinistere() {
+    // 	return ministere;
+    // }
+    // public void setMinistere(List<Ministere> ministere) {
+    // 	this.ministere = ministere;
+    // }
+    public String getAdresse() {
         return adresse;
     }
 
