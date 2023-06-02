@@ -13,7 +13,6 @@ public class ActeDTO{
     private String reference;
     
     private String enteteMinistere;
-    private String enteteStructure;
     
     private EStatusActe status;
     
@@ -54,14 +53,6 @@ public class ActeDTO{
 
 	public EStatusActe getStatus() {
 		return status;
-	}
-	
-	public String getEnteteStructure() {
-		return enteteStructure;
-	}
-
-	public void setEnteteStructure(String enteteStructure) {
-		this.enteteStructure = enteteStructure;
 	}
 
 	public void setStatus(EStatusActe status) {

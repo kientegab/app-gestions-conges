@@ -106,7 +106,7 @@ spring:
     type: com.zaxxer.hikari.HikariDataSource
     url: jdbc:postgresql://localhost:5432/dbconges
     username: postgres
-    password: admin #admin #rootPostgresql
+    password: 1222 #admin #rootPostgresql
     hikari:
       poolName: Hikari
       auto-commit: false
